@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="ElectroShop ERP — Sequence Diagrams" id="d1">
+    <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3400" pageHeight="3600" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="3" value="ElectroShop ERP — Sequence Diagrams" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="10" width="1400" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="4" value="Flow 1: Customer Checkout &amp; Payment" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="70" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="5" value="Customer" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="115" width="100" height="804" as="geometry"/>
+        </mxCell>
+        <mxCell id="6" value="Vue Storefront" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="115" width="100" height="804" as="geometry"/>
+        </mxCell>
+        <mxCell id="7" value="Laravel API" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="115" width="100" height="804" as="geometry"/>
+        </mxCell>
+        <mxCell id="8" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="115" width="100" height="804" as="geometry"/>
+        </mxCell>
+        <mxCell id="9" value="Payment Provider" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="115" width="100" height="804" as="geometry"/>
+        </mxCell>
+        <mxCell id="10" value="Click &quot;Buy Now&quot;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="5" target="6" parent="1">
+          <mxGeometry y="205" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="11" value="POST /cart/items {variant_id, qty}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="6" target="7" parent="1">
+          <mxGeometry y="247" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="12" value="INSERT order_items" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="8" parent="1">
+          <mxGeometry y="289" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="13" value="200 OK" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="8" target="7" parent="1">
+          <mxGeometry y="331" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="14" value="200 OK {cart}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="6" parent="1">
+          <mxGeometry y="373" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="15" value="Click &quot;Checkout&quot;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="5" target="6" parent="1">
+          <mxGeometry y="415" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="16" value="GET /checkout" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="6" target="7" parent="1">
+          <mxGeometry y="457" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="17" value="SELECT shipping_rules, addresses" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="8" parent="1">
+          <mxGeometry y="499" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="18" value="results" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="8" target="7" parent="1">
+          <mxGeometry y="541" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="19" value="200 OK {checkout_data}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="6" parent="1">
+          <mxGeometry y="583" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="20" value="Select delivery + payment" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="5" target="6" parent="1">
+          <mxGeometry y="625" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="21" value="POST /orders {address, delivery, payment}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="6" target="7" parent="1">
+          <mxGeometry y="667" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="22" value="INSERT orders + order_items + payments" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="8" parent="1">
+          <mxGeometry y="709" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="23" value="Process payment (if online)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;dashed=1;dashPattern=8 8;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="9" parent="1">
+          <mxGeometry y="751" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="24" value="UPDATE inventory (reserved)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="8" parent="1">
+          <mxGeometry y="793" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="25" value="201 Created {order_number}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="7" target="6" parent="1">
+          <mxGeometry y="835" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="26" value="Show confirmation page" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="6" target="5" parent="1">
+          <mxGeometry y="877" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="27" value="Flow 2: Employee Confirms Mobile Money Payment" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="969" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="28" value="Employee" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1014" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="29" value="Vue Dashboard" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1014" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="30" value="Laravel API" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1014" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="31" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1014" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="32" value="Open Order Management" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="28" target="29" parent="1">
+          <mxGeometry y="1104" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="33" value="GET /orders?status=pending" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="29" target="30" parent="1">
+          <mxGeometry y="1146" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="34" value="SELECT orders WHERE status=pending" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="31" parent="1">
+          <mxGeometry y="1188" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="35" value="results" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="31" target="30" parent="1">
+          <mxGeometry y="1230" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="36" value="200 OK {pending_orders}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="29" parent="1">
+          <mxGeometry y="1272" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="37" value="Click &quot;Confirm Payment&quot;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="28" target="29" parent="1">
+          <mxGeometry y="1314" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="38" value="POST /orders/{id}/confirm {customer_name}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="29" target="30" parent="1">
+          <mxGeometry y="1356" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="39" value="UPDATE payments SET status=confirmed" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="31" parent="1">
+          <mxGeometry y="1398" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="40" value="UPDATE orders SET status=paid" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="31" parent="1">
+          <mxGeometry y="1440" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="41" value="UPDATE inventory (deduct stock)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="31" parent="1">
+          <mxGeometry y="1482" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="42" value="200 OK {success}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="30" target="29" parent="1">
+          <mxGeometry y="1524" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="43" value="Show &quot;Payment Confirmed&quot;" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="29" target="28" parent="1">
+          <mxGeometry y="1566" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="44" value="Flow 3: Customer-Owner Conversation" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1658" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="45" value="Customer" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1703" width="100" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="46" value="Vue Storefront" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1703" width="100" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="47" value="Laravel API" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1703" width="100" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="48" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1703" width="100" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="49" value="Owner" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1703" width="100" height="720" as="geometry"/>
+        </mxCell>
+        <mxCell id="50" value="Open Inbox - New Conversation" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="45" target="46" parent="1">
+          <mxGeometry y="1793" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="51" value="POST /conversations {type, subject, message}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="46" target="47" parent="1">
+          <mxGeometry y="1835" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="52" value="INSERT conversations + messages" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="48" parent="1">
+          <mxGeometry y="1877" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="53" value="result" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="48" target="47" parent="1">
+          <mxGeometry y="1919" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="54" value="201 Created" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="46" parent="1">
+          <mxGeometry y="1961" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="55" value="Type and send message" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="45" target="46" parent="1">
+          <mxGeometry y="2003" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="56" value="POST /conversations/{id}/messages" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="46" target="47" parent="1">
+          <mxGeometry y="2045" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="57" value="INSERT conversation_messages" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="48" parent="1">
+          <mxGeometry y="2087" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="58" value="201 Created" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="46" parent="1">
+          <mxGeometry y="2129" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="59" value="GET /conversations (polling every 15s)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;dashed=1;dashPattern=8 8;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="49" target="47" parent="1">
+          <mxGeometry y="2171" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="60" value="SELECT conversations WHERE owner_id" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="48" parent="1">
+          <mxGeometry y="2213" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="61" value="200 OK {new_message}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="49" parent="1">
+          <mxGeometry y="2255" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="62" value="POST /conversations/{id}/messages {reply}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="49" target="47" parent="1">
+          <mxGeometry y="2297" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="63" value="INSERT conversation_messages" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="48" parent="1">
+          <mxGeometry y="2339" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="64" value="201 Created" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="47" target="49" parent="1">
+          <mxGeometry y="2381" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="65" value="Flow 4: Superadmin Creates Owner Account" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="2473" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="66" value="Superadmin" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="2518" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="67" value="Vue Dashboard" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="2518" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="68" value="Laravel API" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="2518" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="69" value="Database" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="2518" width="100" height="594" as="geometry"/>
+        </mxCell>
+        <mxCell id="70" value="Fill create owner form" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="66" target="67" parent="1">
+          <mxGeometry y="2608" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="71" value="POST /superadmin/owners {name, email, company}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="67" target="68" parent="1">
+          <mxGeometry y="2650" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="72" value="INSERT users (role=owner)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="69" parent="1">
+          <mxGeometry y="2692" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="73" value="INSERT owner_profiles" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="69" parent="1">
+          <mxGeometry y="2734" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="74" value="201 Created {default_password}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="67" parent="1">
+          <mxGeometry y="2776" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="75" value="Show password to share" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="67" target="66" parent="1">
+          <mxGeometry y="2818" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="76" value="Owner logs in with default password" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="66" target="67" parent="1">
+          <mxGeometry y="2860" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="77" value="POST /login {email, password}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="67" target="68" parent="1">
+          <mxGeometry y="2902" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="78" value="SELECT users WHERE email" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="69" parent="1">
+          <mxGeometry y="2944" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="79" value="Check password_changed_at IS NULL" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;dashed=1;dashPattern=8 8;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="69" parent="1">
+          <mxGeometry y="2986" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="80" value="200 OK {token, force_password_change: true}" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="68" target="67" parent="1">
+          <mxGeometry y="3028" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="81" value="Show Change Password modal" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="67" target="66" parent="1">
+          <mxGeometry y="3070" relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="ElectroShop ERP — New Feature Flows" id="d2">
+    <mxGraphModel dx="0" dy="0" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="2500" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        <mxCell id="100" value="ElectroShop ERP — New Feature Flows" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=24;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="100" y="10" width="1400" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="101" value="Flow 4: Accounting Auto-Journal" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="70" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="102" value="Customer" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="115" width="100" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="103" value="Employee" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="115" width="100" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="104" value="OrderController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="115" width="100" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="105" value="JournalController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="115" width="100" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="106" value="AccountModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="115" width="100" height="600" as="geometry"/>
+        </mxCell>
+        <mxCell id="107" value="Pay Order (mobile money)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="102" target="104" parent="1">
+          <mxGeometry y="205" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="108" value="Confirm Payment" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="103" target="104" parent="1">
+          <mxGeometry y="247" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="109" value="Set status = paid" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="104" parent="1">
+          <mxGeometry y="289" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="110" value="Create Revenue Journal" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="105" parent="1">
+          <mxGeometry y="331" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="111" value="DR Accounts Receivable / CR Sales Revenue" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="105" target="106" parent="1">
+          <mxGeometry y="373" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="112" value="Create COGS Journal" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="105" parent="1">
+          <mxGeometry y="415" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="113" value="DR Cost of Goods Sold / CR Inventory" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="105" target="106" parent="1">
+          <mxGeometry y="457" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="114" value="Create Inventory Transactions" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="104" parent="1">
+          <mxGeometry y="499" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="115" value="Calculate Commission (if employee)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="104" parent="1">
+          <mxGeometry y="541" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="116" value="Order Confirmed" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="104" target="103" parent="1">
+          <mxGeometry y="583" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="117" value="Flow 5: Commission Payout" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="760" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="118" value="Owner" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="805" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="119" value="CommissionController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="805" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="120" value="JournalEntry" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="805" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="121" value="CashAccount" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="805" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="122" value="Pay Commission (employee X)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="118" target="119" parent="1">
+          <mxGeometry y="895" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="123" value="Calculate total pending" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="119" target="119" parent="1">
+          <mxGeometry y="937" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="124" value="Create Journal Entry" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="119" target="120" parent="1">
+          <mxGeometry y="979" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="125" value="DR Commission Expense / CR Cash" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="120" target="121" parent="1">
+          <mxGeometry y="1021" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="126" value="Set status = paid_out" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="119" target="119" parent="1">
+          <mxGeometry y="1063" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="127" value="Payout Complete" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="119" target="118" parent="1">
+          <mxGeometry y="1105" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="128" value="Flow 6: Purchase Order Receive" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1310" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="129" value="Owner" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1355" width="100" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="130" value="Supplier" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1355" width="100" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="131" value="PurchaseOrderController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1355" width="100" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="132" value="InventoryModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1355" width="100" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="133" value="JournalEntry" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1355" width="100" height="500" as="geometry"/>
+        </mxCell>
+        <mxCell id="134" value="Receive PO (id)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="129" target="131" parent="1">
+          <mxGeometry y="1445" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="135" value="Validate PO status = ordered" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="131" target="131" parent="1">
+          <mxGeometry y="1487" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="136" value="Create InventoryTransactions (purchase)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="131" target="132" parent="1">
+          <mxGeometry y="1529" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="137" value="Increase stock per item" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="132" target="132" parent="1">
+          <mxGeometry y="1571" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="138" value="Create Journal Entry" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="131" target="133" parent="1">
+          <mxGeometry y="1613" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="139" value="DR Inventory / CR Accounts Payable" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="133" target="133" parent="1">
+          <mxGeometry y="1655" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="140" value="Update PO status = received" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="131" target="131" parent="1">
+          <mxGeometry y="1697" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="141" value="PO Received" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="131" target="129" parent="1">
+          <mxGeometry y="1739" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="142" value="Flow 7: Stock Alert Detection" style="text;html=1;strokeColor=#2c3e50;fillColor=#eaf2f8;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#2c3e50;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1910" width="700" height="30" as="geometry"/>
+        </mxCell>
+        <mxCell id="143" value="OrderController" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="200" y="1955" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="144" value="InventoryModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="500" y="1955" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="145" value="StockAlertModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="800" y="1955" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="146" value="NotificationModel" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1100" y="1955" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="147" value="Owner" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;" vertex="1" parent="1">
+          <mxGeometry x="1400" y="1955" width="100" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="148" value="Decrease stock (order paid)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="143" target="144" parent="1">
+          <mxGeometry y="2045" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="149" value="Check reorder_level" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="144" target="144" parent="1">
+          <mxGeometry y="2087" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="150" value="Create stock_alert (if quantity &amp;le; reorder_level)" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="144" target="145" parent="1">
+          <mxGeometry y="2129" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="151" value="Set type = low_stock or out_of_stock" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=1;exitY=0.25;entryX=1;entryY=0.75;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="145" target="145" parent="1">
+          <mxGeometry y="2171" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="152" value="Create notification" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="145" target="146" parent="1">
+          <mxGeometry y="2213" relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="153" value="Stock Alert Notification" style="html=1;verticalAlign=bottom;endArrow=open;endFill=0;exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;" edge="1" source="146" target="147" parent="1">
+          <mxGeometry y="2255" relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
