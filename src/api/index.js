@@ -520,6 +520,18 @@ export const supplierApi = {
   delete(id) {
     return api.delete(`/suppliers/${id}`)
   },
+  getDocuments(id) {
+    return api.get(`/suppliers/${id}/documents`)
+  },
+  uploadDocuments(id, formData) {
+    return api.post(`/suppliers/${id}/documents`, formData)
+  },
+  deleteDocument(supplierId, documentId) {
+    return api.delete(`/suppliers/${supplierId}/documents/${documentId}`)
+  },
+  downloadDocument(supplierId, documentId) {
+    return api.get(`/suppliers/${supplierId}/documents/${documentId}/download`, { responseType: 'blob' })
+  },
 }
 
 export const stockAlertApi = {

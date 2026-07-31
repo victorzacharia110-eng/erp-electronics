@@ -32,8 +32,8 @@ export const useSessionStore = defineStore('session', () => {
   }
 
   function handleActivity() {
-    persistActivity()
     if (!running) return
+    persistActivity()
     remaining.value = IDLE_TIMEOUT_SECONDS
     showWarning.value = false
   }
@@ -99,6 +99,7 @@ export const useSessionStore = defineStore('session', () => {
 
   function stop() {
     running = false
+    localStorage.removeItem(LAST_ACTIVE_KEY)
     ACTIVITY_EVENTS.forEach((ev) => window.removeEventListener(ev, handleActivity))
     document.removeEventListener('visibilitychange', onVisibilityChange)
     if (timer) {

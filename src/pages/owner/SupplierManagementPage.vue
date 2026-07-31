@@ -128,6 +128,37 @@
               <input v-model="form.country" type="text" placeholder="Country" />
             </div>
           </div>
+
+          <div class="legal-section">
+            <h4><i class="fas fa-file-contract"></i> Tanzanian Business Details</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Business Type</label>
+                <select v-model="form.business_type">
+                  <option value="">Select business type</option>
+                  <option value="sole_proprietorship">Sole Proprietorship</option>
+                  <option value="partnership">Partnership</option>
+                  <option value="limited_company">Limited Company</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>TIN Number (TRA)</label>
+                <input v-model="form.tin_number" type="text" placeholder="e.g. 123-456-789" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>VAT Number</label>
+                <input v-model="form.vat_number" type="text" placeholder="VAT registration number if registered" />
+              </div>
+              <div class="form-group">
+                <label>Business Registration No. (BRELA)</label>
+                <input v-model="form.business_registration_number" type="text" placeholder="BRELA registration number" />
+              </div>
+            </div>
+          </div>
+
           <div class="form-group">
             <label>Products Description</label>
             <textarea v-model="form.products_description" rows="3" placeholder="What products does this supplier provide?"></textarea>
@@ -135,6 +166,45 @@
           <div class="form-group">
             <label>Notes</label>
             <textarea v-model="form.notes" rows="2" placeholder="Internal notes about this supplier"></textarea>
+          </div>
+
+          <div class="legal-section">
+            <h4><i class="fas fa-folder-open"></i> Legal Documents (Tanzanian Format)</h4>
+            <p class="attachments-desc">Business registration (BRELA), TIN certificate, VAT certificate, business license, certificate of incorporation, identification and the signed supply contract.</p>
+
+            <template v-if="editingSupplier">
+              <div v-if="documents.length === 0" class="no-files">No documents uploaded yet</div>
+              <div v-for="doc in documents" :key="doc.id" class="file-item">
+                <i class="fas fa-file-alt"></i>
+                <span class="file-name" :title="doc.original_name">{{ doc.original_name }}</span>
+                <span class="doc-category">{{ docCategoryLabel(doc.category) }}</span>
+                <button type="button" class="btn-icon" title="Download" @click="downloadDoc(doc)"><i class="fas fa-download"></i></button>
+                <button type="button" class="btn-icon danger" title="Delete" @click="deleteDoc(doc)"><i class="fas fa-trash"></i></button>
+              </div>
+              <div class="doc-upload-sep" v-if="documents.length > 0"></div>
+            </template>
+
+            <label class="file-drop">
+              <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" @change="onFilesSelected" />
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>{{ editingSupplier ? 'Upload more documents' : 'Choose documents' }}</span>
+            </label>
+            <div v-if="newDocs.length === 0" class="no-files">No files chosen</div>
+            <div v-for="(f, i) in newDocs" :key="i" class="file-item">
+              <i class="fas fa-file-alt"></i>
+              <span class="file-name" :title="f.file.name">{{ f.file.name }}</span>
+              <select v-model="f.type" class="form-select file-type-select">
+                <option value="contract">Supply Contract</option>
+                <option value="business_registration">Business Registration (BRELA)</option>
+                <option value="tin_certificate">TIN Certificate (TRA)</option>
+                <option value="vat_certificate">VAT Certificate</option>
+                <option value="business_license">Business License</option>
+                <option value="certificate_of_incorporation">Certificate of Incorporation</option>
+                <option value="identification">Identification (NIDA / Passport / License)</option>
+                <option value="other">Other</option>
+              </select>
+              <button type="button" class="btn-icon danger" title="Remove" @click="removeFile(i)"><i class="fas fa-trash"></i></button>
+            </div>
           </div>
 
           <div class="server-errors" v-if="serverErrors.length > 0">
@@ -198,6 +268,9 @@ const showModal = ref(false)
 const editingSupplier = ref(null)
 const deletingSupplier = ref(null)
 
+const documents = ref([])
+const newDocs = ref([])
+
 const formErrors = ref({})
 const serverErrors = ref([])
 
@@ -209,6 +282,10 @@ const defaultForm = () => ({
   address: '',
   city: '',
   country: 'Tanzania',
+  business_type: '',
+  tin_number: '',
+  vat_number: '',
+  business_registration_number: '',
   products_description: '',
   notes: '',
 })
@@ -263,6 +340,8 @@ function showToast(msg) {
 function openCreateModal() {
   editingSupplier.value = null
   Object.assign(form, defaultForm())
+  documents.value = []
+  newDocs.value = []
   formErrors.value = {}
   serverErrors.value = []
   showModal.value = true
@@ -278,9 +357,16 @@ function openEditModal(supplier) {
     address: supplier.address || '',
     city: supplier.city || '',
     country: supplier.country || 'Tanzania',
+    business_type: supplier.business_type || '',
+    tin_number: supplier.tin_number || '',
+    vat_number: supplier.vat_number || '',
+    business_registration_number: supplier.business_registration_number || '',
     products_description: supplier.products_description || '',
     notes: supplier.notes || '',
   })
+  newDocs.value = []
+  documents.value = []
+  loadDocuments(supplier.id)
   formErrors.value = {}
   serverErrors.value = []
   showModal.value = true
@@ -289,9 +375,72 @@ function openEditModal(supplier) {
 function closeModal() {
   showModal.value = false
   editingSupplier.value = null
+  documents.value = []
+  newDocs.value = []
   Object.assign(form, defaultForm())
   formErrors.value = {}
   serverErrors.value = []
+}
+
+const docCategoryLabels = {
+  contract: 'Contract',
+  business_registration: 'Business Registration (BRELA)',
+  tin_certificate: 'TIN Certificate',
+  vat_certificate: 'VAT Certificate',
+  business_license: 'Business License',
+  certificate_of_incorporation: 'Certificate of Incorporation',
+  identification: 'Identification',
+  other: 'Other',
+}
+
+function docCategoryLabel(cat) {
+  return docCategoryLabels[cat] || cat || 'Other'
+}
+
+function onFilesSelected(e) {
+  const files = Array.from(e.target.files || [])
+  files.forEach(f => newDocs.value.push({ file: f, type: 'other' }))
+  e.target.value = ''
+}
+
+function removeFile(i) {
+  newDocs.value.splice(i, 1)
+}
+
+async function loadDocuments(id) {
+  try {
+    const res = await supplierApi.getDocuments(id)
+    documents.value = res.data.data || []
+  } catch {
+    documents.value = []
+  }
+}
+
+async function deleteDoc(doc) {
+  if (!confirm('Delete this document?')) return
+  try {
+    await supplierApi.deleteDocument(editingSupplier.value.id, doc.id)
+    showToast('Document deleted')
+    await loadDocuments(editingSupplier.value.id)
+  } catch (e) {
+    serverErrors.value = [e.response?.data?.message || 'Failed to delete document']
+  }
+}
+
+async function downloadDoc(doc) {
+  try {
+    const res = await supplierApi.downloadDocument(editingSupplier.value.id, doc.id)
+    const url = URL.createObjectURL(res.data)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = doc.original_name || 'document'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  } catch {
+    showToast('Download failed')
+  }
 }
 
 async function loadSuppliers() {
@@ -320,14 +469,32 @@ async function saveSupplier() {
       address: form.address.trim() || null,
       city: form.city.trim() || null,
       country: form.country.trim() || null,
+      business_type: form.business_type || null,
+      tin_number: form.tin_number.trim() || null,
+      vat_number: form.vat_number.trim() || null,
+      business_registration_number: form.business_registration_number.trim() || null,
       products_description: form.products_description.trim() || null,
       notes: form.notes.trim() || null,
     }
 
     if (editingSupplier.value) {
       await supplierApi.update(editingSupplier.value.id, payload)
+      if (newDocs.value.length > 0) {
+        const fd = new FormData()
+        newDocs.value.forEach((a, i) => {
+          fd.append(`attachments[${i}]`, a.file)
+          fd.append(`document_types[${i}]`, a.type)
+        })
+        await supplierApi.uploadDocuments(editingSupplier.value.id, fd)
+      }
     } else {
-      await supplierApi.create(payload)
+      const fd = new FormData()
+      Object.entries(payload).forEach(([key, value]) => fd.append(key, value ?? ''))
+      newDocs.value.forEach((a, i) => {
+        fd.append(`attachments[${i}]`, a.file)
+        fd.append(`document_types[${i}]`, a.type)
+      })
+      await supplierApi.create(fd)
     }
     closeModal()
     showToast(editingSupplier.value ? 'Supplier updated' : 'Supplier created')
@@ -433,6 +600,25 @@ onMounted(loadSuppliers)
 .field-error { display: flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: #e74c3c; font-weight: 500; }
 .field-error i { font-size: 11px; }
 .required { color: #e74c3c; }
+
+.legal-section { border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #fafafa; }
+.legal-section h4 { font-size: 13px; font-weight: 700; color: #333; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+.legal-section h4 i { color: #e74c3c; }
+
+.attachments-desc { font-size: 12px; color: #999; margin: -4px 0 12px; line-height: 1.5; }
+.file-drop { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px; border: 2px dashed #ddd; border-radius: 8px; cursor: pointer; color: #888; transition: all 0.2s; margin-bottom: 10px; }
+.file-drop:hover { border-color: #e74c3c; color: #e74c3c; }
+.file-drop i { font-size: 24px; }
+.file-drop input[type="file"] { display: none; }
+.no-files { font-size: 13px; color: #999; padding: 4px 0 8px; }
+.file-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid #f5f5f5; font-size: 13px; }
+.file-item > i { color: #e74c3c; flex-shrink: 0; }
+.file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-type-select { width: 210px; flex-shrink: 0; padding: 8px 10px; font-size: 12px; }
+.doc-category { flex-shrink: 0; font-size: 11px; font-weight: 600; color: #555; background: #f0f0f0; border-radius: 4px; padding: 2px 8px; text-transform: uppercase; letter-spacing: 0.3px; }
+.doc-upload-sep { height: 1px; background: #f0f0f0; margin: 8px 0 12px; }
+.btn-icon.danger { color: #e74c3c; }
+.btn-icon.danger:hover { background: #fef5f5; border-color: #e74c3c; }
 
 .supplier-ref { font-weight: 600; color: #333; margin-top: 8px !important; }
 
