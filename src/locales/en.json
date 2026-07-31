@@ -18,7 +18,7 @@
     "or": "or",
     "optional": "(optional)",
     "search": "Search...",
-    "noResults": "No results",
+    "noResults": "No results found",
     "success": "Success",
     "error": "Error",
     "tryAgain": "Try again",
@@ -38,8 +38,7 @@
     "of": "of",
     "viewAll": "View All",
     "showPaginated": "Show Paginated",
-    "searchPlaceholder": "Search...",
-    "noResults": "No results found"
+    "searchPlaceholder": "Search..."
   },
   "nav": {
     "home": "Home",
@@ -738,7 +737,7 @@
     "inactive": "Inactive",
     "paid": "Paid",
     "processing": "Processing",
-    "shipped": "Shipped",
+    "shipped": "Shipped:",
     "delivered": "Delivered",
     "cancelled": "Cancelled",
     "ordersShown": "orders shown",
@@ -760,7 +759,6 @@
     "trackingPlaceholder": "e.g., DHL-1234567890",
     "deliveryNotes": "Delivery Notes",
     "deliveryNotesPlaceholder": "Any special delivery instructions...",
-    "pending": "Pending",
     "confirmPayment": "Confirm Payment",
     "reject": "Reject",
     "paidVia": "Paid via",
@@ -768,7 +766,6 @@
     "customerPaidVia": "Customer says they paid via {provider} from {phone}",
     "verifyPayment": "Verify the payment on your {provider} account before confirming.",
     "tracking": "Tracking:",
-    "shipped": "Shipped:",
     "order": "Order",
     "customer": "Customer",
     "amount": "Amount",
@@ -1033,5 +1030,11 @@
     "title": "Notifications",
     "markAllRead": "Mark all read",
     "noNotifications": "No notifications"
+  },
+  "session": {
+    "title": "Session Expiring",
+    "message": "You have been inactive for a while. For your security, your session will end soon.",
+    "hint": "Any mouse or keyboard activity will keep you signed in.",
+    "staySignedIn": "Stay Signed In"
   }
 }

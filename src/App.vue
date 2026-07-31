@@ -1,6 +1,26 @@
 <template>
   <router-view />
+  <SessionWarningModal v-if="session.showWarning" />
 </template>
+
+<script setup>
+import { watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useSessionStore } from '@/stores/session'
+import SessionWarningModal from '@/components/SessionWarningModal.vue'
+
+const authStore = useAuthStore()
+const session = useSessionStore()
+
+watch(
+  () => authStore.token,
+  (token) => {
+    if (token) session.start()
+    else session.stop()
+  },
+  { immediate: true }
+)
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');

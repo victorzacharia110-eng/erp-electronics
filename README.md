@@ -1,6 +1,23 @@
-# erp-electronics
+# ERP Electronics Store (Frontend)
 
-This template should help get you started developing with Vue 3 in Vite.
+Vue 3 single-page application for the ERP Electronics Store — an e-commerce storefront, role-based dashboards (owner, employee, customer, superadmin, supplier), and back-office tools (inventory, accounting, commissions, reports, employee management).
+
+## Documentation
+
+Generated PDF documentation lives in [`docs/`](docs/):
+
+- `User_Manual_EN.pdf` / `User_Manual_SW.pdf` — end-user manuals (English & Swahili)
+- `Developer_Documentation.pdf` — developer & technical documentation (architecture, brand identity, API, superadmin module, security, deployment)
+- `*.drawio` — ERD, class, use case, and sequence diagrams (open in [diagrams.net](https://app.diagrams.net))
+
+Regenerate the PDFs from the repo root:
+
+```sh
+python3 generate_manual.py     # user manuals
+python3 generate_dev_doc.py    # developer documentation
+```
+
+Full developer notes: [`MyDocumentationNotes/PROJECT.md`](MyDocumentationNotes/PROJECT.md).
 
 ## Recommended IDE Setup
 

@@ -168,7 +168,7 @@ def build_en():
     el += cover_page(
         'ERP Electronics Store',
         'User Manual',
-        'Version 2.0',
+        'Version 3.0',
         'July 2026'
     )
 
@@ -199,7 +199,7 @@ def build_en():
         ('21.', 'My Account (Customer)'),
         ('22.', 'Language Settings'),
         ('23.', 'Password Policy'),
-        ('24.', 'Superadmin Dashboard'),
+        ('24.', 'Session & Security'),
     ]
     for num, title in toc:
         el.append(Paragraph(f'<b>{num}</b>  {title}', sTocEntry))
@@ -249,22 +249,37 @@ def build_en():
     # ── Chapter 3: Employee Management ──
     el.append(chapter('3. Employee Management (Owner)'))
     el.append(hr())
-    el.append(body('As the owner, you can manage your store employees from <b>Owner → Employees</b>.'))
+    el.append(body('As the owner, you can manage your store employees from <b>Owner → Employees</b>. Employees help run your store — managing orders, inventory, customers, and support.'))
     el.append(spacer())
     el.append(section('Viewing Employees'))
-    el.append(body('The employee list shows all registered employees with their name, email, and join date. Use the search bar to find specific employees, or click "View All" to see the full list.'))
+    el.append(body('The employee list shows all registered employees with their name, email, branch, position, and status. Use the search bar to find specific employees, or click "View All" to see the full list.'))
     el.append(spacer())
     el.append(section('Adding a New Employee'))
+    el.append(body('Click <b>"Add Employee"</b> and complete the registration form:'))
+    el.extend(bullet_list([
+        '<b>Full Name</b>, <b>Email</b>, and <b>Phone number</b> (required).',
+        '<b>Identification</b> — provide either the <b>NIDA number</b> or the <b>Voting ID card number</b>.',
+        '<b>Branch</b> — assign the employee to one of your branches (optional if no branches exist).',
+        '<b>Position</b> and <b>Department</b> — e.g. Cashier / Sales, or Warehouse.',
+        '<b>Commission Rate (%)</b> — the percentage the employee earns on sales (0–100).',
+    ]))
+    el.append(spacer())
+    el.append(section('Wadhamini (Guarantors)'))
+    el.append(body('Add at least one guarantor (Wadhamini) by clicking <b>"Fill Wadhamini Form"</b>. Enter each guarantor\'s full name, phone, relationship, and address, then click <b>"Add Guarantor"</b>. Guarantors vouch for the employee and can be edited later.'))
+    el.append(spacer())
+    el.append(section('Attachments'))
+    el.append(body('You can attach the employee\'s <b>contract</b>, ID scans, and <b>background check</b> documents. Click <b>"Choose Files"</b>, then set the type for each file (Contract, Background Check, or Other).'))
+    el.append(spacer())
     el.append(steps_table([
-        'Navigate to <b>Owner → Employees</b>.',
-        'Click <b>"Add Employee"</b> button.',
-        'Enter the employee\'s <b>Full Name</b> and <b>Email</b>.',
-        'Click <b>"Save"</b>.',
+        'Click <b>"Create Employee"</b> to finish.',
         'The employee account is created with a <b>default password = FULL NAME IN CAPITALS</b> (e.g., "MATHEW ZACHARIA").',
         'Share these credentials with the employee securely.',
     ]))
     el.append(spacer())
     el.append(note('Employees will be prompted to change their password on first login if it has been more than 3 days since creation.'))
+    el.append(spacer())
+    el.append(section('Editing an Employee'))
+    el.append(body('Click the <b>pencil (edit)</b> icon on an employee\'s card to open the edit form. You can update their name, email, phone, identification, branch, position, department, commission rate, and their guarantors. Click <b>"Save Changes"</b> when done.'))
     el.append(PageBreak())
 
     # ── Chapter 4: Branch Management ──
@@ -778,41 +793,33 @@ def build_en():
     el.append(body('When the owner creates a new employee account, the default password is the employee\'s <b>full name in capital letters</b> (e.g., "MATHEW ZACHARIA"). Employees should change this immediately on first login.'))
     el.append(spacer())
     el.append(section('Owner Default Password'))
-    el.append(body('When the superadmin creates a new owner account, the default password is the owner\'s <b>full name in capital letters</b> (e.g., "JOHN DOE"). The superadmin should share this password securely with the owner.'))
+    el.append(body('When a new owner account is created by the system administrator, the default password is the owner\'s <b>full name in capital letters</b> (e.g., "JOHN DOE"). The administrator shares this password securely with the owner.'))
     el.append(PageBreak())
 
-    # ── Chapter 24: Superadmin Dashboard ──
-    el.append(chapter('24. Superadmin Dashboard'))
+    # ── Chapter 24: Session & Security ──
+    el.append(chapter('24. Session & Security'))
     el.append(hr())
-    el.append(body('The Superadmin is the system administrator who manages all business owners. Access the superadmin panel at <b>/superadmin</b>.'))
+    el.append(section('Automatic Logout (Inactivity)'))
+    el.append(body('For your security, the system automatically signs you out after <b>15 minutes of inactivity</b>. Moving the mouse, clicking, or typing resets the timer.'))
     el.append(spacer())
-    el.append(section('System Overview'))
+    el.append(body('When you have been inactive for 14 minutes, a warning appears with a <b>60-second countdown</b>. Any mouse or keyboard activity dismisses the warning and keeps you signed in. When the countdown reaches zero, you are signed out and returned to the login page.'))
+    el.append(spacer())
+    el.append(section('Leaving the Dashboard'))
+    el.append(body('If you switch to another tab or application, the timer pauses. When you return within <b>10 minutes</b>, your session continues. If you are away for <b>longer than 10 minutes</b>, the system signs you out to protect your account.'))
+    el.append(spacer())
+    el.append(section('Login Security'))
+    el.append(body('To protect your account against unauthorized access:'))
     el.extend(bullet_list([
-        '<b>System Statistics</b> — Total customers, orders, revenue, and active owners at a glance.',
-        '<b>Owners Table</b> — View all registered business owners with their company, plan, status, and registration date.',
+        'Login attempts are limited to <b>5 per minute</b> per IP address.',
+        'After <b>5 failed attempts</b>, the account locks automatically for <b>30 minutes</b>.',
+        'New account registrations are limited to <b>3 per minute</b> and <b>10 per day</b> per IP address.',
     ]))
     el.append(spacer())
-    el.append(section('Managing Owners'))
-    el.extend(bullet_list([
-        '<b>Create Owner</b> — Register a new business owner with name, email, phone, and company name. The default password is their full name in capitals.',
-        '<b>Toggle Active/Inactive</b> — Enable or disable an owner\'s account.',
-        '<b>Delete Owner</b> — Remove an owner and all associated data.',
-    ]))
-    el.append(spacer())
-    el.append(section('Owner Details'))
-    el.append(body('Click on any owner to view their full details:'))
-    el.extend(bullet_list([
-        '<b>Subscription</b> — View and update plan (Starter, Professional, Enterprise), status, and expiry date.',
-        '<b>Limits</b> — Set maximum products and employees allowed.',
-        '<b>Branding</b> — Configure white-label branding: store name, tagline, logo, and colors.',
-    ]))
-    el.append(spacer())
-    el.append(section('Communicating with Owners'))
-    el.append(body('The superadmin can send messages to any owner via the Inbox. Conversations appear in real-time with unread badges.'))
+    el.append(note('If your account becomes locked, wait 30 minutes and try again, or contact your system administrator for assistance.'))
     el.append(spacer())
     el.append(spacer())
     el.append(hr())
-    el.append(Paragraph('<b>ERP Electronics Store</b> — User Manual v2.0 — July 2026', sFooter))
+    el.append(Paragraph('<b>ERP Electronics Store</b> — User Manual v3.0 — July 2026', sFooter))
     el.append(Paragraph('For technical support, contact your system administrator.', sFooter))
 
     return el
@@ -829,7 +836,7 @@ def build_sw():
     el += cover_page(
         'Duka la Elektroniki ERP',
         'Manual ya Mtumiaji',
-        'Toleo 2.0',
+        'Toleo 3.0',
         'Julai 2026'
     )
 
@@ -860,7 +867,7 @@ def build_sw():
         ('21.', 'Akaunti Yangu (Mteja)'),
         ('22.', 'Mipangilio ya Lugha'),
         ('23.', 'Sera ya Nenosiri'),
-        ('24.', 'Dashibodi ya Msimamizi Mkuu'),
+        ('24.', 'Kipindi na Usalama'),
     ]
     for num, title in toc:
         el.append(Paragraph(f'<b>{num}</b>  {title}', sTocEntry))
@@ -910,22 +917,37 @@ def build_sw():
     # ── Sura ya 3: Usimamizi wa Wafanyakazi ──
     el.append(chapter('3. Usimamizi wa Wafanyakazi (Mmiliki)'))
     el.append(hr())
-    el.append(body('Kama mmiliki, unaweza kusimamia wafanyakazi wako kutoka <b>Mmiliki → Wafanyakazi</b>.'))
+    el.append(body('Kama mmiliki, unaweza kusimamia wafanyakazi wako kutoka <b>Mmiliki → Wafanyakazi</b>. Wafanyakazi husaidia kuendesha duka lako — kusimamia oda, hifadhi, wateja, na msaada.'))
     el.append(spacer())
     el.append(section('Kuona Wafanyakazi'))
-    el.append(body('Orodha ya wafanyakazi inaonyesha wafanyakazi wote waliojisajili kwa majina, barua pepe, na tarehe ya kujiunga. Tumia upau wa utafutaji kupata wafanyakazi maalum, au bofya "Angalia Zote" kuona orodha kamili.'))
+    el.append(body('Orodha ya wafanyakazi inaonyesha wafanyakazi wote waliojisajili kwa majina, barua pepe, tawi, cheo, na hali. Tumia upau wa utafutaji kupata wafanyakazi maalum, au bofya "Angalia Zote" kuona orodha kamili.'))
     el.append(spacer())
     el.append(section('Kuongeza Mfanyakazi Mpya'))
+    el.append(body('Bofya <b>"Ongeza Mfanyakazi"</b> na ukamilishe fomu ya usajili:'))
+    el.extend(bullet_list([
+        '<b>Jina Kamili</b>, <b>Barua Pepe</b> na <b>Nambari ya Simu</b> (lazima).',
+        '<b>Utambulisho</b> — toa aidha <b>nambari ya NIDA</b> au <b>nambari ya kitambulisho cha mpiga kura</b>.',
+        '<b>Tawi</b> — mpe mfanyakazi moja ya matawi yako (hiari ikiwa hakuna matawi).',
+        '<b>Cheo</b> na <b>Idara</b> — mfano Mhazini / Mauzo, au Ghala.',
+        '<b>Kiwango cha Kamisheni (%)</b> — asilimia anayopata mfanyakazi kwenye mauzo (0–100).',
+    ]))
+    el.append(spacer())
+    el.append(section('Wadhamini'))
+    el.append(body('Ongeza angalau mdhamini mmoja (Wadhamini) kwa kubofya <b>"Jaza Fomu ya Wadhamini"</b>. Weka jina kamili, simu, uhusiano, na anwani ya kila mdhamini, kisha bofya <b>"Ongeza Mdhamini"</b>. Wadhamini humthibitishia mfanyakazi na wanaweza kuhaririwa baadaye.'))
+    el.append(spacer())
+    el.append(section('Viambatisho'))
+    el.append(body('Unaweza kuambatanisha <b>mkataba</b> wa mfanyakazi, skani za kitambulisho, na nyaraka za <b>uchunguzi wa msingi</b>. Bofya <b>"Chagua Faili"</b>, kisha weka aina ya kila faili (Mkataba, Uchunguzi wa Msingi, au Nyingine).'))
+    el.append(spacer())
     el.append(steps_table([
-        'Nenda kwenye <b>Mmiliki → Wafanyakazi</b>.',
-        'Bofya kitufe <b>"Ongeza Mfanyakazi"</b>.',
-        'Weka <b>Jina Kamili</b> na <b>Barua Pepe</b> ya mfanyakazi.',
-        'Bofya <b>"Hifadhi"</b>.',
+        'Bofya <b>"Unda Mfanyakazi"</b> kumaliza.',
         'Akaunti ya mfanyakazi inaundwa na <b>nenosiri chaguo-msingi = JINA KAMILI KWA HERUFI KUBWA</b> (mfano, "MATHEW ZACHARIA").',
         'Shiriki sifa hizi na mfanyakazi kwa usalama.',
     ]))
     el.append(spacer())
     el.append(note('Wafanyakazi wataombwa kubadilisha nenosiri lao mara ya kwanza ya kuingia ikiwa zimepita zaidi ya siku 3 tangu kuundwa.'))
+    el.append(spacer())
+    el.append(section('Kuhariri Mfanyakazi'))
+    el.append(body('Bofya ikoni ya <b>kalamu (hariri)</b> kwenye kadi ya mfanyakazi kufungua fomu ya kuhariri. Unaweza kusasisha jina, barua pepe, simu, utambulisho, tawi, cheo, idara, kiwango cha kamisheni, na wadhamini wake. Bofya <b>"Hifadhi Mabadiliko"</b> umalize.'))
     el.append(PageBreak())
 
     # ── Sura ya 4: Usimamizi wa Matawi ──
@@ -1436,41 +1458,33 @@ def build_sw():
     el.append(body('Mmiliki anapounda akaunti mpya ya mfanyakazi, nenosiri chaguo-msingi ni <b>jina kamili la mfanyakazi kwa herufi kubwa</b> (mfano, "MATHEW ZACHARIA"). Wafanyakazi wanapaswa kubadilisha hili mara moja wakati wa kuingia kwa mara ya kwanza.'))
     el.append(spacer())
     el.append(section('Nenosiri Chaguo-msingi la Mmiliki'))
-    el.append(body('Msimamizi mkuu anapounda akaunti mpya ya mmiliki, nenosiri chaguo-msingi ni <b>jina kamili la mmiliki kwa herufi kubwa</b> (mfano, "JOHN DOE"). Msimamizi mkuu anapaswa kushiriki nenosiri hili kwa usalama na mmiliki.'))
+    el.append(body('Akaunti mpya ya mmiliki inapoundwa na msimamizi wa mfumo, nenosiri chaguo-msingi ni <b>jina kamili la mmiliki kwa herufi kubwa</b> (mfano, "JOHN DOE"). Msimamizi hushiriki nenosiri hili kwa usalama na mmiliki.'))
     el.append(PageBreak())
 
-    # ── Sura ya 24: Dashibodi ya Msimamizi Mkuu ──
-    el.append(chapter('24. Dashibodi ya Msimamizi Mkuu'))
+    # ── Sura ya 24: Kipindi na Usalama ──
+    el.append(chapter('24. Kipindi na Usalama'))
     el.append(hr())
-    el.append(body('Msimamizi mkuu ni msimamizi wa mfumo anayesimamia wamiliki wote. Fikia paneli ya msimamizi mkuu kupitia <b>/superadmin</b>.'))
+    el.append(section('Kutoka Kiotomatiki (Kutokuwa na Shughuli)'))
+    el.append(body('Kwa usalama wako, mfumo unakutoa nje kiotomatiki baada ya <b>dakika 15 za kutokuwa na shughuli</b>. Kusogeza kipanya, kubofya, au kuandika kunarejesha saa.'))
     el.append(spacer())
-    el.append(section('Muhtasari wa Mfumo'))
+    el.append(body('Ukiwa kimya kwa dakika 14, onyo linaonekana na <b>hesabu ya chini ya sekunde 60</b>. Shughuli yoyote ya kipanya au kibodi inaondoa onyo na kukuweka umeingia. Hesabu inapofikia sifuri, unatolewa nje na kurudishwa kwenye ukurasa wa kuingia.'))
+    el.append(spacer())
+    el.append(section('Kuondoka kwenye Dashibodi'))
+    el.append(body('Ukibadilisha kichupo au kuingia programu nyingine, saa inasitisha. Ukirudi ndani ya <b>dakika 10</b>, kipindi chako kinaendelea. Ukibaki mbali kwa <b>zaidi ya dakika 10</b>, mfumo unakutoa nje kulinda akaunti yako.'))
+    el.append(spacer())
+    el.append(section('Usalama wa Kuingia'))
+    el.append(body('Ili kulinda akaunti yako dhidi ya ufikiaji usioidhinishwa:'))
     el.extend(bullet_list([
-        '<b>Takwimu za Mfumo</b> — Wateja jumla, oda, mapato, na wamiliki wanaotumia kwa macho.',
-        '<b>Orodha ya Wamiliki</b> — Ona wamiliki wote waliojisajili pamoja na kampuni zao, mpango, hali, na tarehe ya usajili.',
+        'Majerabi ya kuingia yamepunguzwa hadi <b>5 kwa dakika</b> kwa kila anwani ya IP.',
+        'Baada ya majerabi <b>5 yaliyoshindikana</b>, akaunti inafungwa kiotomatiki kwa <b>dakika 30</b>.',
+        'Usajili wa akaunti mpya umepunguzwa hadi <b>3 kwa dakika</b> na <b>10 kwa siku</b> kwa kila IP.',
     ]))
     el.append(spacer())
-    el.append(section('Kusimamia Wamiliki'))
-    el.extend(bullet_list([
-        '<b>Unda Mmiliki</b> — Sajili mmiliki mpya wa biashara kwa jina, barua pepe, simu, na jina la kampuni. Nenosiri chaguo-msingi ni jina lao kamili kwa herufi kubwa.',
-        '<b>Washa/Zima</b> — Washa au zima akaunti ya mmiliki.',
-        '<b>Futa Mmiliki</b> — Ondoa mmiliki na data yote inayohusishwa.',
-    ]))
-    el.append(spacer())
-    el.append(section('Maelezo ya Mmiliki'))
-    el.append(body('Bofya mmiliki yeyote kuona maelezo yake kamili:'))
-    el.extend(bullet_list([
-        '<b>Usajili</b> — Angalia na sasisha mpango (Starter, Professional, Enterprise), hali, na tarehe ya kumalizika.',
-        '<b>Vikwazo</b> — Weka bidhaa na wafanyakazi wakubwa zaidi wanaruhusiwa.',
-        '<b>Uchapishaji</b> — Sanidi uchapishaji wa white-label: jina la duka, maelezo mafupi, nemo, na rangi.',
-    ]))
-    el.append(spacer())
-    el.append(section('Kuongea na Wamiliki'))
-    el.append(body('Msimamizi mkuu anaweza kutuma ujumbe kwa mmiliki yeyote kupitia Kikasha. Mazungumzo yanaonyeshwa kwa wakati halisi na beji za usomwa.'))
+    el.append(note('Ikiwa akaunti yako imefungwa, subiri dakika 30 na ujaribu tena, au wasiliana na msimamizi wako wa mfumo kwa msaada.'))
     el.append(spacer())
     el.append(spacer())
     el.append(hr())
-    el.append(Paragraph('<b>ERP Duka la Elektroniki</b> — Manual ya Mtumiaji Toleo 2.0 — Julai 2026', sFooter))
+    el.append(Paragraph('<b>ERP Duka la Elektroniki</b> — Manual ya Mtumiaji Toleo 3.0 — Julai 2026', sFooter))
     el.append(Paragraph('Kwa msaada wa kiufundi, wasiliana na msimamizi wako wa mfumo.', sFooter))
 
     return el

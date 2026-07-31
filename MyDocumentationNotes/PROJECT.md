@@ -1,6 +1,6 @@
 # ERP Electronics — Full Project Documentation
 
-Complete ERP system for selling electronics in Tanzania. Laravel API backend + Vue 3 storefront. UI inspired by bafredoelectronics.co.tz — clean white layout with `#e74c3c` red accents. Features: e-commerce storefront, owner management, employee commissions, inventory tracking, purchase orders, supplier management, double-entry bookkeeping, stock alerts, and multi-role authentication.
+Complete ERP system for selling electronics in Tanzania. Laravel API backend + Vue 3 storefront. UI inspired by bafredoelectronics.co.tz — clean white layout with `#e74c3c` red accents. Features: e-commerce storefront, owner management, employee commissions, inventory tracking, purchase orders, supplier management, double-entry bookkeeping, stock alerts, multi-role authentication, API rate limiting, and automatic session termination (idle timeout).
 
 ---
 
@@ -46,6 +46,8 @@ Complete ERP system for selling electronics in Tanzania. Laravel API backend + V
 - **Frontend**: Vue 3 SPA served by Vite dev server (port 5173)
 - **Backend**: Laravel REST API served by artisan (port 8000)
 - **Auth**: Sanctum token-based — `Authorization: Bearer <token>`
+- **Rate limiting**: `throttle:api` (120/min) on all API routes; `throttle:login` (5/min) and `throttle:register` (3/min + 10/day) on auth routes
+- **Session security**: frontend idle timeout (15 min) + tab-away grace (10 min) force automatic logout
 - **Database**: SQLite (file: `database/database.sqlite`)
 - **Images**: Stored in `public/products/` on the Laravel server
 - **Scheduler**: `php artisan schedule:work` for automated tasks
@@ -1082,6 +1084,24 @@ Relationships:
 - `PATCH /employees/{user}/profile` → `EmployeeController::updateProfile`
 - Employees cannot edit their own profile
 
+### Account Lockout
+- 5 failed attempts → account locks for 30 minutes (`users.locked_until`)
+- API returns HTTP 423 with remaining minutes; login form shows remaining attempts
+
+### Rate Limiting
+- `RateLimiter::for('api')` — 120 requests/min keyed by authenticated user id, else IP
+- `RateLimiter::for('login')` — 5/min per IP (applied via `throttle:login` on `POST /auth/login`)
+- `RateLimiter::for('register')` — 3/min and 10/day per IP (applied via `throttle:register` on `POST /auth/register`)
+- Enabled with `$middleware->throttleApi()` in `bootstrap/app.php`
+- Exceeding limits returns HTTP 429 with `X-RateLimit-Remaining`/`X-RateLimit-Reset` headers
+- Tests: `tests/Feature/RateLimitingTest.php`
+
+### Session Termination (Idle Timeout)
+- Implemented client-side in `src/stores/session.js` (frontend)
+- 15 minutes of inactivity → automatic logout; warning modal appears in the final 60 seconds
+- Switching away (tab hidden) pauses the timer; returning within 10 minutes continues, otherwise logs out
+- Persists `session_last_active`; a reload after the idle window forces logout immediately
+
 ### Route Guards (Frontend)
 - `meta.requiresAuth` — redirects to `/login` if no token
 - `meta.role` — redirects to correct dashboard if wrong role
@@ -1344,6 +1364,11 @@ Base URL: `http://localhost:8000/api`
 ### products (`stores/products.js`)
 **State**: product listing data, featured products, categories
 **Actions**: `fetchProducts(params)`, `fetchFeatured()`, `fetchProduct(slug)`, `fetchCategories()`, `fetchCategory(slug)`
+
+### session (`stores/session.js`)
+**State**: `remaining` (seconds until logout), `showWarning`, `warningSeconds` (60 s countdown)
+**Actions**: `start()`, `stop()`, `activity()`
+**Behavior**: 15-minute inactivity timer with a 60-second warning modal; activity (mouse/keyboard/touch/scroll/click) resets the timer; tab-away longer than 10 minutes signs the user out on return; `session_last_active` persisted to localStorage so a closed tab opened after the idle window forces logout. Wired globally in `App.vue`; logout revokes the Sanctum token.
 
 ---
 
@@ -1725,12 +1750,14 @@ pending_payment (cart) → pending (order placed) → paid → processing → sh
 
 ### Employee Management (Owner)
 - Owner adds employees via form — default password = UPPERCASE FULL NAME
-- Commission rate (e.g., 5% of profit) per employee
+- Registration form: full name, email, phone, **NIDA or Voting ID number**, branch, position, department, commission rate (0–100)
+- **Wadhamini (Guarantors)**: at least one guarantor required — name, phone, relationship, address
+- **Attachments**: contract, background check, and other documents (PDF/JPG/PNG/DOC/DOCX, ≤ 20 MB) stored on the filesystem disk
+- **Edit employee**: pencil icon opens a pre-filled form — name, email, phone, identification, branch, position, department, commission rate, and guarantor replacement
 - List all employees with status + branch
 - Toggle active/inactive status
 - Assign employees to branches
 - **Reset employee password** to default via modal (returns default password for owner to share)
-- **Update employee profile**: position, department, commission_rate, branch_id
 - Delete employees
 
 ### Customer Management (Employee)
@@ -1947,23 +1974,25 @@ GEMINI_API_KEY=your-gemini-api-key
 
 ---
 
-## 17. PDF User Manuals
+## 17. PDF Documentation
 
 ### Files
 | File | Language | Pages |
 |---|---|---|
-| `docs/User_Manual_EN.pdf` | English | 18 |
-| `docs/User_Manual_SW.pdf` | Swahili | 18 |
+| `docs/User_Manual_EN.pdf` | English | 29 |
+| `docs/User_Manual_SW.pdf` | Swahili | 30 |
+| `docs/Developer_Documentation.pdf` | English (developers) | 22 |
 
-### Generator Script
-- `generate_manual.py` — Python script using ReportLab
+### Generator Scripts
+- `generate_manual.py` — Python script using ReportLab for the user manuals (EN + SW)
+- `generate_dev_doc.py` — Python script using ReportLab for the developer documentation
 - DejaVu Sans font for full Swahili character support
-- Generates styled PDFs with cover page, table of contents, numbered steps, info tables, and notes
+- Styled PDFs with cover page, table of contents, numbered steps, info tables, code blocks, brand color swatches, and notes
 
-### Chapters Covered
+### User Manual Chapters (v3.0)
 1. Getting Started (login, default credentials)
 2. Owner Dashboard (stats, charts, AI insights)
-3. Employee Management (add employees, default passwords, branch assignment)
+3. Employee Management (registration with NIDA/voting ID, branch, position, commission rate, Wadhamini guarantors, attachments; editing employees)
 4. Product Management (CRUD, variants, image upload)
 5. Payment Settings (ClickPesa toggle, mobile money providers)
 6. Shipping Settings (routes, value-based pricing)
@@ -1977,6 +2006,12 @@ GEMINI_API_KEY=your-gemini-api-key
 14. My Account (orders, support, addresses)
 15. Language Settings (English/Swahili toggle)
 16. Password Policy (requirements, forced change, default passwords)
+17. Session & Security (idle timeout, leaving the dashboard, login security)
+
+**Note**: The superadmin dashboard is deliberately excluded from the user manuals — it is covered in the developer documentation instead.
+
+### Developer Documentation Chapters (v1.0)
+Document control, system overview & architecture, technology stack, brand identity & visual guidelines (logo, color palette, white-label colors, typography), roles & permissions, database schema & models, authentication & authorization, API reference (with rate limits), superadmin module (full), security measures, analytics & AI, documentation & diagrams, development commands & environment, deployment, and the full business cycle.
 
 ---
 
@@ -2006,7 +2041,7 @@ users, customer_profiles, employee_profiles, owner_profiles, categories, product
 
 ---
 
-*Last updated: July 20, 2026*
+*Last updated: July 31, 2026*
 
 ---
 

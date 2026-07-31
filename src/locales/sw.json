@@ -18,7 +18,7 @@
     "or": "au",
     "optional": "(si lazima)",
     "search": "Tafuta...",
-    "noResults": "Hakuna matokeo",
+    "noResults": "Hakuna matokeo yaliyopatikana",
     "success": "Imefanikiwa",
     "error": "Hitilafu",
     "tryAgain": "Jaribu tena",
@@ -38,8 +38,7 @@
     "of": "wa",
     "viewAll": "Ona Yote",
     "showPaginated": "Onyesha kwa Kurasa",
-    "searchPlaceholder": "Tafuta...",
-    "noResults": "Hakuna matokeo yaliyopatikana"
+    "searchPlaceholder": "Tafuta..."
   },
   "nav": {
     "home": "Nyumbani",
@@ -738,7 +737,7 @@
     "inactive": "Haijatumika",
     "paid": "Imelipwa",
     "processing": "Inachakatwa",
-    "shipped": "Imesafirishwa",
+    "shipped": "Imesafirishwa:",
     "delivered": "Imefikishwa",
     "cancelled": "Imeghairiwa",
     "ordersShown": "oda zimeonyeshwa",
@@ -767,7 +766,6 @@
     "customerPaidVia": "Mteja anasema amelipwa kupitia {provider} kutoka {phone}",
     "verifyPayment": "Thibitisha malipo kwenye akaunti yako ya {provider} kabla ya kuthibitisha.",
     "tracking": "Ufuatiliaji:",
-    "shipped": "Imesafirishwa:",
     "order": "Oda",
     "customer": "Mteja",
     "amount": "Kiasi",
@@ -1032,5 +1030,11 @@
     "title": "Arifa",
     "markAllRead": "Weka zote kama zimesomwa",
     "noNotifications": "Hakuna arifa"
+  },
+  "session": {
+    "title": "Kipindi Kinaisha",
+    "message": "Umekuwa kimya kwa muda. Kwa usalama wako, kipindi chako kitaisha hivi karibuni.",
+    "hint": "Shughuli yoyote ya kipanya au kibodi itakuweka umeingia.",
+    "staySignedIn": "Baki Umeingia"
   }
 }
