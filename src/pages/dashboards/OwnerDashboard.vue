@@ -63,8 +63,10 @@
             $t('dashboards.owner.branchesAction') }}</span></router-link>
           <router-link to="/owner/products" class="action-tile"><i class="fas fa-box"></i><span>{{
             $t('dashboards.owner.productsAction') }}</span></router-link>
-          <router-link to="/orders" class="action-tile"><i class="fas fa-receipt"></i><span>{{
+          <router-link to="/owner/orders" class="action-tile"><i class="fas fa-receipt"></i><span>{{
             $t('dashboards.owner.ordersAction') }}</span></router-link>
+          <router-link to="/owner/customers" class="action-tile"><i class="fas fa-users"></i><span>{{
+            $t('dashboards.owner.customersAction') }}</span></router-link>
           <router-link to="/owner/reports" class="action-tile"><i class="fas fa-chart-line"></i><span>{{
             $t('dashboards.owner.reportsAction') }}</span></router-link>
           <router-link to="/owner/inventory" class="action-tile"><i

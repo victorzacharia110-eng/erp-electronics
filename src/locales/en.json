@@ -711,6 +711,7 @@
       "products": "Products",
       "productsAction": "Products",
       "ordersAction": "Orders",
+      "customersAction": "Customers",
       "reports": "Reports",
       "reportsAction": "Reports",
       "inventoryAction": "Inventory",

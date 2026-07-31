@@ -6,7 +6,7 @@
         </h1>
         <p>{{ $t('ordersManage.subtitle') }}</p>
       </div>
-      <router-link to="/employee" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.backToDashboard')
+      <router-link :to="dashboardRoute" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.backToDashboard')
       }}</router-link>
     </div>
 
@@ -260,8 +260,12 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue'
 import { orderManageApi, branchApi } from '@/api'
+import { useAuthStore } from '@/stores/auth'
 import TablePagination from '@/components/TablePagination.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+
+const authStore = useAuthStore()
+const dashboardRoute = computed(() => (authStore.isOwner ? '/owner' : '/employee'))
 
 const orders = ref([])
 const branches = ref([])

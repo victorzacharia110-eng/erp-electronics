@@ -5,7 +5,7 @@
         <h1><i class="fas fa-users" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('customers.title') }}</h1>
         <p>{{ $t('customers.subtitle') }}</p>
       </div>
-      <router-link to="/employee" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.backToDashboard')
+      <router-link :to="dashboardRoute" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.backToDashboard')
         }}</router-link>
     </div>
 
@@ -96,12 +96,16 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { customerApi } from '@/api'
+import { useAuthStore } from '@/stores/auth'
 import { useTablePagination } from '@/composables/useTablePagination'
 import TablePagination from '@/components/TablePagination.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+
+const authStore = useAuthStore()
+const dashboardRoute = computed(() => (authStore.isOwner ? '/owner' : '/employee'))
 
 const { t } = useI18n()
 

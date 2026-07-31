@@ -230,6 +230,18 @@ const routes = [
         meta: { requiresAuth: true, role: 'employee' },
       },
       {
+        path: 'owner/orders',
+        name: 'owner-orders',
+        component: () => import('@/pages/employee/OrderManagementPage.vue'),
+        meta: { requiresAuth: true, role: ['owner', 'employee'] },
+      },
+      {
+        path: 'owner/customers',
+        name: 'owner-customers',
+        component: () => import('@/pages/employee/CustomerManagementPage.vue'),
+        meta: { requiresAuth: true, role: ['owner', 'employee'] },
+      },
+      {
         path: 'employee',
         name: 'employee-dashboard',
         component: () => import('@/pages/dashboards/EmployeeDashboard.vue'),
@@ -319,7 +331,8 @@ router.beforeEach(async (to) => {
         return { name: 'login' }
       }
     }
-    if (authStore.user?.role !== to.meta.role) {
+    const allowedRoles = Array.isArray(to.meta.role) ? to.meta.role : [to.meta.role]
+    if (!allowedRoles.includes(authStore.user?.role)) {
       const dashboardMap = {
         superadmin: '/superadmin',
         owner: '/owner',
