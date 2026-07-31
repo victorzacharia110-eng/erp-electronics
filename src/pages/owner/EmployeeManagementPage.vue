@@ -38,7 +38,9 @@
             <h3>{{ emp.name }}</h3>
             <p class="emp-email">{{ emp.email }}</p>
             <p class="emp-meta" v-if="emp.phone"><i class="fas fa-phone"></i> {{ emp.phone }}</p>
+            <p class="emp-meta" v-if="emp.nida_number || emp.voting_id_number"><i class="fas fa-id-card"></i> {{ emp.nida_number || emp.voting_id_number }}</p>
             <p class="emp-meta" v-if="emp.employee_profile?.branch"><i class="fas fa-store"></i> {{ emp.employee_profile.branch.name }}</p>
+            <p class="emp-meta"><i class="fas fa-file-contract"></i> {{ emp.documents_count || 0 }} docs · {{ emp.guarantors_count || 0 }} {{ $t('employees.addModal.wadhamini') }}</p>
           </div>
           <div class="emp-details-row">
             <div class="emp-status">
@@ -75,7 +77,7 @@
     </div>
 
     <div class="modal-overlay" v-if="showAddModal" @click.self="closeAddModal">
-      <div class="modal-card card">
+      <div class="modal-card card add-employee-modal">
         <h2><i class="fas fa-user-plus"></i> {{ $t('employees.addModal.title') }}</h2>
         <p class="modal-desc">{{ $t('employees.defaultPasswordDesc') }}</p>
         <form @submit.prevent="addEmployee" novalidate>
@@ -89,16 +91,73 @@
             <input v-model="newEmp.email" type="email" :placeholder="$t('employees.addModal.emailPlaceholder')" @blur="validateAddField('email')" @input="validateAddField('email')" />
             <span class="field-error" v-if="addErrors.email"><i class="fas fa-exclamation-triangle"></i> {{ addErrors.email }}</span>
           </div>
-          <div class="form-group">
-            <label>{{ $t('employees.addModal.phone') }}</label>
-            <input v-model="newEmp.phone" type="tel" :placeholder="$t('employees.addModal.phonePlaceholder')" />
+          <div class="form-group" :class="{ 'has-error': addErrors.phone }">
+            <label>{{ $t('employees.addModal.phone') }} *</label>
+            <input v-model="newEmp.phone" type="tel" :placeholder="$t('employees.addModal.phonePlaceholder')" @blur="validateAddField('phone')" @input="validateAddField('phone')" />
+            <span class="field-error" v-if="addErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ addErrors.phone }}</span>
           </div>
+          <div class="form-row">
+            <div class="form-group" :class="{ 'has-error': addErrors.nida_number }">
+              <label>{{ $t('employees.addModal.nida') }}</label>
+              <input v-model="newEmp.nida_number" type="text" :placeholder="$t('employees.addModal.nidaPlaceholder')" @input="validateAddField('nida_number')" />
+            </div>
+            <div class="form-group" :class="{ 'has-error': addErrors.voting_id_number }">
+              <label>{{ $t('employees.addModal.votingId') }}</label>
+              <input v-model="newEmp.voting_id_number" type="text" :placeholder="$t('employees.addModal.votingIdPlaceholder')" @input="validateAddField('voting_id_number')" />
+            </div>
+          </div>
+          <p class="id-hint"><i class="fas fa-info-circle"></i> {{ $t('employees.addModal.idEither') }}</p>
           <div class="form-group" v-if="branches.length > 0">
             <label>{{ $t('branches.branchName') }}</label>
             <select v-model="newEmp.branch_id" class="form-select">
               <option value="">{{ $t('branches.noBranches') }}</option>
               <option v-for="b in branches" :key="b.id" :value="b.id">{{ b.name }}</option>
             </select>
+          </div>
+
+          <div class="wadhamini-box" :class="{ 'has-error': addErrors.guarantors }">
+            <div class="wadhamini-head">
+              <div>
+                <strong>{{ $t('employees.addModal.wadhamini') }} *</strong>
+                <p>{{ $t('employees.addModal.wadhaminiRequired') }}</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" @click="showGuarantorModal = true">
+                <i class="fas fa-users"></i>
+                {{ newEmp.guarantors.length > 0 ? $t('employees.addModal.editWadhamini') : $t('employees.addModal.fillWadhamini') }}
+                <span class="badge-count" v-if="newEmp.guarantors.length > 0">{{ newEmp.guarantors.length }}</span>
+              </button>
+            </div>
+            <div v-if="newEmp.guarantors.length === 0" class="wadhamini-empty">{{ $t('employees.addModal.emptyGuarantors') }}</div>
+            <div v-for="(g, i) in newEmp.guarantors" :key="i" class="wadhamini-item">
+              <div class="wadhamini-info">
+                <strong>{{ g.full_name }}</strong>
+                <span class="muted">{{ g.relationship }}</span>
+              </div>
+              <span class="muted">{{ g.phone }}</span>
+              <button type="button" class="btn-icon danger" :title="$t('common.delete')" @click="removeGuarantor(i)"><i class="fas fa-trash"></i></button>
+            </div>
+            <span class="field-error" v-if="addErrors.guarantors"><i class="fas fa-exclamation-triangle"></i> {{ addErrors.guarantors }}</span>
+          </div>
+
+          <div class="form-group attachments-group">
+            <label>{{ $t('employees.addModal.attachments') }}</label>
+            <p class="attachments-desc">{{ $t('employees.addModal.attachmentsDesc') }}</p>
+            <label class="file-drop">
+              <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" @change="onFilesSelected" />
+              <i class="fas fa-cloud-upload-alt"></i>
+              <span>{{ $t('employees.addModal.chooseFiles') }}</span>
+            </label>
+            <div v-if="newEmp.attachments.length === 0" class="no-files">{{ $t('employees.addModal.noFiles') }}</div>
+            <div v-for="(f, i) in newEmp.attachments" :key="i" class="file-item">
+              <i class="fas fa-file-alt"></i>
+              <span class="file-name">{{ f.file.name }}</span>
+              <select v-model="f.type" class="form-select file-type-select">
+                <option value="contract">{{ $t('employees.addModal.typeContract') }}</option>
+                <option value="background_check">{{ $t('employees.addModal.typeBackground') }}</option>
+                <option value="other">{{ $t('employees.addModal.typeOther') }}</option>
+              </select>
+              <button type="button" class="btn-icon danger" :title="$t('common.delete')" @click="removeFile(i)"><i class="fas fa-trash"></i></button>
+            </div>
           </div>
           <div class="default-pw-note" v-if="newEmp.name.trim()">
             <i class="fas fa-info-circle"></i>
@@ -112,6 +171,38 @@
             <button type="submit" class="btn btn-primary" :disabled="addLoading || !canAdd">
               <i class="fas fa-plus"></i> {{ addLoading ? $t('employees.addModal.creating') : $t('employees.addModal.createBtn') }}
             </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="modal-overlay" v-if="showGuarantorModal" @click.self="showGuarantorModal = false">
+      <div class="modal-card card guarantor-modal">
+        <h2><i class="fas fa-users"></i> {{ $t('employees.addModal.wadhamini') }}</h2>
+        <p class="modal-desc">{{ $t('employees.addModal.wadhaminiRequired') }}</p>
+        <form @submit.prevent="addGuarantor">
+          <div class="form-group" :class="{ 'has-error': guarantorErrors.full_name }">
+            <label>{{ $t('employees.addModal.guarantorName') }} *</label>
+            <input v-model="guarantorForm.full_name" type="text" :placeholder="$t('employees.addModal.guarantorNamePlaceholder')" />
+            <span class="field-error" v-if="guarantorErrors.full_name"><i class="fas fa-exclamation-triangle"></i> {{ guarantorErrors.full_name }}</span>
+          </div>
+          <div class="form-group" :class="{ 'has-error': guarantorErrors.phone }">
+            <label>{{ $t('employees.addModal.guarantorPhone') }} *</label>
+            <input v-model="guarantorForm.phone" type="tel" :placeholder="$t('employees.addModal.guarantorPhonePlaceholder')" />
+            <span class="field-error" v-if="guarantorErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ guarantorErrors.phone }}</span>
+          </div>
+          <div class="form-group" :class="{ 'has-error': guarantorErrors.relationship }">
+            <label>{{ $t('employees.addModal.guarantorRelationship') }} *</label>
+            <input v-model="guarantorForm.relationship" type="text" :placeholder="$t('employees.addModal.guarantorRelationshipPlaceholder')" />
+            <span class="field-error" v-if="guarantorErrors.relationship"><i class="fas fa-exclamation-triangle"></i> {{ guarantorErrors.relationship }}</span>
+          </div>
+          <div class="form-group">
+            <label>{{ $t('employees.addModal.guarantorAddress') }}</label>
+            <input v-model="guarantorForm.address" type="text" :placeholder="$t('employees.addModal.guarantorAddressPlaceholder')" />
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-outline" @click="showGuarantorModal = false">{{ $t('common.cancel') }}</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> {{ $t('employees.addModal.addGuarantor') }}</button>
           </div>
         </form>
       </div>
@@ -146,14 +237,23 @@ const branches = ref([])
 const { search, currentPage, showAll, displayItems, totalPages, pageInfo, onSearch, goToPage, toggleShowAll } = useTablePagination(employees, ['name', 'email', 'phone'])
 const loading = ref(true)
 const showAddModal = ref(false)
-const newEmp = ref({ name: '', email: '', phone: '', branch_id: '' })
+const newEmp = ref({ name: '', email: '', phone: '', nida_number: '', voting_id_number: '', branch_id: '', guarantors: [], attachments: [] })
 const addErrors = ref({})
 const addServerErrors = ref([])
 const addLoading = ref(false)
+const showGuarantorModal = ref(false)
+const guarantorForm = ref({ full_name: '', phone: '', relationship: '', address: '' })
+const guarantorErrors = ref({})
 const deleteTarget = ref(null)
 const deleting = ref(false)
 
-const canAdd = computed(() => newEmp.value.name.trim().length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmp.value.email))
+const canAdd = computed(() =>
+  newEmp.value.name.trim().length >= 2 &&
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmp.value.email) &&
+  newEmp.value.phone.trim().length >= 3 &&
+  (newEmp.value.nida_number.trim() || newEmp.value.voting_id_number.trim()) &&
+  newEmp.value.guarantors.length > 0
+)
 
 function validateAddField(field) {
   if (field === 'name') {
@@ -166,23 +266,86 @@ function validateAddField(field) {
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(newEmp.value.email)) addErrors.value.email = t('employees.emailInvalid')
     else delete addErrors.value.email
   }
+  if (field === 'phone') {
+    if (!newEmp.value.phone.trim()) addErrors.value.phone = t('employees.addModal.phoneRequired')
+    else delete addErrors.value.phone
+  }
+  if (field === 'nida_number' || field === 'voting_id_number') {
+    if (!newEmp.value.nida_number.trim() && !newEmp.value.voting_id_number.trim()) {
+      addErrors.value.nida_number = t('employees.addModal.idEither')
+      addErrors.value.voting_id_number = t('employees.addModal.idEither')
+    } else {
+      delete addErrors.value.nida_number
+      delete addErrors.value.voting_id_number
+    }
+  }
+}
+
+function addGuarantor() {
+  guarantorErrors.value = {}
+  const g = guarantorForm.value
+  if (!g.full_name.trim()) guarantorErrors.value.full_name = t('employees.addModal.guarantorNameRequired')
+  if (!g.phone.trim()) guarantorErrors.value.phone = t('employees.addModal.guarantorPhoneRequired')
+  if (!g.relationship.trim()) guarantorErrors.value.relationship = t('employees.addModal.guarantorRelationshipRequired')
+  if (Object.keys(guarantorErrors.value).length) return
+  newEmp.value.guarantors.push({ ...g, address: g.address.trim() })
+  guarantorForm.value = { full_name: '', phone: '', relationship: '', address: '' }
+}
+
+function removeGuarantor(i) {
+  newEmp.value.guarantors.splice(i, 1)
+}
+
+function onFilesSelected(e) {
+  const files = Array.from(e.target.files || [])
+  files.forEach(f => newEmp.value.attachments.push({ file: f, type: 'other' }))
+  e.target.value = ''
+}
+
+function removeFile(i) {
+  newEmp.value.attachments.splice(i, 1)
 }
 
 async function loadEmployees() {
   loading.value = true
   try {
     const [empRes, brRes] = await Promise.all([employeeApi.getAll(), branchApi.getAll()])
-    employees.value = empRes.data
-    branches.value = brRes.data
+    employees.value = empRes.data.data || []
+    branches.value = brRes.data || []
   } catch { employees.value = [] }
   loading.value = false
 }
 
 async function addEmployee() {
   addServerErrors.value = []
+  validateAddField('name')
+  validateAddField('email')
+  validateAddField('phone')
+  validateAddField('nida_number')
+  if (newEmp.value.guarantors.length === 0) addErrors.value.guarantors = t('employees.addModal.wadhaminiRequired')
+  else delete addErrors.value.guarantors
+  if (Object.keys(addErrors.value).length > 0) return
+
   addLoading.value = true
   try {
-    await employeeApi.create(newEmp.value)
+    const fd = new FormData()
+    fd.append('name', newEmp.value.name)
+    fd.append('email', newEmp.value.email)
+    fd.append('phone', newEmp.value.phone)
+    if (newEmp.value.nida_number.trim()) fd.append('nida_number', newEmp.value.nida_number.trim())
+    if (newEmp.value.voting_id_number.trim()) fd.append('voting_id_number', newEmp.value.voting_id_number.trim())
+    if (newEmp.value.branch_id) fd.append('branch_id', newEmp.value.branch_id)
+    newEmp.value.guarantors.forEach((g, i) => {
+      fd.append(`guarantors[${i}][full_name]`, g.full_name)
+      fd.append(`guarantors[${i}][phone]`, g.phone)
+      fd.append(`guarantors[${i}][relationship]`, g.relationship)
+      if (g.address) fd.append(`guarantors[${i}][address]`, g.address)
+    })
+    newEmp.value.attachments.forEach((a, i) => {
+      fd.append(`attachments[${i}]`, a.file)
+      fd.append(`document_types[${i}]`, a.type)
+    })
+    await employeeApi.create(fd)
     closeAddModal()
     await loadEmployees()
   } catch (e) {
@@ -197,9 +360,12 @@ async function addEmployee() {
 
 function closeAddModal() {
   showAddModal.value = false
-  newEmp.value = { name: '', email: '', phone: '', branch_id: '' }
+  newEmp.value = { name: '', email: '', phone: '', nida_number: '', voting_id_number: '', branch_id: '', guarantors: [], attachments: [] }
   addErrors.value = {}
   addServerErrors.value = []
+  showGuarantorModal.value = false
+  guarantorForm.value = { full_name: '', phone: '', relationship: '', address: '' }
+  guarantorErrors.value = {}
 }
 
 async function toggleStatus(emp) {
@@ -275,9 +441,38 @@ onMounted(loadEmployees)
 
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
 .modal-card { width: 100%; max-width: 460px; padding: 32px; }
+.modal-card.add-employee-modal { max-width: 580px; max-height: 90vh; overflow-y: auto; }
+.modal-card.guarantor-modal { max-width: 480px; }
 .modal-card h2 { font-size: 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
 .modal-card h2 i { color: #e74c3c; }
 .modal-desc { color: #888; font-size: 13px; margin-bottom: 20px; line-height: 1.5; }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.id-hint { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #999; margin: -8px 0 16px; }
+.id-hint i { color: #2980b9; }
+
+.wadhamini-box { border: 2px dashed #d5c7f0; background: #fbf9ff; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+.wadhamini-box.has-error { border-color: #e74c3c; }
+.wadhamini-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.wadhamini-head strong { font-size: 14px; }
+.wadhamini-head p { font-size: 12px; color: #888; margin: 2px 0 0; }
+.badge-count { display: inline-flex; align-items: center; justify-content: center; min-width: 20px; height: 20px; padding: 0 6px; background: #8e44ad; color: #fff; border-radius: 10px; font-size: 11px; font-weight: 700; }
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+.wadhamini-empty { font-size: 13px; color: #999; padding: 6px 0; }
+.wadhamini-item { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-top: 1px solid #f0ebfb; font-size: 13px; }
+.wadhamini-info { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wadhamini-info .muted { margin-left: 0; }
+
+.attachments-desc { font-size: 12px; color: #999; margin: -8px 0 12px; }
+.file-drop { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 20px; border: 2px dashed #ddd; border-radius: 8px; cursor: pointer; color: #888; transition: all 0.2s; margin-bottom: 10px; }
+.file-drop:hover { border-color: #e74c3c; color: #e74c3c; }
+.file-drop i { font-size: 24px; }
+.file-drop input[type="file"] { display: none; }
+.no-files { font-size: 13px; color: #999; padding: 4px 0 8px; }
+.file-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-top: 1px solid #f5f5f5; font-size: 13px; }
+.file-item > i { color: #e74c3c; }
+.file-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-type-select { width: 150px; flex-shrink: 0; padding: 8px 10px; font-size: 12px; }
 .form-group { margin-bottom: 16px; }
 .form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
 .optional { color: #aaa; font-weight: 400; font-size: 12px; }
@@ -315,5 +510,7 @@ onMounted(loadEmployees)
   .emp-date span:last-child, .emp-pw-status span:last-child { display: inline; }
   .emp-details-row { display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center; }
   .emp-actions { width: 100%; justify-content: flex-end; border-top: 1px solid #f0f0f0; padding-top: 10px; }
+  .form-row { grid-template-columns: 1fr; }
+  .wadhamini-head { flex-direction: column; align-items: flex-start; }
 }
 </style>

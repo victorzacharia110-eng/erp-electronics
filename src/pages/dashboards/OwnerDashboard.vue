@@ -119,14 +119,12 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { productApi, orderApi, employeeApi, stockAlertApi } from '@/api'
 import SalesCharts from './analytics/SalesCharts.vue'
 import AiSuggestions from './analytics/AiSuggestions.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
-const { t } = useI18n()
 const authStore = useAuthStore()
 const stats = ref({ revenue: 0, totalOrders: 0, totalProducts: 0, totalEmployees: 0 })
 const recentOrders = ref([])
@@ -141,11 +139,6 @@ function onAnalyticsLoaded(data) {
 }
 
 function formatPrice(v) { return Number(v).toLocaleString('en-TZ') }
-
-function showPlaceholder(section) {
-  toastMsg.value = t('dashboards.owner.placeholderComingSoon', { section })
-  setTimeout(() => toastMsg.value = '', 3000)
-}
 
 onMounted(async () => {
   await authStore.fetchProfile()
@@ -162,7 +155,7 @@ onMounted(async () => {
     recentOrders.value = orders
     stats.value.totalOrders = orderRes.data.total || orders.length
     stats.value.revenue = orders.reduce((s, o) => s + Number(o.total || 0), 0)
-    stats.value.totalEmployees = empRes.data?.length || 0
+    stats.value.totalEmployees = empRes.data?.data?.length || 0
     stockAlertCount.value = alertRes.data?.count || 0
   } catch { /* empty */ }
   loading.value = false

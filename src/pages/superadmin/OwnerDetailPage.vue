@@ -243,7 +243,7 @@ async function saveSubscription() {
     await superadminApi.updateSubscription(route.params.id, subForm.value)
     toastMsg.value = 'Subscription updated'
     await loadData()
-  } catch (e) {
+  } catch {
     toastMsg.value = 'Failed to update subscription'
   }
   savingSub.value = false
@@ -256,7 +256,7 @@ async function saveLimits() {
     await superadminApi.updateLimits(route.params.id, limitsForm.value)
     toastMsg.value = 'Limits updated'
     await loadData()
-  } catch (e) {
+  } catch {
     toastMsg.value = 'Failed to update limits'
   }
   savingLimits.value = false

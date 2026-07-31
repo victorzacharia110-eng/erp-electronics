@@ -227,7 +227,7 @@ async function toggleOwner(id) {
     const res = await superadminApi.toggleActive(id)
     toastMsg.value = res.data.message
     await loadData()
-  } catch (e) {
+  } catch {
     toastMsg.value = 'Failed to toggle owner'
   }
   setTimeout(() => toastMsg.value = '', 3000)

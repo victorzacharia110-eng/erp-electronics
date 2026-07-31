@@ -26,7 +26,9 @@ export const employeeApi = {
     return api.get('/employees')
   },
   create(data) {
-    return api.post('/employees', data)
+    return api.post('/employees', data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
   },
   toggleStatus(id) {
     return api.patch(`/employees/${id}/toggle-status`)
@@ -36,6 +38,24 @@ export const employeeApi = {
   },
   delete(id) {
     return api.delete(`/employees/${id}`)
+  },
+  documents: {
+    list(userId) {
+      return api.get(`/employees/${userId}/documents`)
+    },
+    upload(userId, formData) {
+      return api.post(`/employees/${userId}/documents`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+    },
+    remove(userId, documentId) {
+      return api.delete(`/employees/${userId}/documents/${documentId}`)
+    },
+    download(userId, documentId) {
+      return api.get(`/employees/${userId}/documents/${documentId}/download`, {
+        responseType: 'blob',
+      })
+    },
   },
 }
 
@@ -182,6 +202,9 @@ export const orderManageApi = {
   },
   updateDelivery(orderId, data) {
     return api.patch(`/orders/${orderId}/delivery`, data)
+  },
+  returnItems(orderId, data) {
+    return api.post(`/orders/${orderId}/return`, data)
   },
 }
 
@@ -406,6 +429,12 @@ export const accountingReportApi = {
   },
   getGeneralLedger(params) {
     return api.get('/reports/general-ledger', { params })
+  },
+}
+
+export const accountingIssuesApi = {
+  get() {
+    return api.get('/accounting-issues')
   },
 }
 

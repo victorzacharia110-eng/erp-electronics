@@ -269,7 +269,7 @@ async function viewOrder(po) {
   try {
     const res = await supplierPortalApi.getOrder(po.id)
     selectedPO.value = res.data
-  } catch (e) {
+  } catch {
     selectedPO.value = po
   }
   showDetailModal.value = true

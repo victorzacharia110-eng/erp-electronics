@@ -152,7 +152,7 @@ async function saveBranding() {
     await superadminApi.updateBranding(route.params.id, brandForm.value)
     toastMsg.value = 'Branding updated'
     await loadData()
-  } catch (e) {
+  } catch {
     toastMsg.value = 'Failed to update branding'
   }
   saving.value = false
@@ -173,7 +173,7 @@ async function uploadLogo() {
     toastMsg.value = 'Logo uploaded'
     selectedFile.value = null
     await loadData()
-  } catch (e) {
+  } catch {
     toastMsg.value = 'Failed to upload logo'
   }
   uploading.value = false

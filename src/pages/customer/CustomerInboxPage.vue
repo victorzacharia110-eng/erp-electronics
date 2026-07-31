@@ -99,12 +99,10 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { conversationApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
-const { t } = useI18n()
 const authStore = useAuthStore()
 const conversations = ref([])
 const activeConversation = ref(null)

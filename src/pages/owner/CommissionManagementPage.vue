@@ -125,7 +125,6 @@
 import { ref, computed, onMounted } from 'vue'
 import { commissionApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
-import TablePagination from '@/components/TablePagination.vue'
 
 const loading = ref(true)
 const commissions = ref([])

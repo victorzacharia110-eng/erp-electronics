@@ -60,6 +60,25 @@
       </router-link>
     </div>
 
+    <div class="card dash-section accounting-issues">
+      <div class="section-header-row">
+        <h2><i class="fas fa-balance-scale"></i> {{ $t('dashboards.employee.accountingIssues') }}</h2>
+        <span v-if="accountingIssues.length > 0" class="issue-total">
+          {{ $t('dashboards.employee.issueCount', { count: accountingIssues.length }) }}
+        </span>
+      </div>
+      <p class="issue-desc">{{ $t('dashboards.employee.accountingIssuesDesc') }}</p>
+      <div v-if="accountingIssues.length === 0" class="empty-mini">{{ $t('dashboards.employee.accountingIssuesEmpty') }}</div>
+      <div v-for="issue in accountingIssues" :key="issue.type" class="issue-item">
+        <span class="sev-dot" :class="`sev-${issue.severity}`"></span>
+        <div class="issue-body">
+          <strong>{{ locale === 'sw' ? issue.title_sw : issue.title_en }}</strong>
+          <span class="issue-desc-text">{{ locale === 'sw' ? issue.description_sw : issue.description_en }}</span>
+        </div>
+        <span class="issue-count">{{ issue.count }}</span>
+      </div>
+    </div>
+
     <div class="dash-grid">
       <div class="card dash-section">
         <div class="section-header-row">
@@ -100,28 +119,33 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
-import { productApi, orderApi, customerApi, supportApi } from '@/api'
+import { productApi, orderApi, customerApi, supportApi, accountingIssuesApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
+const { locale } = useI18n()
 const authStore = useAuthStore()
 const stats = ref({ pendingOrders: 0, processingOrders: 0, shippedToday: 0, totalProducts: 0, totalCustomers: 0 })
 const recentOrders = ref([])
 const unreadTickets = ref(0)
+const accountingIssues = ref([])
 const loading = ref(true)
 
 onMounted(async () => {
   await authStore.fetchProfile()
   try {
-    const [prodRes, orderRes, custRes, unreadRes] = await Promise.all([
+    const [prodRes, orderRes, custRes, unreadRes, issuesRes] = await Promise.all([
       productApi.getAll({ per_page: 1 }),
       orderApi.getAll({ per_page: 10 }),
       customerApi.getAll().catch(() => ({ data: [] })),
       supportApi.getUnreadCount().catch(() => ({ data: { open_tickets: 0 } })),
+      accountingIssuesApi.get().catch(() => ({ data: { issues: [] } })),
     ])
     stats.value.totalProducts = prodRes.data.total || 0
     stats.value.totalCustomers = custRes.data?.length || 0
     unreadTickets.value = unreadRes.data?.open_tickets || 0
+    accountingIssues.value = issuesRes.data?.issues || []
     const orders = orderRes.data.data || []
     recentOrders.value = orders.slice(0, 5)
     stats.value.pendingOrders = orders.filter(o => o.status === 'pending').length
@@ -360,6 +384,89 @@ onMounted(async () => {
   padding: 24px;
   color: #999;
   font-size: 14px;
+}
+
+.accounting-issues {
+  margin-bottom: 24px;
+}
+
+.accounting-issues h2 i {
+  color: #8e44ad;
+}
+
+.issue-total {
+  font-size: 13px;
+  font-weight: 600;
+  color: #8e44ad;
+  background: #f4ecfb;
+  border-radius: 12px;
+  padding: 4px 12px;
+}
+
+.issue-desc {
+  font-size: 13px;
+  color: #888;
+  margin: -8px 0 12px;
+}
+
+.issue-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 14px;
+}
+
+.issue-item:last-child {
+  border-bottom: none;
+}
+
+.sev-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.sev-dot.sev-high {
+  background: #e74c3c;
+}
+
+.sev-dot.sev-medium {
+  background: #f39c12;
+}
+
+.sev-dot.sev-low {
+  background: #95a5a6;
+}
+
+.issue-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.issue-body strong {
+  font-size: 14px;
+  color: #333;
+}
+
+.issue-desc-text {
+  font-size: 12px;
+  color: #999;
+}
+
+.issue-count {
+  font-size: 14px;
+  font-weight: 700;
+  color: #8e44ad;
+  background: #f4ecfb;
+  border-radius: 12px;
+  padding: 2px 10px;
+  min-width: 40px;
+  text-align: center;
 }
 
 .status-badge {
