@@ -291,6 +291,20 @@
       "removeFile": "Ondoa",
       "creating": "Inaunda...",
       "createBtn": "Unda Mfanyakazi"
+    },
+    "editFailed": "Imeshindikana kusasisha mfanyakazi",
+    "editModal": {
+      "title": "Hariri Mfanyakazi",
+      "noBranch": "Hakuna tawi",
+      "position": "Nafasi",
+      "positionPlaceholder": "mf. Mhasibu, Muuzaji",
+      "department": "Idara",
+      "departmentPlaceholder": "mf. Mauzo, Ghala",
+      "commissionRate": "Kiwango cha Ushiriki (%)",
+      "commissionRatePlaceholder": "0 - 100",
+      "guarantorsInfo": "Wadhamini si lazima wakati wa kuhariri.",
+      "saving": "Inahifadhi...",
+      "saveBtn": "Hifadhi Mabadiliko"
     }
   },
   "branches": {

@@ -59,6 +59,7 @@
             </div>
           </div>
           <div class="emp-actions">
+            <button class="btn-icon" :title="$t('common.edit')" @click="openEdit(emp)"><i class="fas fa-edit"></i></button>
             <button class="btn-icon" :title="emp.is_active ? $t('employees.deactivate') : $t('employees.activate')" @click="toggleStatus(emp)">
               <i :class="emp.is_active ? 'fas fa-user-slash' : 'fas fa-user-check'"></i>
             </button>
@@ -176,6 +177,95 @@
       </div>
     </div>
 
+    <div class="modal-overlay" v-if="showEditModal" @click.self="closeEditModal">
+      <div class="modal-card card add-employee-modal">
+        <h2><i class="fas fa-user-edit"></i> {{ $t('employees.editModal.title') }}</h2>
+        <form @submit.prevent="saveEmployee" novalidate>
+          <div class="form-group" :class="{ 'has-error': editErrors.name }">
+            <label>{{ $t('employees.addModal.name') }} *</label>
+            <input v-model="editEmp.name" type="text" :placeholder="$t('employees.addModal.namePlaceholder')" @blur="validateEditField('name')" @input="validateEditField('name')" />
+            <span class="field-error" v-if="editErrors.name"><i class="fas fa-exclamation-triangle"></i> {{ editErrors.name }}</span>
+          </div>
+          <div class="form-group" :class="{ 'has-error': editErrors.email }">
+            <label>{{ $t('employees.addModal.email') }} *</label>
+            <input v-model="editEmp.email" type="email" :placeholder="$t('employees.addModal.emailPlaceholder')" @blur="validateEditField('email')" @input="validateEditField('email')" />
+            <span class="field-error" v-if="editErrors.email"><i class="fas fa-exclamation-triangle"></i> {{ editErrors.email }}</span>
+          </div>
+          <div class="form-group" :class="{ 'has-error': editErrors.phone }">
+            <label>{{ $t('employees.addModal.phone') }} *</label>
+            <input v-model="editEmp.phone" type="tel" :placeholder="$t('employees.addModal.phonePlaceholder')" @blur="validateEditField('phone')" @input="validateEditField('phone')" />
+            <span class="field-error" v-if="editErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ editErrors.phone }}</span>
+          </div>
+          <div class="form-row">
+            <div class="form-group" :class="{ 'has-error': editErrors.nida_number }">
+              <label>{{ $t('employees.addModal.nida') }}</label>
+              <input v-model="editEmp.nida_number" type="text" :placeholder="$t('employees.addModal.nidaPlaceholder')" @input="validateEditField('nida_number')" />
+            </div>
+            <div class="form-group" :class="{ 'has-error': editErrors.voting_id_number }">
+              <label>{{ $t('employees.addModal.votingId') }}</label>
+              <input v-model="editEmp.voting_id_number" type="text" :placeholder="$t('employees.addModal.votingIdPlaceholder')" @input="validateEditField('nida_number')" />
+            </div>
+          </div>
+          <p class="id-hint"><i class="fas fa-info-circle"></i> {{ $t('employees.addModal.idEither') }}</p>
+          <div class="form-row">
+            <div class="form-group" v-if="branches.length > 0">
+              <label>{{ $t('branches.branchName') }}</label>
+              <select v-model="editEmp.branch_id" class="form-select">
+                <option value="">{{ $t('employees.editModal.noBranch') }}</option>
+                <option v-for="b in branches" :key="b.id" :value="b.id">{{ b.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>{{ $t('employees.editModal.position') }}</label>
+              <input v-model="editEmp.position" type="text" :placeholder="$t('employees.editModal.positionPlaceholder')" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>{{ $t('employees.editModal.department') }}</label>
+              <input v-model="editEmp.department" type="text" :placeholder="$t('employees.editModal.departmentPlaceholder')" />
+            </div>
+            <div class="form-group">
+              <label>{{ $t('employees.editModal.commissionRate') }}</label>
+              <input v-model="editEmp.commission_rate" type="number" min="0" max="100" step="0.01" :placeholder="$t('employees.editModal.commissionRatePlaceholder')" />
+            </div>
+          </div>
+
+          <div class="wadhamini-box" :class="{ 'has-error': editErrors.guarantors }">
+            <div class="wadhamini-head">
+              <div>
+                <strong>{{ $t('employees.addModal.wadhamini') }}</strong>
+                <p>{{ $t('employees.editModal.guarantorsInfo') }}</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" @click="showGuarantorModal = true">
+                <i class="fas fa-users"></i>
+                {{ editEmp.guarantors.length > 0 ? $t('employees.addModal.editWadhamini') : $t('employees.addModal.fillWadhamini') }}
+                <span class="badge-count" v-if="editEmp.guarantors.length > 0">{{ editEmp.guarantors.length }}</span>
+              </button>
+            </div>
+            <div v-if="editEmp.guarantors.length === 0" class="wadhamini-empty">{{ $t('employees.addModal.emptyGuarantors') }}</div>
+            <div v-for="(g, i) in editEmp.guarantors" :key="i" class="wadhamini-item">
+              <div class="wadhamini-info">
+                <strong>{{ g.full_name }}</strong>
+                <span class="muted">{{ g.relationship }}</span>
+              </div>
+              <span class="muted">{{ g.phone }}</span>
+              <button type="button" class="btn-icon danger" :title="$t('common.delete')" @click="removeGuarantor(i)"><i class="fas fa-trash"></i></button>
+            </div>
+          </div>
+          <div class="server-errors" v-if="editServerErrors.length > 0">
+            <div v-for="(msg, i) in editServerErrors" :key="i" class="server-error"><i class="fas fa-exclamation-circle"></i> {{ msg }}</div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-outline" @click="closeEditModal">{{ $t('common.cancel') }}</button>
+            <button type="submit" class="btn btn-primary" :disabled="editLoading || !canEdit">
+              <i class="fas fa-save"></i> {{ editLoading ? $t('employees.editModal.saving') : $t('employees.editModal.saveBtn') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div class="modal-overlay" v-if="showGuarantorModal" @click.self="showGuarantorModal = false">
       <div class="modal-card card guarantor-modal">
         <h2><i class="fas fa-users"></i> {{ $t('employees.addModal.wadhamini') }}</h2>
@@ -244,6 +334,12 @@ const addLoading = ref(false)
 const showGuarantorModal = ref(false)
 const guarantorForm = ref({ full_name: '', phone: '', relationship: '', address: '' })
 const guarantorErrors = ref({})
+const editTarget = ref(null)
+const showEditModal = ref(false)
+const editEmp = ref({ name: '', email: '', phone: '', nida_number: '', voting_id_number: '', branch_id: '', position: '', department: '', commission_rate: '', guarantors: [] })
+const editErrors = ref({})
+const editServerErrors = ref([])
+const editLoading = ref(false)
 const deleteTarget = ref(null)
 const deleting = ref(false)
 
@@ -253,6 +349,14 @@ const canAdd = computed(() =>
   newEmp.value.phone.trim().length >= 3 &&
   (newEmp.value.nida_number.trim() || newEmp.value.voting_id_number.trim()) &&
   newEmp.value.guarantors.length > 0
+)
+
+const canEdit = computed(() =>
+  editTarget.value !== null &&
+  editEmp.value.name.trim().length >= 2 &&
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editEmp.value.email) &&
+  editEmp.value.phone.trim().length >= 3 &&
+  (editEmp.value.nida_number.trim() || editEmp.value.voting_id_number.trim())
 )
 
 function validateAddField(field) {
@@ -281,6 +385,32 @@ function validateAddField(field) {
   }
 }
 
+function validateEditField(field) {
+  if (field === 'name') {
+    if (!editEmp.value.name.trim()) editErrors.value.name = t('employees.nameRequired')
+    else if (editEmp.value.name.trim().length < 2) editErrors.value.name = t('employees.nameTooShort')
+    else delete editErrors.value.name
+  }
+  if (field === 'email') {
+    if (!editEmp.value.email.trim()) editErrors.value.email = t('employees.emailRequired')
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editEmp.value.email)) editErrors.value.email = t('employees.emailInvalid')
+    else delete editErrors.value.email
+  }
+  if (field === 'phone') {
+    if (!editEmp.value.phone.trim()) editErrors.value.phone = t('employees.addModal.phoneRequired')
+    else delete editErrors.value.phone
+  }
+  if (field === 'nida_number' || field === 'voting_id_number') {
+    if (!editEmp.value.nida_number.trim() && !editEmp.value.voting_id_number.trim()) {
+      editErrors.value.nida_number = t('employees.addModal.idEither')
+      editErrors.value.voting_id_number = t('employees.addModal.idEither')
+    } else {
+      delete editErrors.value.nida_number
+      delete editErrors.value.voting_id_number
+    }
+  }
+}
+
 function addGuarantor() {
   guarantorErrors.value = {}
   const g = guarantorForm.value
@@ -288,12 +418,16 @@ function addGuarantor() {
   if (!g.phone.trim()) guarantorErrors.value.phone = t('employees.addModal.guarantorPhoneRequired')
   if (!g.relationship.trim()) guarantorErrors.value.relationship = t('employees.addModal.guarantorRelationshipRequired')
   if (Object.keys(guarantorErrors.value).length) return
-  newEmp.value.guarantors.push({ ...g, address: g.address.trim() })
+  activeGuarantorList().push({ ...g, address: g.address.trim() })
   guarantorForm.value = { full_name: '', phone: '', relationship: '', address: '' }
 }
 
+function activeGuarantorList() {
+  return showEditModal.value ? editEmp.value.guarantors : newEmp.value.guarantors
+}
+
 function removeGuarantor(i) {
-  newEmp.value.guarantors.splice(i, 1)
+  activeGuarantorList().splice(i, 1)
 }
 
 function onFilesSelected(e) {
@@ -366,6 +500,81 @@ function closeAddModal() {
   showGuarantorModal.value = false
   guarantorForm.value = { full_name: '', phone: '', relationship: '', address: '' }
   guarantorErrors.value = {}
+}
+
+function openEdit(emp) {
+  editTarget.value = emp
+  editEmp.value = {
+    name: emp.name,
+    email: emp.email,
+    phone: emp.phone,
+    nida_number: emp.nida_number || '',
+    voting_id_number: emp.voting_id_number || '',
+    branch_id: emp.employee_profile?.branch_id || '',
+    position: emp.employee_profile?.position || '',
+    department: emp.employee_profile?.department || '',
+    commission_rate: emp.employee_profile?.commission_rate ?? '',
+    guarantors: (emp.guarantors || []).map(g => ({
+      full_name: g.full_name,
+      phone: g.phone,
+      relationship: g.relationship,
+      address: g.address || '',
+    })),
+  }
+  editErrors.value = {}
+  editServerErrors.value = []
+  showEditModal.value = true
+}
+
+function closeEditModal() {
+  showEditModal.value = false
+  editTarget.value = null
+  editEmp.value = { name: '', email: '', phone: '', nida_number: '', voting_id_number: '', branch_id: '', position: '', department: '', commission_rate: '', guarantors: [] }
+  editErrors.value = {}
+  editServerErrors.value = []
+  showGuarantorModal.value = false
+  guarantorForm.value = { full_name: '', phone: '', relationship: '', address: '' }
+  guarantorErrors.value = {}
+}
+
+async function saveEmployee() {
+  editServerErrors.value = []
+  validateEditField('name')
+  validateEditField('email')
+  validateEditField('phone')
+  validateEditField('nida_number')
+  if (Object.keys(editErrors.value).length > 0) return
+
+  editLoading.value = true
+  try {
+    const payload = {
+      name: editEmp.value.name,
+      email: editEmp.value.email,
+      phone: editEmp.value.phone,
+      nida_number: editEmp.value.nida_number.trim() || null,
+      voting_id_number: editEmp.value.voting_id_number.trim() || null,
+      branch_id: editEmp.value.branch_id || null,
+      position: editEmp.value.position.trim() || null,
+      department: editEmp.value.department.trim() || null,
+      commission_rate: editEmp.value.commission_rate === '' ? null : editEmp.value.commission_rate,
+      guarantors: editEmp.value.guarantors.map(({ full_name, phone, relationship, address }) => ({
+        full_name,
+        phone,
+        relationship,
+        address: address || '',
+      })),
+    }
+    await employeeApi.update(editTarget.value.id, payload)
+    closeEditModal()
+    await loadEmployees()
+  } catch (e) {
+    if (e.response?.data?.errors) {
+      editServerErrors.value = Object.entries(e.response.data.errors).map(([, arr]) => arr[0])
+    } else {
+      editServerErrors.value = [e.response?.data?.message || t('employees.editFailed')]
+    }
+  }
+  editLoading.value = false
 }
 
 async function toggleStatus(emp) {

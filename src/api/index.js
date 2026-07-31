@@ -30,6 +30,9 @@ export const employeeApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     })
   },
+  update(id, data) {
+    return api.put(`/employees/${id}`, data)
+  },
   toggleStatus(id) {
     return api.patch(`/employees/${id}/toggle-status`)
   },

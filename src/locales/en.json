@@ -291,6 +291,20 @@
       "removeFile": "Remove",
       "creating": "Creating...",
       "createBtn": "Create Employee"
+    },
+    "editFailed": "Failed to update employee",
+    "editModal": {
+      "title": "Edit Employee",
+      "noBranch": "No branch",
+      "position": "Position",
+      "positionPlaceholder": "e.g. Cashier, Salesperson",
+      "department": "Department",
+      "departmentPlaceholder": "e.g. Sales, Warehouse",
+      "commissionRate": "Commission Rate (%)",
+      "commissionRatePlaceholder": "0 - 100",
+      "guarantorsInfo": "Guarantors are optional when editing.",
+      "saving": "Saving...",
+      "saveBtn": "Save Changes"
     }
   },
   "branches": {
