@@ -72,6 +72,12 @@ const routes = [
         meta: { requiresAuth: true, role: 'employee' },
       },
       {
+        path: 'employee/inbox',
+        name: 'employee-inbox',
+        component: () => import('@/pages/employee/EmployeeInboxPage.vue'),
+        meta: { requiresAuth: true, role: 'employee' },
+      },
+      {
         path: 'owner',
         name: 'owner-dashboard',
         component: () => import('@/pages/dashboards/OwnerDashboard.vue'),

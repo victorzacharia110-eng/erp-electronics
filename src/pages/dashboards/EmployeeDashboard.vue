@@ -104,6 +104,8 @@
             $t('dashboards.employee.manageOrders') }}</span></router-link>
           <router-link to="/employee/support" class="action-tile"><i class="fas fa-inbox"></i><span>{{
             $t('dashboards.employee.supportInbox') }}</span></router-link>
+          <router-link to="/employee/inbox" class="action-tile"><i class="fas fa-comments"></i><span>{{
+            $t('dashboards.employee.ownerInbox') }}</span></router-link>
           <router-link to="/products" class="action-tile"><i class="fas fa-box"></i><span>{{
             $t('dashboards.employee.viewProducts') }}</span></router-link>
           <router-link to="/account" class="action-tile"><i class="fas fa-user"></i><span>{{
