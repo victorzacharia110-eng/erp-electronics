@@ -1,6 +1,59 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
+const storefrontChildren = [
+  {
+    path: 'products',
+    name: 'products',
+    component: () => import('@/pages/products/ProductListPage.vue'),
+  },
+  {
+    path: 'products/:slug',
+    name: 'product-detail',
+    component: () => import('@/pages/products/ProductDetailPage.vue'),
+  },
+  {
+    path: 'category/:slug',
+    name: 'category',
+    component: () => import('@/pages/products/CategoryPage.vue'),
+  },
+  {
+    path: 'cart',
+    name: 'cart',
+    component: () => import('@/pages/cart/CartPage.vue'),
+  },
+  {
+    path: 'checkout',
+    name: 'checkout',
+    component: () => import('@/pages/checkout/CheckoutPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: 'orders',
+    name: 'orders',
+    component: () => import('@/pages/account/OrdersPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: 'account',
+    name: 'account',
+    component: () => import('@/pages/account/AccountPage.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: 'support',
+    name: 'support',
+    component: () => import('@/pages/account/SupportPage.vue'),
+    meta: { requiresAuth: true, role: 'customer' },
+  },
+  {
+    path: 'customer/inbox',
+    name: 'customer-inbox',
+    component: () => import('@/pages/customer/CustomerInboxPage.vue'),
+    meta: { requiresAuth: true, role: 'customer' },
+  },
+]
+
 const routes = [
   {
     path: '/',
@@ -9,52 +62,9 @@ const routes = [
       {
         path: '',
         name: 'home',
-        component: () => import('@/pages/home/HomePage.vue'),
+        component: () => import('@/pages/home/DirectoryPage.vue'),
       },
-      {
-        path: 'products',
-        name: 'products',
-        component: () => import('@/pages/products/ProductListPage.vue'),
-      },
-      {
-        path: 'products/:slug',
-        name: 'product-detail',
-        component: () => import('@/pages/products/ProductDetailPage.vue'),
-      },
-      {
-        path: 'category/:slug',
-        name: 'category',
-        component: () => import('@/pages/products/CategoryPage.vue'),
-      },
-      {
-        path: 'cart',
-        name: 'cart',
-        component: () => import('@/pages/cart/CartPage.vue'),
-      },
-      {
-        path: 'checkout',
-        name: 'checkout',
-        component: () => import('@/pages/checkout/CheckoutPage.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'orders',
-        name: 'orders',
-        component: () => import('@/pages/account/OrdersPage.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'account',
-        name: 'account',
-        component: () => import('@/pages/account/AccountPage.vue'),
-        meta: { requiresAuth: true },
-      },
-      {
-        path: 'support',
-        name: 'support',
-        component: () => import('@/pages/account/SupportPage.vue'),
-        meta: { requiresAuth: true, role: 'customer' },
-      },
+      ...storefrontChildren,
       {
         path: 'employee/support',
         name: 'employee-support',
@@ -256,6 +266,67 @@ const routes = [
       {
         path: 'customer/inbox',
         name: 'customer-inbox',
+        component: () => import('@/pages/customer/CustomerInboxPage.vue'),
+        meta: { requiresAuth: true, role: 'customer' },
+      },
+    ],
+  },
+  {
+    path: '/:businessSlug',
+    component: () => import('@/layouts/StoreLayout.vue'),
+    children: [
+      {
+        path: '',
+        name: 'store-home',
+        component: () => import('@/pages/home/HomePage.vue'),
+      },
+      {
+        path: 'products',
+        name: 'store-products',
+        component: () => import('@/pages/products/ProductListPage.vue'),
+      },
+      {
+        path: 'products/:slug',
+        name: 'store-product-detail',
+        component: () => import('@/pages/products/ProductDetailPage.vue'),
+      },
+      {
+        path: 'category/:slug',
+        name: 'store-category',
+        component: () => import('@/pages/products/CategoryPage.vue'),
+      },
+      {
+        path: 'cart',
+        name: 'store-cart',
+        component: () => import('@/pages/cart/CartPage.vue'),
+      },
+      {
+        path: 'checkout',
+        name: 'store-checkout',
+        component: () => import('@/pages/checkout/CheckoutPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'orders',
+        name: 'store-orders',
+        component: () => import('@/pages/account/OrdersPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'account',
+        name: 'store-account',
+        component: () => import('@/pages/account/AccountPage.vue'),
+        meta: { requiresAuth: true },
+      },
+      {
+        path: 'support',
+        name: 'store-support',
+        component: () => import('@/pages/account/SupportPage.vue'),
+        meta: { requiresAuth: true, role: 'customer' },
+      },
+      {
+        path: 'customer/inbox',
+        name: 'store-customer-inbox',
         component: () => import('@/pages/customer/CustomerInboxPage.vue'),
         meta: { requiresAuth: true, role: 'customer' },
       },

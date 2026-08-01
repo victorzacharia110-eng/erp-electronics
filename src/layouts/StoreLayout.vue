@@ -1,5 +1,5 @@
 <template>
-  <div class="store-layout">
+  <div class="store-layout" :style="{ '--brand': brandColor, '--brand-dark': brandColorDark }">
     <header class="site-header">
       <div class="top-bar">
         <div class="container top-bar-inner">
@@ -18,12 +18,12 @@
 
       <div class="main-header">
         <div class="container main-header-inner">
-          <router-link to="/" class="logo" @click="navOpen = false">
+          <router-link :to="homeLink" class="logo" @click="navOpen = false">
             <span class="logo-icon"><i class="fas fa-bolt"></i></span>
-            <span class="logo-text">Electro<span>Shop</span></span>
+            <span class="logo-text">{{ logoTextFirst }}<span v-if="logoTextRest">{{ logoTextRest }}</span></span>
           </router-link>
 
-          <div class="search-bar">
+          <div v-if="!isDirectory" class="search-bar">
             <input
               v-model="searchQuery"
               type="text"
@@ -36,19 +36,24 @@
           </div>
 
           <div class="header-actions">
-            <router-link to="/cart" class="action-link cart-link" :class="{ 'cart-bump': cartBump }">
+            <router-link v-if="!isDirectory" :to="storeLink('/cart')" class="action-link cart-link" :class="{ 'cart-bump': cartBump }">
               <i class="fas fa-shopping-cart"></i>
               <span class="cart-count" v-if="cartStore.itemCount > 0">{{ cartStore.itemCount }}</span>
               <span class="action-label">{{ $t('nav.cart') }}</span>
             </router-link>
 
+            <router-link v-if="isDirectory && authStore.isAuthenticated" :to="dashboardRoute" class="action-link">
+              <i class="fas fa-gauge-high"></i>
+              <span class="action-label">{{ $t('nav.dashboard') }}</span>
+            </router-link>
+
             <template v-if="authStore.isAuthenticated">
-              <router-link v-if="authStore.isOwner || authStore.isCustomer" :to="inboxRoute" class="action-link inbox-link">
+              <router-link v-if="!isDirectory && (authStore.isOwner || authStore.isCustomer)" :to="inboxRoute" class="action-link inbox-link">
                 <i class="fas fa-envelope"></i>
                 <span class="cart-count msg-count" v-if="unreadMsgCount > 0">{{ unreadMsgCount }}</span>
                 <span class="action-label">{{ $t('nav.inbox') }}</span>
               </router-link>
-              <router-link :to="dashboardRoute" class="action-link">
+              <router-link v-if="!isDirectory" :to="dashboardRoute" class="action-link">
                 <i class="fas fa-gauge-high"></i>
                 <span class="action-label">{{ $t('nav.dashboard') }}</span>
               </router-link>
@@ -69,12 +74,12 @@
             </button>
           </div>
 
-          <button class="hamburger" :class="{ active: navOpen }" @click="navOpen = !navOpen">
+          <button v-if="!isDirectory" class="hamburger" :class="{ active: navOpen }" @click="navOpen = !navOpen">
             <span></span><span></span><span></span>
           </button>
         </div>
 
-        <div class="mobile-dropdown" :class="{ open: navOpen }">
+        <div v-if="!isDirectory" class="mobile-dropdown" :class="{ open: navOpen }">
           <div class="mobile-dropdown-inner">
             <div class="mobile-search">
               <input
@@ -88,16 +93,16 @@
               </button>
             </div>
 
-            <router-link to="/" class="mobile-link" @click="navOpen = false">
+            <router-link :to="homeLink" class="mobile-link" @click="navOpen = false">
               <i class="fas fa-home"></i> {{ $t('nav.home') }}
             </router-link>
-            <router-link to="/products" class="mobile-link" @click="navOpen = false">
+            <router-link :to="storeLink('/products')" class="mobile-link" @click="navOpen = false">
               <i class="fas fa-box-open"></i> {{ $t('nav.products') }}
             </router-link>
             <router-link
               v-for="cat in productStore.categories.slice(0, 5)"
               :key="cat.id"
-              :to="`/category/${cat.slug}`"
+              :to="storeLink(`/category/${cat.slug}`)"
               class="mobile-link"
               @click="navOpen = false"
             >
@@ -106,7 +111,11 @@
 
             <div class="mobile-divider"></div>
 
-            <router-link to="/cart" class="mobile-link" @click="navOpen = false">
+            <router-link to="/" class="mobile-link" @click="navOpen = false">
+              <i class="fas fa-store"></i> {{ $t('directory.badge') }}
+            </router-link>
+
+            <router-link :to="storeLink('/cart')" class="mobile-link" @click="navOpen = false">
               <i class="fas fa-shopping-cart"></i> {{ $t('nav.cart') }}
               <span class="mobile-badge" v-if="cartStore.itemCount > 0">{{ cartStore.itemCount }}</span>
             </router-link>
@@ -142,19 +151,22 @@
         </div>
       </div>
 
-      <nav class="main-nav" :class="{ 'mobile-open': navOpen }">
+      <nav v-if="!isDirectory" class="main-nav" :class="{ 'mobile-open': navOpen }">
         <div class="container nav-inner">
           <div class="nav-links">
-            <router-link to="/" class="nav-link" @click="navOpen = false">{{ $t('nav.home') }}</router-link>
-            <router-link to="/products" class="nav-link" @click="navOpen = false">{{ $t('nav.products') }}</router-link>
+            <router-link :to="homeLink" class="nav-link" @click="navOpen = false">{{ $t('nav.home') }}</router-link>
+            <router-link :to="storeLink('/products')" class="nav-link" @click="navOpen = false">{{ $t('nav.products') }}</router-link>
             <router-link
               v-for="cat in productStore.categories.slice(0, 5)"
               :key="cat.id"
-              :to="`/category/${cat.slug}`"
+              :to="storeLink(`/category/${cat.slug}`)"
               class="nav-link"
               @click="navOpen = false"
             >
               {{ cat.translated_name || cat.name }}
+            </router-link>
+            <router-link to="/" class="nav-link" @click="navOpen = false">
+              <i class="fas fa-store"></i> {{ $t('directory.badge') }}
             </router-link>
           </div>
           <div class="nav-right">
@@ -177,15 +189,15 @@
         <div>
           <div class="footer-logo">
             <span class="logo-icon"><i class="fas fa-bolt"></i></span>
-            <span class="logo-text">Electro<span>Shop</span></span>
+            <span class="logo-text">{{ logoTextFirst }}<span v-if="logoTextRest">{{ logoTextRest }}</span></span>
           </div>
           <p class="footer-desc">{{ $t('footer.description') }}</p>
         </div>
         <div>
           <h4>{{ $t('footer.quickLinks') }}</h4>
-          <router-link to="/products">{{ $t('footer.allProducts') }}</router-link>
-          <router-link to="/category/phones">{{ $t('footer.phones') }}</router-link>
-          <router-link to="/category/accessories">{{ $t('footer.accessories') }}</router-link>
+          <router-link :to="storeLink('/products')">{{ $t('footer.allProducts') }}</router-link>
+          <router-link :to="storeLink('/category/phones')">{{ $t('footer.phones') }}</router-link>
+          <router-link :to="storeLink('/category/accessories')">{{ $t('footer.accessories') }}</router-link>
         </div>
         <div>
           <h4>{{ $t('footer.support') }}</h4>
@@ -213,19 +225,22 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { useProductStore } from '@/stores/products'
+import { useBusinessStore } from '@/stores/business'
 import { conversationApi } from '@/api'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 
+const route = useRoute()
 const router = useRouter()
 const { locale } = useI18n()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const productStore = useProductStore()
+const businessStore = useBusinessStore()
 
 function toggleLocale() {
   locale.value = locale.value === 'sw' ? 'en' : 'sw'
@@ -236,6 +251,24 @@ const searchQuery = ref('')
 const navOpen = ref(false)
 const cartBump = ref(false)
 const unreadMsgCount = ref(0)
+
+const businessSlug = computed(() => route.params.businessSlug || null)
+const isDirectory = computed(() => route.name === 'home' && !businessSlug.value)
+
+const brandColor = computed(() => businessStore.current?.brand_color || 'var(--brand)')
+const brandColorDark = computed(() => businessStore.current?.brand_color_secondary || 'var(--brand-dark)')
+const storeName = computed(() => businessStore.current?.store_name || 'ElectroShop')
+const logoTextFirst = computed(() => storeName.value.split(' ')[0] || 'ElectroShop')
+const logoTextRest = computed(() => storeName.value.split(' ').slice(1).join(' '))
+
+function storeLink(path) {
+  return businessStore.link(path)
+}
+
+const homeLink = computed(() => {
+  if (isDirectory.value) return '/'
+  return businessStore.link('/')
+})
 
 const inboxRoute = computed(() => {
   if (authStore.isOwner) return '/owner/inbox'
@@ -267,10 +300,25 @@ const dashboardRoute = computed(() => {
   return '/customer'
 })
 
+async function applyBusinessContext() {
+  businessStore.setSlugMode(!!businessSlug.value)
+  if (businessSlug.value) {
+    const found = await businessStore.loadBySlug(businessSlug.value)
+    if (!found && route.name === 'store-home') {
+      router.replace('/')
+      return
+    }
+  } else {
+    await businessStore.fetchDirectory()
+    businessStore.pickFallback()
+  }
+}
+
 onMounted(async () => {
   if (authStore.isAuthenticated && !authStore.user) {
     await authStore.fetchProfile()
   }
+  await applyBusinessContext()
   await productStore.fetchCategories()
   if (authStore.isAuthenticated) {
     await cartStore.fetchCart()
@@ -279,11 +327,22 @@ onMounted(async () => {
   }
 })
 
-onUnmounted(() => { clearInterval(msgPollTimer) })
+watch(businessSlug, () => {
+  applyBusinessContext()
+  productStore.fetchCategories()
+})
+
+onUnmounted(() => {
+  clearInterval(msgPollTimer)
+  businessStore.setSlugMode(false)
+})
 
 function handleSearch() {
   if (searchQuery.value.trim()) {
-    router.push({ name: 'products', query: { search: searchQuery.value } })
+    router.push({
+      path: businessStore.link('/products'),
+      query: { search: searchQuery.value },
+    })
   }
 }
 
@@ -297,7 +356,7 @@ async function handleLogout() {
 
 <style scoped>
 .top-bar {
-  background: #2c3e50;
+  background: var(--brand-dark);
   color: #fff;
   font-size: 13px;
   padding: 8px 0;
@@ -322,7 +381,7 @@ async function handleLogout() {
 }
 
 .top-bar-left i {
-  color: #e74c3c;
+  color: var(--brand);
 }
 
 .top-bar-right {
@@ -365,7 +424,7 @@ async function handleLogout() {
 
 .logo-icon {
   color: #fff;
-  background: #e74c3c;
+  background: var(--brand);
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -378,11 +437,11 @@ async function handleLogout() {
 .logo-text {
   font-size: 24px;
   font-weight: 800;
-  color: #2c3e50;
+  color: var(--brand-dark);
 }
 
 .logo-text span {
-  color: #e74c3c;
+  color: var(--brand);
 }
 
 .search-bar {
@@ -403,12 +462,12 @@ async function handleLogout() {
 
 .search-bar input:focus {
   outline: none;
-  border-color: #e74c3c;
+  border-color: var(--brand);
 }
 
 .search-btn {
   padding: 12px 20px;
-  background: #e74c3c;
+  background: var(--brand);
   color: #fff;
   border-radius: 0 4px 4px 0;
   font-size: 16px;
@@ -417,7 +476,7 @@ async function handleLogout() {
 }
 
 .search-btn:hover {
-  background: #c0392b;
+  background: var(--brand-dark);
 }
 
 .header-actions {
@@ -439,7 +498,7 @@ async function handleLogout() {
 }
 
 .action-link:hover {
-  color: #e74c3c;
+  color: var(--brand);
 }
 
 .action-link i {
@@ -458,7 +517,7 @@ async function handleLogout() {
   position: absolute;
   top: -6px;
   right: -8px;
-  background: #e74c3c;
+  background: var(--brand);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -545,7 +604,7 @@ async function handleLogout() {
 }
 
 .main-nav {
-  background: #e74c3c;
+  background: var(--brand);
 }
 
 .nav-inner {
@@ -628,7 +687,7 @@ async function handleLogout() {
 
 .mobile-search input:focus {
   outline: none;
-  border-color: #e74c3c;
+  border-color: var(--brand);
 }
 
 .mobile-search .search-btn {
@@ -663,17 +722,17 @@ async function handleLogout() {
 .mobile-link i {
   width: 20px;
   text-align: center;
-  color: #e74c3c;
+  color: var(--brand);
   font-size: 16px;
 }
 
 .mobile-link.logout {
-  color: #e74c3c;
+  color: var(--brand);
 }
 
 .mobile-badge {
   margin-left: auto;
-  background: #e74c3c;
+  background: var(--brand);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
@@ -697,7 +756,7 @@ async function handleLogout() {
 }
 
 footer {
-  background: #2c3e50;
+  background: var(--brand-dark);
   color: #ccc;
   padding-top: 48px;
 }
@@ -753,11 +812,11 @@ footer p {
 
 footer a:hover {
   opacity: 1;
-  color: #e74c3c;
+  color: var(--brand);
 }
 
 footer p i {
-  color: #e74c3c;
+  color: var(--brand);
   width: 18px;
   margin-right: 4px;
 }
@@ -781,8 +840,8 @@ footer p i {
   transition: all 0.2s;
 }
 .lang-switch:hover {
-  border-color: #e74c3c;
-  color: #e74c3c;
+  border-color: var(--brand);
+  color: var(--brand);
 }
 
 @media (max-width: 768px) {

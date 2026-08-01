@@ -57,15 +57,18 @@
 import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import { useBusinessStore } from '@/stores/business'
 import ProductCard from '@/components/product/ProductCard.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
+const businessStore = useBusinessStore()
 const sortBy = ref('created_at')
 
-function loadProducts() {
+function loadProducts(overrides = {}) {
   productStore.fetchProducts({
+    page: overrides.page,
     sort: sortBy.value,
     search: route.query.search || undefined,
     category_id: route.query.category_id || undefined,
@@ -78,6 +81,7 @@ function changePage(page) {
 
 onMounted(() => loadProducts())
 watch(() => route.query, () => loadProducts())
+watch(() => businessStore.activeSlug, () => loadProducts())
 </script>
 
 <style scoped>

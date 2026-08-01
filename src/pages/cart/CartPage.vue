@@ -8,7 +8,7 @@
       <i class="fas fa-shopping-cart"></i>
       <h3>{{ $t('cart.empty') }}</h3>
       <p>{{ $t('cart.emptyDesc') }}</p>
-      <router-link to="/products" class="btn btn-primary" style="margin-top: 16px;">
+      <router-link :to="$storeLink('/products')" class="btn btn-primary" style="margin-top: 16px;">
         <i class="fas fa-shopping-bag"></i> {{ $t('cart.browseProducts') }}
       </router-link>
     </div>
@@ -37,8 +37,8 @@
         <div class="summary-row"><span>{{ $t('cart.subtotal', { count: cartStore.itemCount }) }}</span><span>TSh {{ formatPrice(cartStore.subtotal) }}</span></div>
         <div class="summary-row"><span>{{ $t('cart.shipping') }}</span><span>TSh 5,000</span></div>
         <div class="summary-row total"><span>{{ $t('cart.total') }}</span><span>TSh {{ formatPrice(cartStore.total) }}</span></div>
-        <router-link to="/checkout" class="btn btn-primary checkout-btn"><i class="fas fa-lock"></i> {{ $t('cart.proceedToCheckout') }}</router-link>
-        <router-link to="/products" class="btn btn-outline continue-btn"><i class="fas fa-arrow-left"></i> {{ $t('cart.continueShopping') }}</router-link>
+        <router-link :to="$storeLink('/checkout')" class="btn btn-primary checkout-btn"><i class="fas fa-lock"></i> {{ $t('cart.proceedToCheckout') }}</router-link>
+        <router-link :to="$storeLink('/products')" class="btn btn-outline continue-btn"><i class="fas fa-arrow-left"></i> {{ $t('cart.continueShopping') }}</router-link>
       </div>
     </div>
   </div>

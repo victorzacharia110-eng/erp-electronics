@@ -8,10 +8,10 @@
           <h1>{{ $t('home.heroTitle') }} <span>{{ $t('home.heroTitleHighlight') }}</span></h1>
           <p>{{ $t('home.heroDesc') }}</p>
           <div class="hero-actions">
-            <router-link to="/products" class="btn btn-primary">
+            <router-link :to="$storeLink('/products')" class="btn btn-primary">
               <i class="fas fa-shopping-bag"></i> {{ $t('home.shopNow') }}
             </router-link>
-            <router-link to="/products" class="btn btn-outline-white">
+            <router-link :to="$storeLink('/products')" class="btn btn-outline-white">
               {{ $t('home.viewCatalog') }} <i class="fas fa-arrow-right"></i>
             </router-link>
           </div>
@@ -63,7 +63,7 @@
         <p class="section-subtitle">{{ $t('home.browseCategories') }}</p>
 
         <div v-if="productStore.categories.length > 0" class="categories-grid">
-          <router-link v-for="cat in productStore.categories" :key="cat.id" :to="`/category/${cat.slug}`"
+          <router-link v-for="cat in productStore.categories" :key="cat.id" :to="$storeLink(`/category/${cat.slug}`)"
             class="category-card">
             <div class="cat-icon-wrap">
               <i :class="getCategoryIcon(cat.name)"></i>
@@ -97,7 +97,7 @@
         </div>
 
         <div class="section-action" v-if="productStore.featuredProducts.length > 0">
-          <router-link to="/products" class="btn btn-outline">
+          <router-link :to="$storeLink('/products')" class="btn btn-outline">
             {{ $t('home.viewMoreProducts') }} <i class="fas fa-arrow-right"></i>
           </router-link>
         </div>
@@ -112,7 +112,7 @@
             <span class="promo-badge">{{ $t('home.hotDeals') }}</span>
             <h2>{{ $t('home.hotDealsTitle') }}</h2>
             <p>{{ $t('home.hotDealsDesc') }}</p>
-            <router-link to="/products" class="btn btn-white">
+            <router-link :to="$storeLink('/products')" class="btn btn-white">
               {{ $t('home.shopTheSale') }} <i class="fas fa-arrow-right"></i>
             </router-link>
           </div>
@@ -131,7 +131,7 @@
         </div>
 
         <div class="section-action" v-if="allProducts.length > 0">
-          <router-link to="/products" class="btn btn-outline">
+          <router-link :to="$storeLink('/products')" class="btn btn-outline">
             {{ $t('home.viewAllProducts') }} <i class="fas fa-arrow-right"></i>
           </router-link>
         </div>

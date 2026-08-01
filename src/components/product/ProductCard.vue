@@ -25,6 +25,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
+import { useBusinessStore } from '@/stores/business'
 import { imageUrl } from '@/utils/image'
 
 const props = defineProps({
@@ -34,6 +35,7 @@ const props = defineProps({
 const router = useRouter()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
+const businessStore = useBusinessStore()
 const adding = ref(false)
 const added = ref(false)
 
@@ -42,12 +44,12 @@ function formatPrice(value) {
 }
 
 function navigateToProduct() {
-  router.push(`/products/${props.product.slug}`)
+  router.push(businessStore.link(`/products/${props.product.slug}`))
 }
 
 async function handleAddToCart() {
   if (!authStore.isAuthenticated) {
-    router.push({ name: 'login', query: { redirect: '/cart' } })
+    router.push({ name: 'login', query: { redirect: businessStore.link('/cart') } })
     return
   }
 

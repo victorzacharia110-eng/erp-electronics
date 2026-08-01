@@ -4,7 +4,7 @@
     <SkeletonLoader v-if="loading" type="list" :count="4" />
     <div v-else-if="orders.length === 0" class="empty-state">
       <i class="fas fa-receipt"></i><h3>{{ $t('orders.empty') }}</h3><p>{{ $t('orders.emptyDesc') }}</p>
-      <router-link to="/products" class="btn btn-primary" style="margin-top: 16px;"><i class="fas fa-shopping-bag"></i> {{ $t('cart.browseProducts') }}</router-link>
+      <router-link :to="$storeLink('/products')" class="btn btn-primary" style="margin-top: 16px;"><i class="fas fa-shopping-bag"></i> {{ $t('cart.browseProducts') }}</router-link>
     </div>
     <div v-else class="orders-list">
       <div v-for="order in orders" :key="order.id" class="order-card card">

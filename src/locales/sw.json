@@ -58,6 +58,16 @@
     "switchToEnglish": "Badilisha kuwa Kiingereza",
     "switchToSwahili": "Badilisha kuwa Kiswahili"
   },
+  "directory": {
+    "badge": "Maduka Yetu",
+    "title": "Nunua kutoka maduka ya washirika wetu",
+    "subtitle": "Vinjari vifaa vya elektroniki kutoka maduka yetu yote mahali pamoja. Chagua duka kuanza ununuzi.",
+    "productsCount": "bidhaa {count}",
+    "visitStore": "Tembelea Duka",
+    "empty": "Hakuna maduka yanayopatikana kwa sasa. Tafadhali rudi baadaye.",
+    "new": "Mpya",
+    "newArrivals": "Bidhaa mpya {count} zimefika"
+  },
   "footer": {
     "description": "Duka lako la elektroniki Tanzania. Bidhaa bora, usafirishaji wa haraka, na malipo salama ya pesa za simu.",
     "quickLinks": "Viungo vya Haraka",
@@ -695,6 +705,7 @@
       "title": "Dashibodi ya Mmiliki",
       "welcome": "Karibu, {name}",
       "role": "Mmiliki",
+      "selectBusiness": "Chagua Biashara",
       "totalRevenue": "Mapato Jumla",
       "todaySales": "Mauzo ya Leo",
       "activeOrders": "Oda Zinazotumika",
@@ -967,7 +978,7 @@
     "country": "Nchi",
     "productsDescription": "Maelezo ya Bidhaa",
     "notes": "Vidokezo",
-    "purchaseOrders": "Amri za Kununua",
+    "purchaseOrders": "Oda za Kununua",
     "status": "Hali",
     "active": "Hai",
     "inactive": "Yasiyo Hai",

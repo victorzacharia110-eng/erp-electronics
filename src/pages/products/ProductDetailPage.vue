@@ -2,9 +2,9 @@
   <div>
     <div class="product-detail container" v-if="!loading && product">
       <div class="breadcrumb">
-        <router-link to="/">{{ $t('nav.home') }}</router-link>
+        <router-link :to="$storeLink('/')">{{ $t('nav.home') }}</router-link>
         <i class="fas fa-chevron-right"></i>
-        <router-link to="/products">{{ $t('nav.products') }}</router-link>
+        <router-link :to="$storeLink('/products')">{{ $t('nav.products') }}</router-link>
         <i class="fas fa-chevron-right"></i>
         <span>{{ product.name }}</span>
       </div>
@@ -76,8 +76,8 @@
               <span>{{ product.name }} x {{ quantity }}</span>
             </div>
             <div class="added-banner-actions">
-              <router-link to="/cart" class="btn btn-outline banner-btn"><i class="fas fa-shopping-cart"></i> {{ $t('product.viewCart') }}</router-link>
-              <router-link to="/checkout" class="btn btn-primary banner-btn"><i class="fas fa-lock"></i> {{ $t('product.proceedToCheckout') }}</router-link>
+              <router-link :to="$storeLink('/cart')" class="btn btn-outline banner-btn"><i class="fas fa-shopping-cart"></i> {{ $t('product.viewCart') }}</router-link>
+              <router-link :to="$storeLink('/checkout')" class="btn btn-primary banner-btn"><i class="fas fa-lock"></i> {{ $t('product.proceedToCheckout') }}</router-link>
             </div>
           </div>
 
@@ -96,10 +96,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import { useBusinessStore } from '@/stores/business'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
@@ -111,6 +112,7 @@ const router = useRouter()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 const authStore = useAuthStore()
+const businessStore = useBusinessStore()
 
 const loading = ref(true)
 const product = ref(null)
@@ -148,7 +150,9 @@ async function handleAddToCart() {
   }
 }
 
-onMounted(async () => {
+async function loadProduct() {
+  loading.value = true
+  selectedVariant.value = null
   try {
     product.value = await productStore.fetchProduct(route.params.slug)
     if (product.value?.variants?.length) {
@@ -157,7 +161,11 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(loadProduct)
+watch(() => route.params.slug, loadProduct)
+watch(() => businessStore.activeSlug, loadProduct)
 </script>
 
 <style scoped>

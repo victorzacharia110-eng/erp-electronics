@@ -10,6 +10,21 @@
       <span class="role-badge owner"><i class="fas fa-crown"></i> {{ $t('dashboards.owner.role') }}</span>
     </div>
 
+    <div v-if="businessStore.mine.length > 1" class="business-switcher">
+      <span class="switcher-label"><i class="fas fa-store"></i> {{ $t('dashboards.owner.selectBusiness') }}</span>
+      <div class="switcher-chips">
+        <button
+          v-for="b in businessStore.mine"
+          :key="b.id"
+          :class="['business-chip', { active: businessStore.current?.id === b.id }]"
+          @click="selectBusiness(b)"
+        >
+          <i class="fas fa-store"></i>
+          {{ b.store_name }}
+        </button>
+      </div>
+    </div>
+
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon"><i class="fas fa-dollar-sign"></i></div>
@@ -122,12 +137,14 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useBusinessStore } from '@/stores/business'
 import { productApi, orderApi, employeeApi, stockAlertApi } from '@/api'
 import SalesCharts from './analytics/SalesCharts.vue'
 import AiSuggestions from './analytics/AiSuggestions.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
 const authStore = useAuthStore()
+const businessStore = useBusinessStore()
 const stats = ref({ revenue: 0, totalOrders: 0, totalProducts: 0, totalEmployees: 0 })
 const recentOrders = ref([])
 const stockAlertCount = ref(0)
@@ -142,8 +159,12 @@ function onAnalyticsLoaded(data) {
 
 function formatPrice(v) { return Number(v).toLocaleString('en-TZ') }
 
-onMounted(async () => {
-  await authStore.fetchProfile()
+function selectBusiness(business) {
+  businessStore.setCurrent(business)
+  loadDashboard()
+}
+
+async function loadDashboard() {
   try {
     const [prodRes, orderRes, empRes, alertRes] = await Promise.all([
       productApi.getAll({ per_page: 5 }),
@@ -161,6 +182,18 @@ onMounted(async () => {
     stockAlertCount.value = alertRes.data?.count || 0
   } catch { /* empty */ }
   loading.value = false
+}
+
+onMounted(async () => {
+  await authStore.fetchProfile()
+  try {
+    await businessStore.fetchMine()
+  } catch { /* empty */ }
+  businessStore.restoreFromStorage()
+  if (!businessStore.current && businessStore.mine.length === 1) {
+    businessStore.setCurrent(businessStore.mine[0])
+  }
+  await loadDashboard()
 })
 </script>
 
@@ -198,6 +231,68 @@ onMounted(async () => {
 .role-badge.owner {
   background: #fef5f5;
   color: #e74c3c;
+}
+
+.business-switcher {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 24px;
+}
+
+.switcher-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.switcher-label i {
+  color: #e74c3c;
+}
+
+.switcher-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.business-chip {
+  padding: 8px 14px;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+}
+
+.business-chip:hover {
+  border-color: #e74c3c;
+}
+
+.business-chip.active {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+}
+
+.business-chip.active i {
+  color: #fff;
 }
 
 .stats-grid {

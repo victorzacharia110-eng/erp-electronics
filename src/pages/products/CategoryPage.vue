@@ -17,21 +17,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import { useBusinessStore } from '@/stores/business'
 import ProductCard from '@/components/product/ProductCard.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
 const route = useRoute()
 const productStore = useProductStore()
+const businessStore = useBusinessStore()
 const category = ref(null)
 const loading = ref(true)
 
-onMounted(async () => {
+async function loadCategory() {
+  loading.value = true
   category.value = await productStore.fetchCategory(route.params.slug)
   loading.value = false
-})
+}
+
+onMounted(loadCategory)
+watch(() => route.params.slug, loadCategory)
+watch(() => businessStore.activeSlug, loadCategory)
 </script>
 
 <style scoped>

@@ -126,11 +126,11 @@ export const productApi = {
   getAll(params) {
     return api.get('/products', { params })
   },
-  getFeatured() {
-    return api.get('/products/featured')
+  getFeatured(params) {
+    return api.get('/products/featured', { params })
   },
-  getBySlug(slug) {
-    return api.get(`/products/${slug}`)
+  getBySlug(slug, params) {
+    return api.get(`/products/${slug}`, { params })
   },
 }
 
@@ -158,11 +158,11 @@ export const productManageApi = {
 }
 
 export const categoryApi = {
-  getAll() {
-    return api.get('/categories')
+  getAll(params) {
+    return api.get('/categories', { params })
   },
-  getBySlug(slug) {
-    return api.get(`/categories/${slug}`)
+  getBySlug(slug, params) {
+    return api.get(`/categories/${slug}`, { params })
   },
 }
 
@@ -251,8 +251,8 @@ export const settingsApi = {
   updatePayment(data) {
     return api.put('/settings/payment', data)
   },
-  getBranding() {
-    return api.get('/settings/branding')
+  getBranding(params) {
+    return api.get('/settings/branding', { params })
   },
 }
 
@@ -299,11 +299,11 @@ export const paymentProviderApi = {
 }
 
 export const shippingRuleApi = {
-  getAll() {
-    return api.get('/shipping-rules')
+  getAll(params) {
+    return api.get('/shipping-rules', { params })
   },
-  calculate(data) {
-    return api.post('/shipping/calculate', data)
+  calculate(data, params) {
+    return api.post('/shipping/calculate', data, { params })
   },
   create(data) {
     return api.post('/shipping-rules', data)
@@ -576,5 +576,17 @@ export const supplierPortalApi = {
   },
   updateOrderStatus(id, data) {
     return api.post(`/supplier-portal/purchase-orders/${id}/update-status`, data)
+  },
+}
+
+export const businessApi = {
+  list() {
+    return api.get('/businesses')
+  },
+  bySlug(slug) {
+    return api.get(`/businesses/by-slug/${slug}`)
+  },
+  mine() {
+    return api.get('/businesses/mine')
   },
 }

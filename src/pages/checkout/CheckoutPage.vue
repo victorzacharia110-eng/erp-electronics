@@ -180,10 +180,12 @@ import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { useCartStore } from '@/stores/cart'
+import { useBusinessStore } from '@/stores/business'
 import { addressApi, orderApi, paymentApi, settingsApi, cartApi, orderManageApi, shippingRuleApi } from '@/api'
 
 const router = useRouter()
 const cartStore = useCartStore()
+const businessStore = useBusinessStore()
 const addresses = ref([])
 const selectedAddressId = ref(null)
 const showNewAddress = ref(false)
@@ -306,7 +308,7 @@ async function confirmPendingOrder() {
   }
 }
 
-function goToOrders() { router.push('/orders') }
+function goToOrders() { router.push(businessStore.link('/orders')) }
 
 async function calculateShipping() {
   if (!deliveryRequired.value) {
@@ -316,7 +318,10 @@ async function calculateShipping() {
   }
   const city = newAddress.value.city || 'Dar es Salaam'
   try {
-    const res = await shippingRuleApi.calculate({ from_city: 'Dar es Salaam', to_city: city, subtotal: cartStore.subtotal })
+    const res = await shippingRuleApi.calculate(
+      { from_city: 'Dar es Salaam', to_city: city, subtotal: cartStore.subtotal },
+      businessStore.activeSlug ? { business: businessStore.activeSlug } : undefined
+    )
     shippingCost.value = res.data.cost || 0
     shippingLabel.value = `TSh ${formatPrice(shippingCost.value)}`
   } catch {
@@ -329,7 +334,7 @@ async function initCheckout() {
   try {
     await cartStore.fetchCart()
     if (!cartStore.items.length) {
-      router.push('/cart')
+      router.push(businessStore.link('/cart'))
       return
     }
     try { await loadAddresses() } catch { /* user may have no addresses yet */ }

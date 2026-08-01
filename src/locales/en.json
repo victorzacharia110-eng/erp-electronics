@@ -58,6 +58,16 @@
     "switchToEnglish": "Switch to English",
     "switchToSwahili": "Switch to Swahili"
   },
+  "directory": {
+    "badge": "Our Stores",
+    "title": "Shop from our partner stores",
+    "subtitle": "Browse electronics from all our stores in one place. Choose a store to start shopping.",
+    "productsCount": "{count} products",
+    "visitStore": "Visit Store",
+    "empty": "No stores are available right now. Please check back soon.",
+    "new": "New",
+    "newArrivals": "{count} new items in stock"
+  },
   "footer": {
     "description": "Your trusted electronics store in Tanzania. Quality products, fast delivery, and secure mobile money payments.",
     "quickLinks": "Quick Links",
@@ -695,6 +705,8 @@
       "title": "Owner Dashboard",
       "welcome": "Welcome, {name}",
       "role": "Owner",
+      "selectBusiness": "Select Business",
+      "selectBusiness": "Select Business",
       "totalRevenue": "Total Revenue",
       "todaySales": "Today's Sales",
       "activeOrders": "Active Orders",

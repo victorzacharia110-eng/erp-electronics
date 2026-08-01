@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { productApi, categoryApi } from '@/api'
+import { useBusinessStore } from '@/stores/business'
 
 export const useProductStore = defineStore('products', () => {
   const products = ref([])
@@ -11,10 +12,18 @@ export const useProductStore = defineStore('products', () => {
   const loading = ref(false)
   const pagination = ref({})
 
+  function businessParams(params = {}) {
+    const businessStore = useBusinessStore()
+    if (businessStore.activeSlug) {
+      return { ...params, business: businessStore.activeSlug }
+    }
+    return params
+  }
+
   async function fetchProducts(params = {}) {
     loading.value = true
     try {
-      const response = await productApi.getAll(params)
+      const response = await productApi.getAll(businessParams(params))
       products.value = response.data.data
       pagination.value = {
         currentPage: response.data.current_page,
@@ -30,7 +39,7 @@ export const useProductStore = defineStore('products', () => {
   async function fetchFeatured() {
     loading.value = true
     try {
-      const response = await productApi.getFeatured()
+      const response = await productApi.getFeatured(businessParams())
       featuredProducts.value = response.data
     } finally {
       loading.value = false
@@ -40,7 +49,7 @@ export const useProductStore = defineStore('products', () => {
   async function fetchProduct(slug) {
     loading.value = true
     try {
-      const response = await productApi.getBySlug(slug)
+      const response = await productApi.getBySlug(slug, businessParams())
       currentProduct.value = response.data
       return response.data
     } finally {
@@ -51,7 +60,7 @@ export const useProductStore = defineStore('products', () => {
   async function fetchCategories() {
     loading.value = true
     try {
-      const response = await categoryApi.getAll()
+      const response = await categoryApi.getAll(businessParams())
       categories.value = response.data
     } finally {
       loading.value = false
@@ -61,7 +70,7 @@ export const useProductStore = defineStore('products', () => {
   async function fetchCategory(slug) {
     loading.value = true
     try {
-      const response = await categoryApi.getBySlug(slug)
+      const response = await categoryApi.getBySlug(slug, businessParams())
       currentCategory.value = response.data
       products.value = response.data.products || []
       return response.data
