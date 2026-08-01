@@ -8,27 +8,55 @@
           <h3>Conversations</h3>
           <button class="btn-icon mobile-close" @click="showSidebar = false"><i class="fas fa-times"></i></button>
         </div>
+        <div class="inbox-tabs">
+          <button :class="['tab-btn', { active: viewMode === 'chats' }]" @click="viewMode = 'chats'; debouncedLoad()">
+            <i class="fas fa-comments"></i> Chats
+          </button>
+          <button :class="['tab-btn', { active: viewMode === 'contacts' }]" @click="viewMode = 'contacts'">
+            <i class="fas fa-users"></i> Owners
+          </button>
+        </div>
         <div class="inbox-search">
           <i class="fas fa-search"></i>
           <input v-model="search" type="text" placeholder="Search conversations..." @input="debouncedLoad" />
         </div>
         <div class="inbox-list">
-          <div v-if="conversations.length === 0" class="inbox-empty">
-            <i class="fas fa-envelope-open"></i>
-            <p>No conversations yet</p>
-          </div>
-          <div v-for="conv in conversations" :key="conv.id" class="inbox-item" :class="{ active: activeConversation?.id === conv.id, unread: hasUnread(conv) }" @click="openConversation(conv)">
-            <div class="inbox-item-avatar"><i class="fas fa-store"></i></div>
-            <div class="inbox-item-info">
-              <div class="inbox-item-top">
-                <span class="inbox-item-name">{{ conv.owner?.name }}</span>
-                <span class="inbox-item-time">{{ timeAgo(conv.last_message_at || conv.created_at) }}</span>
-              </div>
-              <span class="inbox-item-subject">{{ conv.subject }}</span>
-              <span class="inbox-item-preview" v-if="conv.last_message">{{ conv.last_message.message }}</span>
+          <template v-if="viewMode === 'contacts'">
+            <div v-if="filteredContacts.length === 0" class="inbox-empty">
+              <i class="fas fa-store"></i>
+              <p>No owners available</p>
             </div>
-            <span v-if="hasUnread(conv)" class="unread-dot"></span>
-          </div>
+            <div v-for="contact in filteredContacts" :key="contact.id" class="inbox-item" @click="openContact(contact)">
+              <div class="inbox-item-avatar owner-avatar"><i class="fas fa-store"></i></div>
+              <div class="inbox-item-info">
+                <div class="inbox-item-top">
+                  <span class="inbox-item-name">{{ contact.name }}</span>
+                  <span class="inbox-item-time" v-if="!contact.is_active">Inactive</span>
+                </div>
+                <span class="inbox-item-subject">{{ contact.store_name }}</span>
+                <span class="inbox-item-preview">{{ contact.email }}</span>
+              </div>
+              <i class="fas fa-paper-plane contact-send"></i>
+            </div>
+          </template>
+          <template v-else>
+            <div v-if="conversations.length === 0" class="inbox-empty">
+              <i class="fas fa-envelope-open"></i>
+              <p>No conversations yet</p>
+            </div>
+            <div v-for="conv in conversations" :key="conv.id" class="inbox-item" :class="{ active: activeConversation?.id === conv.id, unread: hasUnread(conv) }" @click="openConversation(conv)">
+              <div class="inbox-item-avatar"><i class="fas fa-store"></i></div>
+              <div class="inbox-item-info">
+                <div class="inbox-item-top">
+                  <span class="inbox-item-name">{{ conv.owner?.name }}</span>
+                  <span class="inbox-item-time">{{ timeAgo(conv.last_message_at || conv.created_at) }}</span>
+                </div>
+                <span class="inbox-item-subject">{{ conv.subject }}</span>
+                <span class="inbox-item-preview" v-if="conv.last_message">{{ conv.last_message.message }}</span>
+              </div>
+              <span v-if="hasUnread(conv)" class="unread-dot"></span>
+            </div>
+          </template>
         </div>
       </div>
 
@@ -83,11 +111,34 @@
         </template>
       </div>
     </div>
+
+    <div class="modal-overlay" v-if="showCompose" @click.self="closeCompose">
+      <div class="modal-card card">
+        <h2><i class="fas fa-paper-plane"></i> New conversation</h2>
+        <p class="compose-target">To: <strong>{{ composeTarget?.name }}</strong> <span v-if="composeTarget?.store_name">({{ composeTarget.store_name }})</span></p>
+        <form @submit.prevent="createConversation" novalidate>
+          <div class="form-group">
+            <label>Subject *</label>
+            <input v-model="newConv.subject" type="text" placeholder="What is this about?" />
+          </div>
+          <div class="form-group">
+            <label>Message *</label>
+            <textarea v-model="newConv.message" rows="4" placeholder="Type your message..."></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-outline" @click="closeCompose">Cancel</button>
+            <button type="submit" class="btn btn-primary" :disabled="!canCreate || creating">
+              <i class="fas fa-paper-plane"></i> {{ creating ? 'Sending...' : 'Send Message' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { conversationApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
@@ -103,6 +154,24 @@ const newMessage = ref('')
 const search = ref('')
 const showSidebar = ref(true)
 const messagesArea = ref(null)
+const viewMode = ref('chats')
+const contacts = ref([])
+const showCompose = ref(false)
+const composeTarget = ref(null)
+const newConv = ref({ subject: 'Support', message: '' })
+const creating = ref(false)
+
+const canCreate = computed(() => newConv.value.subject.trim() && newConv.value.message.trim())
+
+const filteredContacts = computed(() => {
+  const q = search.value.toLowerCase().trim()
+  if (!q) return contacts.value
+  return contacts.value.filter(c =>
+    c.name?.toLowerCase().includes(q) ||
+    c.store_name?.toLowerCase().includes(q) ||
+    c.email?.toLowerCase().includes(q)
+  )
+})
 
 function hasUnread(conv) {
   if (!authStore.user) return false
@@ -125,6 +194,7 @@ function timeAgo(dateStr) {
 let debounceTimer = null
 function debouncedLoad() {
   clearTimeout(debounceTimer)
+  if (viewMode.value === 'contacts') return
   debounceTimer = setTimeout(loadConversations, 300)
 }
 
@@ -135,6 +205,49 @@ async function loadConversations() {
     conversations.value = res.data.data || []
   } catch { conversations.value = [] }
   loading.value = false
+}
+
+async function loadContacts() {
+  try {
+    const res = await conversationApi.getContacts()
+    contacts.value = res.data.data || []
+  } catch { contacts.value = [] }
+}
+
+async function openContact(contact) {
+  showSidebar.value = false
+  const existing = conversations.value.find(c => c.owner?.id === contact.id && c.type === 'superadmin_owner')
+  if (existing) {
+    viewMode.value = 'chats'
+    await openConversation(existing)
+    return
+  }
+  composeTarget.value = contact
+  newConv.value = { subject: 'Support', message: '' }
+  showCompose.value = true
+}
+
+function closeCompose() {
+  showCompose.value = false
+  composeTarget.value = null
+}
+
+async function createConversation() {
+  if (!canCreate.value || creating.value || !composeTarget.value) return
+  creating.value = true
+  try {
+    const res = await conversationApi.create({
+      type: 'superadmin_owner',
+      owner_id: composeTarget.value.id,
+      subject: newConv.value.subject,
+      message: newConv.value.message,
+    })
+    closeCompose()
+    viewMode.value = 'chats'
+    await loadConversations()
+    await openConversation(res.data)
+  } catch { /* empty */ }
+  creating.value = false
 }
 
 async function openConversation(conv) {
@@ -196,6 +309,7 @@ async function pollConversations() {
 
 onMounted(() => {
   loadConversations()
+  loadContacts()
   pollTimer = setInterval(pollConversations, 15000)
 })
 onUnmounted(() => { clearInterval(pollTimer) })
@@ -209,6 +323,14 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .inbox-sidebar-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 .inbox-sidebar-header h3 { font-size: 18px; font-weight: 700; }
 .mobile-close { display: none; }
+
+.inbox-tabs { display: flex; border-bottom: 1px solid #eee; }
+.tab-btn { flex: 1; padding: 10px; font-size: 12px; font-weight: 600; border: none; background: none; cursor: pointer; color: #888; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; font-family: inherit; }
+.tab-btn:hover { color: #333; }
+.tab-btn.active { color: #e74c3c; border-bottom-color: #e74c3c; }
+
+.owner-avatar { background: #fef5f5; color: #e74c3c; }
+.contact-send { color: #e74c3c; font-size: 14px; flex-shrink: 0; }
 
 .inbox-search { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 8px; }
 .inbox-search i { color: #999; font-size: 13px; }
@@ -270,6 +392,20 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #eee; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #666; }
 .btn-icon:hover { border-color: #e74c3c; color: #e74c3c; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+.modal-card { width: 100%; max-width: 460px; padding: 32px; }
+.modal-card h2 { font-size: 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.modal-card h2 i { color: #e74c3c; }
+.compose-target { font-size: 13px; color: #666; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: 'Inter', sans-serif; box-sizing: border-box; resize: vertical; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #e74c3c; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+
+.btn-outline { background: #fff; color: #333; border: 1px solid #ddd; }
+.btn-outline:hover { border-color: #999; }
 
 @media (max-width: 768px) {
   .inbox-sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 300px; z-index: 100; transform: translateX(-100%); transition: transform 0.25s ease; background: #fff; }

@@ -6,8 +6,41 @@
       <div class="inbox-sidebar" :class="{ 'show-mobile': showSidebar }">
         <div class="inbox-sidebar-header">
           <h3>{{ $t('inbox.title') }}</h3>
+          <button class="btn btn-sm btn-primary new-chat-btn" :title="$t('inbox.newConversation')" @click="showContacts = !showContacts">
+            <i class="fas" :class="showContacts ? 'fa-times' : 'fa-plus'"></i>
+          </button>
           <button class="btn-icon mobile-close" @click="showSidebar = false"><i class="fas fa-times"></i></button>
         </div>
+
+        <template v-if="showContacts">
+          <div class="contacts-header">
+            <button class="back-btn" @click="showContacts = false; debouncedLoad()"><i class="fas fa-arrow-left"></i> {{ $t('inbox.backToChats') }}</button>
+          </div>
+          <div class="inbox-search">
+            <i class="fas fa-search"></i>
+            <input v-model="search" type="text" :placeholder="$t('inbox.searchCustomers')" />
+          </div>
+          <div class="inbox-list">
+            <div v-if="filteredContacts.length === 0" class="inbox-empty">
+              <i class="fas fa-users"></i>
+              <p>{{ $t('inbox.noContacts') }}</p>
+              <p class="inbox-empty-hint">{{ $t('inbox.noContactsHint') }}</p>
+            </div>
+            <div v-for="contact in filteredContacts" :key="contact.id" class="inbox-item" @click="openContact(contact)">
+              <div class="inbox-item-avatar customer_owner"><i class="fas fa-user"></i></div>
+              <div class="inbox-item-info">
+                <div class="inbox-item-top">
+                  <span class="inbox-item-name">{{ contact.name }}</span>
+                </div>
+                <span class="inbox-item-subject">{{ contact.email }}</span>
+                <span class="inbox-item-preview">{{ contact.phone || '&nbsp;' }}</span>
+              </div>
+              <i class="fas fa-paper-plane contact-send"></i>
+            </div>
+          </div>
+        </template>
+
+        <template v-else>
         <div class="inbox-tabs">
           <button :class="['tab-btn', { active: typeFilter === '' }]" @click="typeFilter = ''; loadConversations()">
             {{ $t('inbox.all') }}
@@ -43,6 +76,7 @@
             <span v-if="hasUnread(conv)" class="unread-dot"></span>
           </div>
         </div>
+        </template>
       </div>
 
       <div class="inbox-main">
@@ -106,11 +140,34 @@
         </template>
       </div>
     </div>
+
+    <div class="modal-overlay" v-if="showCompose" @click.self="closeCompose">
+      <div class="modal-card card">
+        <h2><i class="fas fa-paper-plane"></i> {{ $t('inbox.newConversation') }}</h2>
+        <p class="compose-target">{{ $t('inbox.to') }}: <strong>{{ composeTarget?.name }}</strong></p>
+        <form @submit.prevent="createConversation" novalidate>
+          <div class="form-group">
+            <label>{{ $t('inbox.subject') }} *</label>
+            <input v-model="newConv.subject" type="text" :placeholder="$t('inbox.subjectPlaceholder')" />
+          </div>
+          <div class="form-group">
+            <label>{{ $t('inbox.message') }} *</label>
+            <textarea v-model="newConv.message" rows="4" :placeholder="$t('inbox.messagePlaceholder')"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-outline" @click="closeCompose">{{ $t('common.cancel') }}</button>
+            <button type="submit" class="btn btn-primary" :disabled="!canCreate || creating">
+              <i class="fas fa-paper-plane"></i> {{ creating ? $t('common.sending') : $t('inbox.sendMessage') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
 import { conversationApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
@@ -128,6 +185,23 @@ const search = ref('')
 const typeFilter = ref('')
 const showSidebar = ref(true)
 const messagesArea = ref(null)
+const showContacts = ref(false)
+const contacts = ref([])
+const showCompose = ref(false)
+const composeTarget = ref(null)
+const newConv = ref({ subject: '', message: '' })
+const creating = ref(false)
+
+const canCreate = computed(() => newConv.value.subject.trim() && newConv.value.message.trim())
+
+const filteredContacts = computed(() => {
+  const q = search.value.toLowerCase().trim()
+  if (!q) return contacts.value
+  return contacts.value.filter(c =>
+    c.name?.toLowerCase().includes(q) ||
+    c.email?.toLowerCase().includes(q)
+  )
+})
 
 function hasUnread(conv) {
   if (!authStore.user) return false
@@ -150,6 +224,7 @@ function timeAgo(dateStr) {
 let debounceTimer = null
 function debouncedLoad() {
   clearTimeout(debounceTimer)
+  if (showContacts.value) return
   debounceTimer = setTimeout(loadConversations, 300)
 }
 
@@ -162,6 +237,49 @@ async function loadConversations() {
     conversations.value = res.data.data || []
   } catch { conversations.value = [] }
   loading.value = false
+}
+
+async function loadContacts() {
+  try {
+    const res = await conversationApi.getContacts()
+    contacts.value = res.data.data || []
+  } catch { contacts.value = [] }
+}
+
+async function openContact(contact) {
+  const existing = conversations.value.find(c => c.customer?.id === contact.id && c.type === 'customer_owner')
+  if (existing) {
+    showContacts.value = false
+    showSidebar.value = false
+    await openConversation(existing)
+    return
+  }
+  composeTarget.value = contact
+  newConv.value = { subject: '', message: '' }
+  showCompose.value = true
+}
+
+function closeCompose() {
+  showCompose.value = false
+  composeTarget.value = null
+}
+
+async function createConversation() {
+  if (!canCreate.value || creating.value || !composeTarget.value) return
+  creating.value = true
+  try {
+    const res = await conversationApi.create({
+      type: 'customer_owner',
+      customer_id: composeTarget.value.id,
+      subject: newConv.value.subject,
+      message: newConv.value.message,
+    })
+    closeCompose()
+    showContacts.value = false
+    await loadConversations()
+    await openConversation(res.data)
+  } catch { /* empty */ }
+  creating.value = false
 }
 
 async function openConversation(conv) {
@@ -221,6 +339,7 @@ async function pollConversations() {
 
 onMounted(() => {
   loadConversations()
+  loadContacts()
   pollTimer = setInterval(pollConversations, 15000)
 })
 onUnmounted(() => { clearInterval(pollTimer) })
@@ -234,6 +353,13 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .inbox-sidebar-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
 .inbox-sidebar-header h3 { font-size: 18px; font-weight: 700; }
 .mobile-close { display: none; }
+
+.new-chat-btn { padding: 6px 12px; font-size: 12px; border-radius: 6px; flex-shrink: 0; }
+.contacts-header { padding: 12px 16px; border-bottom: 1px solid #f0f0f0; }
+.back-btn { border: none; background: none; color: #e74c3c; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 0; font-family: inherit; }
+.back-btn:hover { text-decoration: underline; }
+.inbox-empty-hint { font-size: 12px; color: #bbb; margin-top: 8px; line-height: 1.5; }
+.contact-send { color: #e74c3c; font-size: 14px; flex-shrink: 0; }
 
 .inbox-tabs { display: flex; border-bottom: 1px solid #eee; }
 .tab-btn { flex: 1; padding: 10px; font-size: 12px; font-weight: 600; border: none; background: none; cursor: pointer; color: #888; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; font-family: inherit; }
@@ -302,6 +428,20 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #eee; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #666; }
 .btn-icon:hover { border-color: #e74c3c; color: #e74c3c; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 24px; }
+.modal-card { width: 100%; max-width: 460px; padding: 32px; }
+.modal-card h2 { font-size: 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.modal-card h2 i { color: #e74c3c; }
+.compose-target { font-size: 13px; color: #666; margin-bottom: 20px; }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.form-group input, .form-group textarea { width: 100%; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 14px; font-family: 'Inter', sans-serif; box-sizing: border-box; resize: vertical; }
+.form-group input:focus, .form-group textarea:focus { outline: none; border-color: #e74c3c; }
+.modal-actions { display: flex; gap: 12px; justify-content: flex-end; margin-top: 20px; }
+
+.btn-outline { background: #fff; color: #333; border: 1px solid #ddd; }
+.btn-outline:hover { border-color: #999; }
 
 @media (max-width: 768px) {
   .inbox-sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 300px; z-index: 100; transform: translateX(-100%); transition: transform 0.25s ease; background: #fff; }

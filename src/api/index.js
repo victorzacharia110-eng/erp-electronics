@@ -108,6 +108,9 @@ export const conversationApi = {
   getUnreadCount() {
     return api.get('/conversations/unread-count')
   },
+  getContacts() {
+    return api.get('/conversations/contacts')
+  },
 }
 
 export const customerApi = {
