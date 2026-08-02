@@ -470,7 +470,7 @@ def build_sw():
     el.append(section('Kuhariri muuzaji'))
     el.append(steps_table([
         'Bonyeza alama ya kuhariri karibu na muuzaji.',
-        'Sasisha maelezo ya mawasiliano au biashara inavyohitajika.',
+        'Sahihisha maelezo ya mawasiliano au biashara inavyohitajika.',
         'Pakia nyaraka mpya au futa nyaraka zilizopitwa na wakati.',
         'Hifadhi mabadiliko yako.',
     ]))
@@ -511,7 +511,7 @@ def build_sw():
     ]))
     el.append(spacer())
     el.append(body(
-        'Wakati muuzaji anapoweka oda kama Imepokelewa, hisa husasishwa kiotomatiki na bidhaa zinakuwa '
+        'Wakati muuzaji anapoweka oda kama Imepokelewa, hisa husahihishwa kiotomatiki na bidhaa zinakuwa '
         'zinapatikana kwa ajili ya kuuzwa.'
     ))
     el.append(spacer())

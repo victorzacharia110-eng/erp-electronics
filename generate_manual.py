@@ -945,7 +945,7 @@ def build_sw():
     el.extend(bullet_list([
         '<b>Takwimu za Muhtasari</b> — Mapato Jumla, Oda Jumla, Bidhaa Jumla, na Wafanyakazi Jumla kwa macho.',
         '<b>Chati za Uchambuzi wa Mauzo</b> — Chati za bar na mstari zinaonyesha Mapato dhidi ya Faida, Mwenendo wa Oda, Bidhaa Zilizouzwa, na Mapato kwa Kategoria. Tumia kichaguzi cha kipindi kubadilisha kati ya miezi 6 na 12.',
-        '<b>Maarifa ya Biashara ya AI</b> — Mapendekezo ya AI kutoka Google Gemini yanayochambua data ya biashara yako. Mapendekezo yamegawanywa kwa kipaumbele (Juu/Wastani/Chini) na aina (Hifadhi, Bei, Matangazo, Ukuaji, Uendeshaji). Bofya "Sasisha" ili kujenga upya.',
+        '<b>Maarifa ya Biashara ya AI</b> — Mapendekezo ya AI kutoka Google Gemini yanayochambua data ya biashara yako. Mapendekezo yamegawanywa kwa kipaumbele (Juu/Wastani/Chini) na aina (Hifadhi, Bei, Matangazo, Ukuaji, Uendeshaji). Bofya "Sahihisha" ili kujenga upya.',
         '<b>Oda za Hivi Karibuni</b> — Mtazamo wa haraka wa oda za mwisho kwa vigezo vya hali. Bofya "Angalia Zote" kwenda kwenye Usimamizi kamili wa Oda.',
         '<b>Hatua za Haraka</b> — Tiles za kufikia Wafanyakazi, Bidhaa, Oda, Ripoti, Hifadhi, Mipangilio ya Malipo, na Mipangilio ya Usafirishaji.',
         '<b>Muhtasari wa Bidhaa</b> — Bidhaa bora kwa jina, chapa, na bei. Bofya "Angalia Zote" kwa usimamizi kamili.',
@@ -985,7 +985,7 @@ def build_sw():
     el.append(note('Wafanyakazi wataombwa kubadilisha nenosiri lao mara ya kwanza ya kuingia ikiwa zimepita zaidi ya siku 3 tangu kuundwa.'))
     el.append(spacer())
     el.append(section('Kuhariri Mfanyakazi'))
-    el.append(body('Bofya ikoni ya <b>kalamu (hariri)</b> kwenye kadi ya mfanyakazi kufungua fomu ya kuhariri. Unaweza kusasisha jina, barua pepe, simu, utambulisho, tawi, cheo, idara, kiwango cha kamisheni, na wadhamini wake. Bofya <b>"Hifadhi Mabadiliko"</b> umalize.'))
+    el.append(body('Bofya ikoni ya <b>kalamu (hariri)</b> kwenye kadi ya mfanyakazi kufungua fomu ya kuhariri. Unaweza kusahihisha jina, barua pepe, simu, utambulisho, tawi, cheo, idara, kiwango cha kamisheni, na wadhamini wake. Bofya <b>"Hifadhi Mabadiliko"</b> umalize.'))
     el.append(PageBreak())
 
     # ── Sura ya 4: Usimamizi wa Matawi ──
@@ -1054,7 +1054,7 @@ def build_sw():
     el.append(body('Simamia nambari za malipo zinazoonyeshwa kwa wateja wakati wa kulipia. Unaweza:'))
     el.extend(bullet_list([
         '<b>Ongeza</b> mtoa huduma mpya (mfano, M-Pesa, Airtel Money, Halopesa).',
-        '<b>Sasisha</b> nambari ya simu au aina ya icon ya yaliyopo.',
+        '<b>Sahihisha</b> nambari ya simu au aina ya icon ya yaliyopo.',
         '<b>Washa/Zima</b> watoa huduma.',
         '<b>Futa</b> mtoa huduma ambaye huna tena.',
     ]))
@@ -1143,7 +1143,7 @@ def build_sw():
     ]))
     el.append(note('Malipo ya pesa taslimu na ClickPesa yanathibitishwa kiotomatiki. Malipo ya pesa za simu pekee yanahitaji uthibitisho wa mkono.'))
     el.append(spacer())
-    el.append(section('Kusasisha Hali ya Oda'))
+    el.append(section('Kusahihisha Hali ya Oda'))
     el.append(body('Tumia vifungo vya kitendo kusonga oda:'))
     el.extend(bullet_list([
         '<b>Weka Inachakatwa</b> — Oda inaandaliwa.',
@@ -1238,7 +1238,7 @@ def build_sw():
     el.append(body('Simamia jedwali la akaunti katika <b>/owner/accounting/chart-of-accounts</b>. Unaweza:'))
     el.extend(bullet_list([
         '<b>Ongeza</b> akaunti mpya kwa msimbo, jina, aina, na maelezo ya hiari.',
-        '<b>Sasisha</b> maelezo ya akaunti zilizopo.',
+        '<b>Sahihisha</b> maelezo ya akaunti zilizopo.',
         '<b>Futa</b> akaunti ambazo hazina shughuli.',
     ]))
     el.append(spacer())
@@ -1404,14 +1404,14 @@ def build_sw():
     el.extend(bullet_list([
         '<b>Muhtasari</b> — PO imeundwa bado haijatumwa kwa mhuzaji. Inaweza kuhaririwa.',
         '<b>Imetumwa</b> — PO imetumwa kwa mhuzaji. Inasubiri uwasilishaji.',
-        '<b>Imepokelewa</b> — Bidhaa zimepokelewa. Hifadhi husasishwa kiotomatiki na jumla za fedha zinaundwa (debiti Hifadhi, mkopo Akaunti zinazolipwa).',
+        '<b>Imepokelewa</b> — Bidhaa zimepokelewa. Hifadhi husahihishwa kiotomatiki na jumla za fedha zinaundwa (debiti Hifadhi, mkopo Akaunti zinazolipwa).',
     ]))
     el.append(spacer())
     el.append(section('Mlango wa Mchuuzi'))
     el.append(body('Wachuuzi wana mlango wao wa kuingia kuona oda za ununuzi zilizowakilishwa kwao. Kutoka kwa mlango wa mhuzaji, wachuuzi wanaweza:'))
     el.extend(bullet_list([
         '<b>Kuona</b> oda zao zote za ununuzi na hali ya sasa.',
-        '<b>Sasisha Hali</b> — Weka oda kama zimetumwa au zimepokelewa.',
+        '<b>Sahihisha Hali</b> — Weka oda kama zimetumwa au zimepokelewa.',
         '<b>Kuona Maelezo</b> — Ona vipengele, kiasi, na gharama.',
     ]))
     el.append(note('Mlango wa mhuzaji hurahisisha mawasiliano kati ya biashara yako na wachuuzi, kupunguza uhitaji wa simu au barua pepe kufuatilia oda.'))
@@ -1467,7 +1467,7 @@ def build_sw():
         'Chagua aina ya bidhaa (rangi/uhifadhi) ikiwa inatumika.',
         'Chagua kiasi.',
         'Bofya <b>"Ongeza kwenye Kikapu"</b>.',
-        'Ikoni ya kikapu kwenye upau wa juu inasasishwa na idadi ya bidhaa.',
+        'Ikoni ya kikapu kwenye upau wa juu inasahihishwa na idadi ya bidhaa.',
     ]))
     el.append(PageBreak())
 
@@ -1496,7 +1496,7 @@ def build_sw():
         '<b>Dashibodi</b> — Ona takwimu za oda: Oda Jumla, Inachakatwa, Imefikishwa.',
         '<b>Historia ya Oda</b> — Angalia oda zote za zamani kwa hali na maelezo.',
         '<b>Msaada</b> — Tuma ujumbe kuhusu masuala ya malipo, hali ya oda, usafirishaji, au maombi ya kurejeshewa pesa. Angalia majibu kutoka kwa wafanyakazi.',
-        '<b>Wasifu</b> — Sasisha jina na taarifa za kibinafsi.',
+        '<b>Wasifu</b> — Sahihisha jina na taarifa za kibinafsi.',
         '<b>Nenosiri</b> — Badilisha nenosiri lako (lazima lifikie mahitaji ya usalama).',
         '<b>Anwani</b> — Simamia anwani zilizohifadhiwa za usafirishaji.',
     ]))
