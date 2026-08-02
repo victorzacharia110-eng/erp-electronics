@@ -204,6 +204,30 @@ const routes = [
         meta: { requiresAuth: true, role: 'owner' },
       },
       {
+        path: 'owner/wingas',
+        name: 'owner-wingas',
+        component: () => import('@/pages/winga/WingaManagementPage.vue'),
+        meta: { requiresAuth: true, role: 'owner' },
+      },
+      {
+        path: 'owner/winga-commissions',
+        name: 'owner-winga-commissions',
+        component: () => import('@/pages/winga/WingaCommissionPage.vue'),
+        meta: { requiresAuth: true, role: 'owner' },
+      },
+      {
+        path: 'employee/wingas',
+        name: 'employee-wingas',
+        component: () => import('@/pages/winga/WingaManagementPage.vue'),
+        meta: { requiresAuth: true, role: 'employee' },
+      },
+      {
+        path: 'employee/winga-commissions',
+        name: 'employee-winga-commissions',
+        component: () => import('@/pages/winga/WingaCommissionPage.vue'),
+        meta: { requiresAuth: true, role: 'employee' },
+      },
+      {
         path: 'owner/inventory',
         name: 'owner-inventory',
         component: () => import('@/pages/owner/InventoryManagementPage.vue'),

@@ -90,6 +90,10 @@
               class="fas fa-truck-loading"></i><span>{{ $t('dashboards.owner.purchaseOrdersAction') }}</span></router-link>
           <router-link to="/owner/commissions" class="action-tile"><i
               class="fas fa-coins"></i><span>{{ $t('dashboards.owner.commissionsAction') }}</span></router-link>
+          <router-link to="/owner/wingas" class="action-tile"><i
+              class="fas fa-user-tie"></i><span>{{ $t('dashboards.owner.wingasAction') }}</span></router-link>
+          <router-link to="/owner/winga-commissions" class="action-tile"><i
+              class="fas fa-money-bill-wave"></i><span>{{ $t('dashboards.owner.wingaCommissionsAction') }}</span></router-link>
           <router-link to="/owner/suppliers" class="action-tile"><i
               class="fas fa-truck"></i><span>{{ $t('dashboards.owner.suppliersAction') }}</span></router-link>
           <router-link to="/owner/stock-alerts" class="action-tile" :class="{ 'alert-tile': stockAlertCount > 0 }">

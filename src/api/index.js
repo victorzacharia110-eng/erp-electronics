@@ -462,6 +462,39 @@ export const commissionApi = {
   },
 }
 
+export const wingaApi = {
+  getAll(params) {
+    return api.get('/wingas', { params })
+  },
+  create(data) {
+    return api.post('/wingas', data)
+  },
+  update(id, data) {
+    return api.put(`/wingas/${id}`, data)
+  },
+  toggleStatus(id) {
+    return api.patch(`/wingas/${id}/toggle-status`)
+  },
+  delete(id) {
+    return api.delete(`/wingas/${id}`)
+  },
+}
+
+export const wingaCommissionApi = {
+  getAll(params) {
+    return api.get('/winga-commissions', { params })
+  },
+  getSummary() {
+    return api.get('/winga-commissions/summary')
+  },
+  pay(id) {
+    return api.post(`/winga-commissions/${id}/pay`)
+  },
+  payAll() {
+    return api.post('/winga-commissions/pay-all')
+  },
+}
+
 export const inventoryApi = {
   getAll(params) {
     return api.get('/inventory', { params })

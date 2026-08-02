@@ -112,6 +112,10 @@
             $t('dashboards.employee.myProfile') }}</span></router-link>
           <router-link to="/employee/earnings" class="action-tile"><i class="fas fa-coins"></i><span>{{
             $t('dashboards.employee.myEarnings') }}</span></router-link>
+          <router-link to="/employee/wingas" class="action-tile"><i class="fas fa-user-tie"></i><span>{{
+            $t('dashboards.employee.wingas') }}</span></router-link>
+          <router-link to="/employee/winga-commissions" class="action-tile"><i class="fas fa-money-bill-wave"></i><span>{{
+            $t('dashboards.employee.wingaCommissions') }}</span></router-link>
         </div>
       </div>
     </div>
