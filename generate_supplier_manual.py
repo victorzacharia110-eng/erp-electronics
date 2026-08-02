@@ -361,7 +361,7 @@ def build_sw():
         ('4.', 'Kupakia Nyaraka za Muuzaji'),
         ('5.', 'Kusimamia Wachuuzi'),
         ('6.', 'Lango la Muuzaji (Supplier Portal)'),
-        ('7.', 'Amri za Ununuzi'),
+        ('7.', 'Oda za Ununuzi'),
         ('8.', 'Msaada na Mawasiliano'),
     ]
     for num, title in toc:
@@ -374,13 +374,13 @@ def build_sw():
     el.append(body(
         'Mwongozo huu unaelezea jinsi wachuuzi wanavyojisajili katika mfumo wa ERP Electronics na jinsi wanavyofanya '
         'kazi na biashara. Muuzaji ni kampuni, ushirikiano au mtu binafsi anayetoa bidhaa au vifaa kwa duka kupitia '
-        'amri za ununuzi.'
+        'oda za ununuzi.'
     ))
     el.append(section('Jinsi mfumo unavyofanya kazi'))
     el += bullet_list([
         'Wachuuzi husajiliwa na mmiliki wa duka, ambaye anaingiza maelezo ya biashara na nyaraka za kisheria zinazohitajika.',
         'Kila muuzaji huhifadhi rekodi ya nyaraka za kisheria za Tanzania (vyeti vya usajili, kodi na leseni).',
-        'Wachuuzi walioidhinishwa wanaweza kuunganishwa na amri za ununuzi na kutumia Lango la Muuzaji kuona na kukamilisha amri.',
+        'Wachuuzi walioidhinishwa wanaweza kuunganishwa na oda za ununuzi na kutumia Lango la Muuzaji kuona na kukamilisha oda.',
     ])
     el.append(spacer())
 
@@ -405,7 +405,7 @@ def build_sw():
     ])
     el.append(section('Hali ya muuzaji'))
     el += bullet_list([
-        'Muuzaji anaweza kuwekwa kama anayefanya kazi au asiyefanya kazi. Wachuuzi wasiofanya kazi hawawezi kuchaguliwa kwa amri mpya za ununuzi.',
+        'Muuzaji anaweza kuwekwa kama anayefanya kazi au asiyefanya kazi. Wachuuzi wasiofanya kazi hawawezi kuchaguliwa kwa oda mpya za ununuzi.',
     ])
     el.append(spacer())
 
@@ -464,7 +464,7 @@ def build_sw():
     el.append(section('Kutazama wachuuzi'))
     el.append(body(
         'Ukurasa wa Usimamizi wa Wachuuzi unaorodhesha wachuuzi wote na mtu wa mawasiliano, simu, barua pepe, mji, '
-        'idadi ya amri za ununuzi na hali ya kufanya kazi. Tumia kisanduku cha utafutaji kupata muuzaji kwa jina, '
+        'idadi ya oda za ununuzi na hali ya kufanya kazi. Tumia kisanduku cha utafutaji kupata muuzaji kwa jina, '
         'mawasiliano au barua pepe.'
     ))
     el.append(section('Kuhariri muuzaji'))
@@ -476,7 +476,7 @@ def build_sw():
     ]))
     el.append(section('Kufuta muuzaji'))
     el.append(body(
-        'Muuzaji anaweza kufutwa tu ikiwa hana amri za ununuzi. Wachuuzi walio na historia ya amri huhifadhiwa kwa '
+        'Muuzaji anaweza kufutwa tu ikiwa hana oda za ununuzi. Wachuuzi walio na historia ya oda huhifadhiwa kwa '
         'madhumuni ya uhasibu na ripoti.'
     ))
     el.append(spacer())
@@ -487,31 +487,31 @@ def build_sw():
     el.append(body(
         'Wachuuzi waliosajiliwa wanaweza kupokea vitambulisho vya kuingia ili waweze kutumia Lango la Muuzaji. Baada '
         'ya kuingia kwa barua pepe na nenosiri kutoka kwa mmiliki, muuzaji anaona dashibodi yenye kadi tatu za '
-        'muhtasari: Jumla ya Amri, Inayosubiri Uwasilishaji na Imekamilika.'
+        'muhtasari: Jumla ya Oda, Inayosubiri Uwasilishaji na Imekamilika.'
     ))
     el += bullet_list([
-        'Muuzaji anaweza kuona amri zote za ununuzi zilizopangiwa kwake.',
-        'Kila amri inaonyesha namba ya PO, tarehe, bidhaa, gharama ya jumla, hali na tarehe inayotarajiwa.',
-        'Maelezo ya amri yanaorodhesha bidhaa kamili, idadi na gharama za kitengo zitakazotolewa.',
-        'Muuzaji anaweza kufungua amri na kuiweka kama Imepokelewa mara bidhaa zinapofikishwa.',
+        'Muuzaji anaweza kuona oda zote za ununuzi zilizopangiwa kwake.',
+        'Kila oda inaonyesha namba ya PO, tarehe, bidhaa, gharama ya jumla, hali na tarehe inayotarajiwa.',
+        'Maelezo ya oda yanaorodhesha bidhaa kamili, idadi na gharama za kitengo zitakazotolewa.',
+        'Muuzaji anaweza kufungua oda na kuiweka kama Imepokelewa mara bidhaa zinapofikishwa.',
     ])
     el.append(spacer())
 
-    # 7. Amri za ununuzi
-    el.append(chapter('7. Amri za Ununuzi'))
+    # 7. Oda za ununuzi
+    el.append(chapter('7. Oda za Ununuzi'))
     el.append(hr())
     el.append(body(
-        'Amri ya ununuzi (PO) inaundwa na mmiliki wakati duka linahitaji kujaza bidhaa. Amri inarekodi muuzaji, '
+        'Oda ya ununuzi (PO) inaundwa na mmiliki wakati duka linahitaji kujaza bidhaa. Oda inarekodi muuzaji, '
         'bidhaa, idadi na gharama za kitengo. Kila PO inafuata hatua zifuatazo:'
     ))
     el.append(info_table([
-        ('Rasimu (Draft)', 'Amri imeundwa lakini bado haijathibitishwa na muuzaji.'),
-        ('Imeagizwa (Ordered)', 'Amri imetumwa kwa muuzaji na inasubiri uwasilishaji wa bidhaa.'),
-        ('Imepokelewa (Received)', 'Muuzaji amefikisha bidhaa na amri imekamilika.'),
+        ('Rasimu (Draft)', 'Oda imeundwa lakini bado haijathibitishwa na muuzaji.'),
+        ('Imeagizwa (Ordered)', 'Oda imetumwa kwa muuzaji na inasubiri uwasilishaji wa bidhaa.'),
+        ('Imepokelewa (Received)', 'Muuzaji amefikisha bidhaa na oda imekamilika.'),
     ]))
     el.append(spacer())
     el.append(body(
-        'Wakati muuzaji anapoweka amri kama Imepokelewa, hisa husasishwa kiotomatiki na bidhaa zinakuwa '
+        'Wakati muuzaji anapoweka oda kama Imepokelewa, hisa husasishwa kiotomatiki na bidhaa zinakuwa '
         'zinapatikana kwa ajili ya kuuzwa.'
     ))
     el.append(spacer())

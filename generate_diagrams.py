@@ -91,11 +91,11 @@ class D:
     def table(s, x, y, name, cols, fill='#dae8fc', stroke='#6c8ebf', cw=220):
         """Native draw.io table with darkened header (white text) + light body rows."""
         cid = s._id()
-        rh = 26
-        hdr = 32
+        rh = 32
+        hdr = 38
         total_h = hdr + len(cols) * rh
         hdr_fill = darken(fill, 0.55)
-        st = f'shape=table;startSize={hdr};container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor={fill};strokeColor={stroke};strokeWidth=2;fontColor=#ffffff;fontSize=13;swimlaneLine=1;'
+        st = f'shape=table;startSize={hdr};container=1;collapsible=0;childLayout=tableLayout;fixedRows=1;rowLines=0;fontStyle=1;align=center;resizeLast=1;fillColor={fill};strokeColor={stroke};strokeWidth=2;fontColor=#ffffff;fontSize=15;swimlaneLine=1;'
         s.c.append(f'        <mxCell id="{cid}" value="{xe(name)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="{cw}" height="{total_h}" as="geometry"/>\n        </mxCell>')
         for i, (cn, ct, pk) in enumerate(cols):
             rid = s._id()
@@ -104,9 +104,9 @@ class D:
             s.c.append(f'        <mxCell id="{rid}" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor={alt_fill};collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;strokeColor={stroke};" vertex="1" parent="{cid}">\n          <mxGeometry y="{ry}" width="{cw}" height="{rh}" as="geometry"/>\n        </mxCell>')
             nid = s._id()
             pk_s = 'fontStyle=1;fontColor=#c0392b;' if pk else ''
-            s.c.append(f'        <mxCell id="{nid}" value="{xe(cn)}" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontSize=10;align=left;fontColor=#1a1a1a;{pk_s}" vertex="1" parent="{rid}">\n          <mxGeometry width="{cw*0.55}" height="{rh}" as="geometry"><mxRectangle width="{cw*0.55}" height="{rh}" as="alternateBounds"/></mxGeometry>\n        </mxCell>')
+            s.c.append(f'        <mxCell id="{nid}" value="{xe(cn)}" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontSize=12;align=left;fontColor=#111111;{pk_s}" vertex="1" parent="{rid}">\n          <mxGeometry width="{cw*0.55}" height="{rh}" as="geometry"><mxRectangle width="{cw*0.55}" height="{rh}" as="alternateBounds"/></mxGeometry>\n        </mxCell>')
             tid = s._id()
-            s.c.append(f'        <mxCell id="{tid}" value="{xe(ct)}" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontStyle=5;fontSize=9;align=left;fontColor=#555555;" vertex="1" parent="{rid}">\n          <mxGeometry x="{cw*0.55}" width="{cw*0.45}" height="{rh}" as="geometry"><mxRectangle width="{cw*0.45}" height="{rh}" as="alternateBounds"/></mxGeometry>\n        </mxCell>')
+            s.c.append(f'        <mxCell id="{tid}" value="{xe(ct)}" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontStyle=5;fontSize=11;align=left;fontColor=#333333;" vertex="1" parent="{rid}">\n          <mxGeometry x="{cw*0.55}" width="{cw*0.45}" height="{rh}" as="geometry"><mxRectangle width="{cw*0.45}" height="{rh}" as="alternateBounds"/></mxGeometry>\n        </mxCell>')
         return cid
 
     def edge(s, src, tgt, label='', ex=0.5, ey=1, ix=0.5, iy=0, dashed=False, color='#333333', labelBg=None):
@@ -114,39 +114,39 @@ class D:
         d = 'dashed=1;dashPattern=8 4;' if dashed else ''
         bg = labelBg if labelBg else '#ffffff'
         label_style = f'labelBackgroundColor={bg};' if label else ''
-        st = f'relative=1;orthogonalLoop=1;jettySize=auto;html=1;exitX={ex};exitY={ey};entryX={ix};entryY={iy};{d}strokeColor={color};strokeWidth=2;fontColor=#1a1a1a;fontSize=12;fontStyle=1;endArrow=classic;endFill=1;endSize=8;{label_style}'
+        st = f'relative=1;orthogonalLoop=1;jettySize=auto;html=1;exitX={ex};exitY={ey};entryX={ix};entryY={iy};{d}strokeColor={color};strokeWidth=2;fontColor=#000000;fontSize=15;fontStyle=1;endArrow=classic;endFill=1;endSize=8;{label_style}'
         val = f' value="{xe(label)}"' if label else ''
         s.c.append(f'        <mxCell id="{eid}"{val} style="{st}" edge="1" source="{src}" target="{tgt}" parent="1">\n          <mxGeometry relative="1" as="geometry"/>\n        </mxCell>')
         return eid
 
     def stick(s, x, y, label, h=100):
         cid = s._id()
-        st = f'shape=actor;whiteSpace=wrap;html=1;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=13;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;fontColor=#1a1a1a;fontStyle=1;'
+        st = f'shape=actor;whiteSpace=wrap;html=1;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=16;fontStyle=1;verticalLabelPosition=bottom;verticalAlign=top;fontColor=#111111;fontStyle=1;'
         s.c.append(f'        <mxCell id="{cid}" value="{xe(label)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="40" height="{h}" as="geometry"/>\n        </mxCell>')
         return cid
 
-    def oval(s, x, y, t, w=180, h=50, fill='#fff2cc', stroke='#333333'):
+    def oval(s, x, y, t, w=210, h=56, fill='#fff2cc', stroke='#333333'):
         cid = s._id()
-        st = f'shape=ellipse;whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};strokeWidth=2;fontSize=11;fontStyle=1;align=center;verticalAlign=middle;fontColor=#1a1a1a;'
+        st = f'shape=ellipse;whiteSpace=wrap;html=1;fillColor={fill};strokeColor={stroke};strokeWidth=2;fontSize=14;fontStyle=1;align=center;verticalAlign=middle;fontColor=#111111;'
         s.c.append(f'        <mxCell id="{cid}" value="{xe(t)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry"/>\n        </mxCell>')
         return cid
 
     def lifeline(s, x, y, label, h=400):
         cid = s._id()
-        st = f'shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=40;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=12;fontStyle=1;fontColor=#ffffff;'
+        st = f'shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=0;collapsible=0;recursiveResize=0;outlineConnect=0;size=50;fillColor=#2c3e50;strokeColor=#1a252f;fontSize=15;fontStyle=1;fontColor=#ffffff;'
         s.c.append(f'        <mxCell id="{cid}" value="{xe(label)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="100" height="{h}" as="geometry"/>\n        </mxCell>')
         return cid
 
     def msg(s, src, tgt, label, y, dashed=False):
         eid = s._id()
         d = 'dashed=1;dashPattern=8 8;' if dashed else ''
-        st = f'html=1;verticalAlign=bottom;endArrow=open;endFill=0;{d}exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#1a1a1a;fontSize=11;fontStyle=0;'
+        st = f'html=1;verticalAlign=bottom;endArrow=open;endFill=0;{d}exitX=0.5;exitY=0;entryX=0.5;entryY=0;strokeColor=#2c3e50;strokeWidth=2;fontColor=#111111;fontSize=13;fontStyle=0;'
         s.c.append(f'        <mxCell id="{eid}" value="{xe(label)}" style="{st}" edge="1" source="{src}" target="{tgt}" parent="1">\n          <mxGeometry y="{y}" relative="1" as="geometry"/>\n        </mxCell>')
         return eid
 
     def boundary(s, x, y, w, h, label):
         cid = s._id()
-        st = f'shape=mxgraph.basic.rect;fillColor=none;strokeColor=#2c3e50;strokeWidth=3;rounded=1;arcSize=3;fontSize=16;fontStyle=1;verticalAlign=top;align=center;fontColor=#2c3e50;'
+        st = f'shape=mxgraph.basic.rect;fillColor=none;strokeColor=#2c3e50;strokeWidth=3;rounded=1;arcSize=3;fontSize=19;fontStyle=1;verticalAlign=top;align=center;fontColor=#2c3e50;'
         s.c.append(f'        <mxCell id="{cid}" value="{xe(label)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="{w}" height="{h}" as="geometry"/>\n        </mxCell>')
         return cid
 
@@ -192,14 +192,14 @@ def gen_erd():
     d.text(1800, 15, 'ElectroShop ERP — Entity Relationship Diagram', sz=24, w=1600, bold=True, color='#2c3e50')
 
     # Section labels with subtle background
-    d.text(80, 60, 'USERS & PROFILES', sz=12, bold=True, w=220, color='#2c3e50', bgColor='#eaf2f8', strokeColor='#2c3e50')
-    d.text(750, 60, 'PRODUCT CATALOG', sz=12, bold=True, w=220, color='#7d6608', bgColor='#fef9e7', strokeColor='#d6b656')
-    d.text(1420, 60, 'LOCATIONS', sz=12, bold=True, w=220, color='#6c3483', bgColor='#f4ecf7', strokeColor='#9673a6')
-    d.text(2100, 60, 'ORDERS & PAYMENTS', sz=12, bold=True, w=220, color='#922b21', bgColor='#fdedec', strokeColor='#b85450')
-    d.text(3000, 60, 'CONFIG & SUPPORT', sz=12, bold=True, w=220, color='#2c3e50', bgColor='#f2f3f4', strokeColor='#666666')
-    d.text(3900, 60, 'MESSAGING', sz=12, bold=True, w=220, color='#7e5109', bgColor='#fef5e7', strokeColor='#d79b00')
+    d.text(80, 60, 'USERS & PROFILES', sz=15, bold=True, w=260, color='#1a252f', bgColor='#eaf2f8', strokeColor='#2c3e50')
+    d.text(750, 60, 'PRODUCT CATALOG', sz=15, bold=True, w=260, color='#7d6608', bgColor='#fef9e7', strokeColor='#d6b656')
+    d.text(1420, 60, 'LOCATIONS', sz=15, bold=True, w=260, color='#6c3483', bgColor='#f4ecf7', strokeColor='#9673a6')
+    d.text(2100, 60, 'ORDERS & PAYMENTS', sz=15, bold=True, w=260, color='#922b21', bgColor='#fdedec', strokeColor='#b85450')
+    d.text(3000, 60, 'CONFIG & SUPPORT', sz=15, bold=True, w=260, color='#1a252f', bgColor='#f2f3f4', strokeColor='#666666')
+    d.text(3900, 60, 'MESSAGING', sz=15, bold=True, w=260, color='#7e5109', bgColor='#fef5e7', strokeColor='#d79b00')
 
-    CW = 280
+    CW = 320
 
     # ── Col 1: Users & Profiles ──
     users = d.table(80, 100, 'users', [
@@ -447,20 +447,20 @@ def gen_class():
 
     def cls(x, y, name, attrs, methods=None, fill='#dae8fc'):
         cid = d._id()
-        rh = 22
+        rh = 26
         ah = len(attrs) * rh + 10
         mh = (len(methods or []) * rh + 10) if methods else 0
-        hdr = 32
+        hdr = 38
         total_h = hdr + ah + mh
-        cw = 320
+        cw = 330
         hdr_fill = darken(fill, 0.55)
-        st = f'shape=swimlane;fontStyle=1;align=center;startSize={hdr};fillColor={fill};strokeColor={darken(fill, 0.4)};strokeWidth=2;fontColor=#ffffff;fontSize=13;collapsible=0;'
+        st = f'shape=swimlane;fontStyle=1;align=center;startSize={hdr};fillColor={fill};strokeColor={darken(fill, 0.4)};strokeWidth=2;fontColor=#ffffff;fontSize=15;collapsible=0;'
         d.c.append(f'        <mxCell id="{cid}" value="{xe(name)}" style="{st}" vertex="1" parent="1">\n          <mxGeometry x="{x}" y="{y}" width="{cw}" height="{total_h}" as="geometry"/>\n        </mxCell>')
         for i, a in enumerate(attrs):
             aid = d._id()
             ay = hdr + i * rh
             bg = '#ffffff' if i % 2 == 0 else lighten(fill)
-            d.c.append(f'        <mxCell id="{aid}" value="{xe(a)}" style="text;strokeColor=none;fillColor={bg};align=left;verticalAlign=middle;spacingLeft=8;fontSize=11;fontColor=#1a1a1a;" vertex="1" parent="{cid}">\n          <mxGeometry y="{ay}" width="{cw}" height="{rh}" as="geometry"/>\n        </mxCell>')
+            d.c.append(f'        <mxCell id="{aid}" value="{xe(a)}" style="text;strokeColor=none;fillColor={bg};align=left;verticalAlign=middle;spacingLeft=8;fontSize=12;fontColor=#111111;" vertex="1" parent="{cid}">\n          <mxGeometry y="{ay}" width="{cw}" height="{rh}" as="geometry"/>\n        </mxCell>')
         if methods:
             sid = d._id()
             sy = hdr + ah
@@ -469,7 +469,7 @@ def gen_class():
                 mid = d._id()
                 my = sy + 8 + i * rh
                 bg = '#ffffff' if i % 2 == 0 else lighten(fill)
-                d.c.append(f'        <mxCell id="{mid}" value="{xe(m)}" style="text;strokeColor=none;fillColor={bg};align=left;verticalAlign=middle;spacingLeft=8;fontSize=11;fontColor=#1a1a1a;" vertex="1" parent="{cid}">\n          <mxGeometry y="{my}" width="{cw}" height="{rh}" as="geometry"/>\n        </mxCell>')
+                d.c.append(f'        <mxCell id="{mid}" value="{xe(m)}" style="text;strokeColor=none;fillColor={bg};align=left;verticalAlign=middle;spacingLeft=8;fontSize=12;fontColor=#111111;" vertex="1" parent="{cid}">\n          <mxGeometry y="{my}" width="{cw}" height="{rh}" as="geometry"/>\n        </mxCell>')
         return cid
 
     # Row 1
@@ -757,14 +757,14 @@ def gen_uc():
     uc25 = d.oval(2150, 1190, 'Message Owner (Inbox)')
 
     for uc in [uc1,uc2,uc3,uc4,uc5]:
-        d.edge(sa, uc, color='#2980b9', labelBg='#d6eaf8')
+        d.edge(sa, uc, 'manages', color='#2980b9', labelBg='#d6eaf8')
     for uc in [uc6,uc7,uc8,uc9,uc10,uc11,uc12,uc13]:
-        d.edge(ow, uc, color='#27ae60', labelBg='#d5f5e3')
+        d.edge(ow, uc, 'manages', color='#27ae60', labelBg='#d5f5e3')
     for uc in [uc14,uc15,uc16,uc17,uc18]:
-        d.edge(em, uc, color='#c0392b', labelBg='#fdedec')
+        d.edge(em, uc, 'handles', color='#c0392b', labelBg='#fdedec')
     for uc in [uc19,uc20,uc21,uc22,uc23,uc24,uc25]:
-        d.edge(cu, uc, color='#d79b00', labelBg='#fef5e7')
-    d.edge(ai, uc12, '', ex=0, ey=0.5, ix=1, iy=0.5, color='#8e44ad', labelBg='#f4ecf7')
+        d.edge(cu, uc, 'uses', color='#d79b00', labelBg='#fef5e7')
+    d.edge(ai, uc12, 'powers', ex=0, ey=0.5, ix=1, iy=0.5, color='#8e44ad', labelBg='#f4ecf7')
 
     d.edge(uc20, uc21, '<<include>>', ex=0.5, ey=1, ix=0.5, iy=0, dashed=True, color='#7f8c8d', labelBg='#f2f3f4')
     d.edge(uc21, uc15, '<<include>>', ex=0.5, ey=1, ix=0.5, iy=0, dashed=True, color='#7f8c8d', labelBg='#f2f3f4')

@@ -898,7 +898,7 @@ def build_sw():
         ('14.', 'Mfumo wa Uhasibu'),
         ('15.', 'Kamisheni, Mapato na Winga'),
         ('16.', 'Usimamizi wa Hifadhi'),
-        ('17.', 'Amri za Ununuzi na Wachuuzi'),
+        ('17.', 'Oda za Ununuzi na Wachuuzi'),
         ('18.', 'Tahadhari za Hisa'),
         ('19.', 'Ununuzi kwa Mteja'),
         ('20.', 'Malipo na Uthibitishaji'),
@@ -1249,7 +1249,7 @@ def build_sw():
     el.extend(bullet_list([
         '<b>Malipo ya Oda</b> — Debiti Fedha/Benki, Mkopo Mapato ya Mauzo (na Gharama ya Bidhaa za Hifadhi).',
         '<b>Kughairi Oda</b> — Inarejesha jedwali la awali la malipo.',
-        '<b>Pokea Amri ya Ununuzi</b> — Debiti Hifadhi, Mkopo Akaunti zinazolipwa.',
+        '<b>Pokea Oda ya Ununuzi</b> — Debiti Hifadhi, Mkopo Akaunti zinazolipwa.',
     ]))
     el.append(spacer())
     el.append(body('Unaweza pia kuunda <b>jumla za fedha kwa mkono</b> kwa marekebisho, kurekebisha, au muamala mwingine wowote wa fedha. Kila jedwali linahitaji angalau vipengele viwili vya mstari (debiti na mkopo) ambavyo lazima vilanishwe.'))
@@ -1365,16 +1365,16 @@ def build_sw():
     el.append(section('Historia ya Shughuli'))
     el.append(body('Kila mabadiliko ya hisa yanaandikwa kwenye historia ya shughuli. Kila kipengele kinaonyesha:'))
     el.extend(bullet_list([
-        '<b>Aina</b> — Sababu ya mabadiliko ya hisa (Mauzo, Kughairi, Marekebisho, Uharibifu, Fungua, Amri ya Ununuzi, n.k.).',
+        '<b>Aina</b> — Sababu ya mabadiliko ya hisa (Mauzo, Kughairi, Marekebisho, Uharibifu, Fungua, Oda ya Ununuzi, n.k.).',
         '<b>Bidhaa</b> — Aina iliyoathiriwa.',
         '<b>Kiasi</b> — Nambari iliyoongezwa (+) au kuondolewa (-).',
         '<b>Mizani Inayoendelea</b> — Kiwango cha hisa baada ya shughuli hii.',
     ]))
-    el.append(note('Hisa huondolewa kiotomatiki pale oda zinapolipwa na kurejeshwa pale oda zinapoghairiwa. Kupokea amri za ununuzi pia huongeza hisa kiotomatiki.'))
+    el.append(note('Hisa huondolewa kiotomatiki pale oda zinapolipwa na kurejeshwa pale oda zinapoghairiwa. Kupokea oda za ununuzi pia huongeza hisa kiotomatiki.'))
     el.append(PageBreak())
 
-    # ── Sura ya 17: Amri za Ununuzi na Wachuuzi ──
-    el.append(chapter('17. Amri za Ununuzi na Wachuuzi'))
+    # ── Sura ya 17: Oda za Ununuzi na Wachuuzi ──
+    el.append(chapter('17. Oda za Ununuzi na Wachuuzi'))
     el.append(hr())
     el.append(section('Wachuuzi'))
     el.append(body('Simamia wachuuzi wako kutoka <b>Mmiliki → Wachuuzi</b>. Kila rekodi ya mtu anayeuza inajumuisha:'))
@@ -1388,19 +1388,19 @@ def build_sw():
     el.append(spacer())
     el.append(body('Unaweza kuongeza, kuhariri, na kufuta wachuuzi. Tumia upau wa utafutaji kupata wachuuzi kwa uwanja wowote (jina, mtu wa mawasiliano, barua pepe, simu, au anwani).'))
     el.append(spacer())
-    el.append(section('Amri za Ununuzi'))
-    el.append(body('Unda na simamia amri za ununuzi kutoka <b>Mmiliki → Amri za Ununuzi</b> ili kujaza upya hifadhi kutoka kwa wachuuzi.'))
+    el.append(section('Oda za Ununuzi'))
+    el.append(body('Unda na simamia oda za ununuzi kutoka <b>Mmiliki → Oda za Ununuzi</b> ili kujaza upya hifadhi kutoka kwa wachuuzi.'))
     el.append(spacer())
-    el.append(body('Kuunda Amri ya Ununuzi:'))
+    el.append(body('Kuunda Oda ya Ununuzi:'))
     el.append(steps_table([
-        'Bofya <b>"Unda Amri ya Ununuzi"</b>.',
+        'Bofya <b>"Unda Oda ya Ununuzi"</b>.',
         'Chagua <b>mhuzaji</b> kunja chini.',
         'Ongeza <b>vipengele vya mstari</b> — kwa kila kitu, chagua aina ya bidhaa, weka kiasi na gharama ya kitu.',
         'Kagua jumla ya gharama.',
         'Bofya <b>"Hifadhi"</b> ili kuunda PO katika hali ya Muhtasari.',
     ]))
     el.append(spacer())
-    el.append(body('Mtiririko wa hali ya Amri ya Ununuzi:'))
+    el.append(body('Mtiririko wa hali ya Oda ya Ununuzi:'))
     el.extend(bullet_list([
         '<b>Muhtasari</b> — PO imeundwa bado haijatumwa kwa mhuzaji. Inaweza kuhaririwa.',
         '<b>Imetumwa</b> — PO imetumwa kwa mhuzaji. Inasubiri uwasilishaji.',
@@ -1408,13 +1408,13 @@ def build_sw():
     ]))
     el.append(spacer())
     el.append(section('Mlango wa Mchuuzi'))
-    el.append(body('Wachuuzi wana mlango wao wa kuingia kuona amri za ununuzi zilizowakilishwa kwao. Kutoka kwa mlango wa mhuzaji, wachuuzi wanaweza:'))
+    el.append(body('Wachuuzi wana mlango wao wa kuingia kuona oda za ununuzi zilizowakilishwa kwao. Kutoka kwa mlango wa mhuzaji, wachuuzi wanaweza:'))
     el.extend(bullet_list([
-        '<b>Kuona</b> amri zao zote za ununuzi na hali ya sasa.',
-        '<b>Sasisha Hali</b> — Weka amri kama zimetumwa au zimepokelewa.',
+        '<b>Kuona</b> oda zao zote za ununuzi na hali ya sasa.',
+        '<b>Sasisha Hali</b> — Weka oda kama zimetumwa au zimepokelewa.',
         '<b>Kuona Maelezo</b> — Ona vipengele, kiasi, na gharama.',
     ]))
-    el.append(note('Mlango wa mhuzaji hurahisisha mawasiliano kati ya biashara yako na wachuuzi, kupunguza uhitaji wa simu au barua pepe kufuatilia amri.'))
+    el.append(note('Mlango wa mhuzaji hurahisisha mawasiliano kati ya biashara yako na wachuuzi, kupunguza uhitaji wa simu au barua pepe kufuatilia oda.'))
     el.append(PageBreak())
 
     # ── Sura ya 18: Tahadhari za Hisa ──
@@ -1429,7 +1429,7 @@ def build_sw():
         '<b>Hisa Imekwisha</b> — Inaundwa pale kiasi cha aina kifikia sifuri. Inaonyesha hitaji la dharura la kujaza upya.',
     ]))
     el.append(spacer())
-    el.append(body('Tahadhari zinakaguliwa na kuundwa kiotomatiki pale mabadiliko ya hifadhi yanapotokea (mfano, oda inapolipwa, marekebisho ya hisa yanaporekodiwa, au amri ya ununuzi inapopokelewa).'))
+    el.append(body('Tahadhari zinakaguliwa na kuundwa kiotomatiki pale mabadiliko ya hifadhi yanapotokea (mfano, oda inapolipwa, marekebisho ya hisa yanaporekodiwa, au oda ya ununuzi inapopokelewa).'))
     el.append(spacer())
     el.append(section('Kusimamia Tahadhari'))
     el.append(body('Ona na simamia tahadhari za hisa kutoka <b>Mmiliki → Tahadhari za Hisa</b>.'))

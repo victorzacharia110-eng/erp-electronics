@@ -416,7 +416,7 @@ def build():
     # ── 6. Database Schema & Models ──
     el.append(chapter('6. Database Schema & Models'))
     el.append(hr())
-    el.append(body('The database consists of <b>28 tables</b>. A full entity-relationship diagram is available as <b>ERD.drawio</b> (crow\'s foot notation, 35+ relationships).'))
+    el.append(body('The database consists of <b>30 tables</b>. A full entity-relationship diagram is available as <b>ERD.drawio</b> (crow\'s foot notation, 35+ relationships).'))
     el.append(spacer(8))
     el.append(section('Tables by Domain'))
     el.append(info_table(header=['Domain', 'Tables'], col_widths=[130, 350], rows=[
@@ -425,7 +425,7 @@ def build():
         ('Commerce', 'addresses, branches, orders, order_items, payments, payment_providers, shipping_rules'),
         ('Support', 'support_messages, conversations, conversation_messages'),
         ('Accounting', 'accounts, journal_entries, journal_lines, accounting_reports'),
-        ('Operations', 'commissions, inventory_transactions, purchase_orders, purchase_order_items, suppliers, stock_alerts'),
+        ('Operations', 'commissions, wingas, winga_commissions, inventory_transactions, purchase_orders, purchase_order_items, suppliers, stock_alerts'),
         ('Notifications', 'notifications'),
     ]))
     el.append(spacer(8))
@@ -434,11 +434,13 @@ def build():
         '<b>User</b> (polymorphic) — one <b>customer_profile</b>, <b>employee_profile</b>, or <b>owner_profile</b>; role gates access via middleware.',
         '<b>employee_profile</b> — branch_id, position, department, commission_rate, hire_date, employee_code; has many <b>employee_guarantors</b> (Wadhamini) and many <b>employee_documents</b> (contracts, background checks).',
         '<b>Product</b> — belongs to a <b>category</b>; has many <b>product_variants</b> and <b>inventory</b> records.',
-        '<b>Order</b> — belongs to a <b>user</b> and optional <b>branch</b>; has many <b>order_items</b>, a <b>payment</b>, and a delivery/tracking payload.',
+        '<b>Order</b> — belongs to a <b>user</b> and optional <b>branch</b>; has many <b>order_items</b>, a <b>payment</b>, and a delivery/tracking payload. Orders placed with a street promoter store <b>winga_id</b> and the <b>winga_fee</b> added at checkout.',
+        '<b>Winga</b> — a street promoter (name, phone, TIN/NIDA, commission_rate, optional branch); has many <b>winga_commissions</b>.',
+        '<b>WingaCommission</b> — created per winga per paid order with <b>commission_amount</b> (gross), <b>withholding_tax</b> (TRA TDS 5%), and <b>net_amount</b>; paid individually or in bulk, posting a payout journal (Dr 2100 / Cr 1020 / Cr 2120).',
         '<b>Accounting</b> — <b>accounts</b> form a chart of accounts; <b>journal_entries</b> contain <b>journal_lines</b> (double-entry). Payments and cancellations create journals automatically.',
         '<b>Commissions</b> — created per employee per paid order; paid individually or in bulk by the owner.',
         '<b>Purchase orders</b> — link <b>suppliers</b> and <b>purchase_order_items</b>; receiving stock creates inventory transactions and journals.',
-        '<b>Conversations</b> — owner ↔ superadmin and owner ↔ customer messaging with real-time unread badges.',
+        '<b>Conversations</b> — owner ↔ superadmin, owner ↔ customer, and owner ↔ employee messaging with real-time unread badges.',
     ]))
     el.append(PageBreak())
 
@@ -505,6 +507,7 @@ def build():
         ('Accounting', '/accounts, /journal-entries, /reports/trial-balance, /profit-loss, /balance-sheet, /general-ledger', 'owner'),
         ('Reports', '/reports/daily, /reports/summary', 'employee, owner'),
         ('Commissions', '/commissions, /commissions/summary, /commissions/{id}/pay, /pay-all, /my-earnings', 'owner / employee'),
+        ('Wingas', '/wingas CRUD + toggle-status, /winga-commissions, /winga-commissions/summary, /winga-commissions/{id}/pay, /pay-all', 'owner / employee'),
         ('Inventory', '/inventory (index, adjust, transactions, low-stock, dashboard)', 'owner'),
         ('Purchase orders', '/purchase-orders CRUD + receive', 'owner'),
         ('Suppliers', '/suppliers CRUD + portal', 'owner / supplier'),
