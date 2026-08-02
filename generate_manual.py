@@ -188,9 +188,9 @@ def build_en():
         ('10.', 'Order Management'),
         ('11.', 'Customer Management'),
         ('12.', 'Support Inbox'),
-        ('13.', 'Owner Inbox (Conversations)'),
+        ('13.', 'Messaging (Owner & Employee Inbox)'),
         ('14.', 'Accounting System'),
-        ('15.', 'Commissions & Earnings'),
+        ('15.', 'Commissions, Earnings & Wingas'),
         ('16.', 'Inventory Management'),
         ('17.', 'Purchase Orders & Suppliers'),
         ('18.', 'Stock Alerts'),
@@ -467,7 +467,7 @@ def build_en():
     # ── Chapter 12: Support Inbox ──
     el.append(chapter('12. Support Inbox (Employee)'))
     el.append(hr())
-    el.append(body('Handle customer support messages from <b>Employee → Support</b>.'))
+    el.append(body('Handle customer support messages from <b>Employee → Support</b>. This is the channel for customer service: customers raise issues here and employees reply. For conversations with your store owner, use <b>Employee → Inbox</b> (see Chapter 13).'))
     el.append(spacer())
     el.append(section('Viewing Messages'))
     el.extend(bullet_list([
@@ -486,17 +486,24 @@ def build_en():
     ]))
     el.append(PageBreak())
 
-    # ── Chapter 13: Owner Inbox (Conversations) ──
-    el.append(chapter('13. Owner Inbox (Conversations)'))
+    # ── Chapter 13: Messaging (Owner & Employee Inbox) ──
+    el.append(chapter('13. Messaging (Owner & Employee Inbox)'))
     el.append(hr())
-    el.append(body('The Owner Inbox is a messaging system for two types of conversations:'))
+    el.append(body('The Inbox is the platform-wide messaging system. Conversations exist between these roles only:'))
     el.extend(bullet_list([
         '<b>Owner ↔ Superadmin</b> — Communicate with the system administrator for account issues, subscription questions, or technical support.',
         '<b>Owner ↔ Customer</b> — Customers can start conversations with you about orders, products, or general inquiries.',
+        '<b>Owner ↔ Employee</b> — Staff and owners can message each other about daily operations, shift notes, or approvals.',
     ]))
+    el.append(note('Customers cannot message the Superadmin directly, and Employees do not see Superadmin conversations. Customers reach the store through <b>Support</b> messages.'))
     el.append(spacer())
-    el.append(section('Accessing the Inbox'))
-    el.append(body('Click the <b>Inbox</b> icon in the navigation bar. You\'ll see two tabs: "Superadmin" and "Customers". Unread conversations show a red badge.'))
+    el.append(section('Owner Inbox'))
+    el.append(body('Open the Inbox from <b>Owner → Inbox</b>. Conversations are grouped into tabs: <b>"All"</b>, <b>"Customers"</b>, <b>"Staff"</b>, and <b>"Admin"</b>. Unread conversations show a red badge.'))
+    el.append(spacer())
+    el.append(body('To start a new conversation, click the <b>"+"</b> button. You can pick a customer who ordered from your store or any of your staff members.'))
+    el.append(spacer())
+    el.append(section('Employee Inbox'))
+    el.append(body('Employees can message their store owner from <b>Employee → Inbox</b> (next to the Support inbox). The conversation list shows threads with your owner, and the <b>"+"</b> button lets you start a new conversation with your owner directly.'))
     el.append(spacer())
     el.append(section('Replying to Messages'))
     el.append(steps_table([
@@ -506,7 +513,7 @@ def build_en():
         'Click <b>"Send"</b>.',
     ]))
     el.append(spacer())
-    el.append(note('Conversations are created automatically when a customer initiates contact or when the superadmin reaches out to you.'))
+    el.append(note('Re-sending a message to the same person reuses the existing conversation thread instead of creating duplicates.'))
     el.append(PageBreak())
 
     # ── Chapter 14: Accounting System ──
@@ -590,6 +597,37 @@ def build_en():
         '<b>Paid Commission</b> — Total amount that has been paid to the employee.',
     ]))
     el.append(note('Commissions are purely profit-based with no base salary. This incentivizes employees to focus on selling higher-margin products.'))
+    el.append(spacer())
+    el.append(section('Winga (Street Promoters)'))
+    el.append(body('A <b>Winga</b> is a street promoter who brings customers into your shop. You can register wingas for your business (optionally per branch) and pay them a commission for the customers they bring. Wingas are managed from <b>Owner → Wingas</b>; employees can also view and manage them.'))
+    el.append(spacer())
+    el.append(section('How Winga Commissions Work'))
+    el.append(body('When an order is placed with a winga attached, the winga\'s commission rate is added as a <b>percentage increase on the product price</b>. This "winga fee" is included in the customer\'s total and funds the winga\'s commission. For example, a 10% winga rate on a TSh 100,000 order adds TSh 10,000 to the total, which becomes the winga\'s commission.'))
+    el.append(spacer())
+    el.append(body('Registering a winga:'))
+    el.extend(bullet_list([
+        'Navigate to <b>Owner → Wingas</b> and click <b>"Add Winga"</b>.',
+        'Enter the <b>name</b> and <b>phone number</b>.',
+        'Enter the winga\'s <b>TIN number</b> (TRA Taxpayer Identification Number) and <b>NIDA number</b> for tax compliance.',
+        'Set the <b>commission rate (%)</b> — the percentage added to the sale.',
+        'Optionally assign the winga to a <b>branch</b>.',
+        'Click <b>"Save"</b>.',
+    ]))
+    el.append(spacer())
+    el.append(section('Withholding Tax (TDS)'))
+    el.append(body('Tanzania requires a <b>5% withholding tax (TDS)</b> to be deducted from commission payments. When you pay a winga, the system automatically deducts 5% from the gross commission and records it as <b>Withholding Tax Payable</b> to be remitted to TRA.'))
+    el.append(spacer())
+    el.append(body('Example: A winga with a TSh 10,000 commission receives <b>TSh 9,500</b>, and <b>TSh 500</b> is withheld for TRA. The journal entries are posted automatically (debit Winga Commission Payable, credit Cash and Withholding Tax Payable).'))
+    el.append(spacer())
+    el.append(section('Paying Winga Commissions'))
+    el.append(body('From the winga commissions view, you can:'))
+    el.extend(bullet_list([
+        '<b>View</b> pending commissions per winga with gross, tax (TDS), and net amounts.',
+        '<b>Pay</b> a single commission — the net amount is paid out and the withholding tax is recorded.',
+        '<b>Pay All</b> — settle every pending commission in one action.',
+    ]))
+    el.append(spacer())
+    el.append(note('Commissions are created automatically when an order with a winga is marked as paid. Cancelling an order or returning items reverses the commission proportionally.'))
     el.append(PageBreak())
 
     # ── Chapter 16: Inventory Management ──
@@ -858,7 +896,7 @@ def build_sw():
         ('12.', 'Kikasha cha Msaada'),
         ('13.', 'Kikasha cha Mmiliki (Mazungumzo)'),
         ('14.', 'Mfumo wa Uhasibu'),
-        ('15.', 'Kamisheni na Mapato ya Wafanyakazi'),
+        ('15.', 'Kamisheni, Mapato na Winga'),
         ('16.', 'Usimamizi wa Hifadhi'),
         ('17.', 'Amri za Ununuzi na Wachuuzi'),
         ('18.', 'Tahadhari za Hisa'),
@@ -1132,7 +1170,7 @@ def build_sw():
     # ── Sura ya 12: Kikasha cha Msaada ──
     el.append(chapter('12. Kikasha cha Msaada (Mfanyakazi)'))
     el.append(hr())
-    el.append(body('Shughulikia ujumbe wa msaada wa wateja kutoka <b>Mfanyakazi → Msaada</b>.'))
+    el.append(body('Shughulikia ujumbe wa msaada wa wateja kutoka <b>Mfanyakazi → Msaada</b>. Hii ndiyo njia ya huduma kwa wateja: wateja hupeleka masuala hapa na wafanyakazi hujibu. Kwa mazungumzo na mmiliki wa duka, tumia <b>Mfanyakazi → Kikasha</b> (ona Sura ya 13).'))
     el.append(spacer())
     el.append(section('Kuona Ujumbe'))
     el.extend(bullet_list([
@@ -1152,16 +1190,24 @@ def build_sw():
     el.append(PageBreak())
 
     # ── Sura ya 13: Kikasha cha Mmiliki (Mazungumzo) ──
-    el.append(chapter('13. Kikasha cha Mmiliki (Mazungumzo)'))
+    el.append(chapter('13. Mazungumzo (Kikasha cha Mmiliki na Mfanyakazi)'))
     el.append(hr())
-    el.append(body('Kikasha cha Mmiliki ni mifumo ya ujumbe kwa aina mbili za mazungumzo:'))
+    el.append(body('Kikasha cha Mazungumzo ni mifumo ya ujumbe kwa mazungumzo kati ya majukumu yafuatayo pekee:'))
     el.extend(bullet_list([
         '<b>Mmiliki ↔ Msimamizi Mkuu</b> — Wasiliana na msimamizi wa mfumo kwa masuala ya akaunti, maswali ya usajili, au msaada wa kiufundi.',
         '<b>Mmiliki ↔ Mteja</b> — Wateja wanaweza kuanzisha mazungumzo nawe kuhusu oda, bidhaa, au maswali ya jumla.',
+        '<b>Mmiliki ↔ Mfanyakazi</b> — Wafanyakazi na wamiliki wanaweza kuwasiliana kuhusu uendeshaji wa kila siku, maelezo ya zamu, au idhini.',
     ]))
     el.append(spacer())
-    el.append(section('Kufikia Kikasha'))
-    el.append(body('Bofya ikoni ya <b>Kikasha</b> kwenye upau wa urambazaji. Utakaona vichupo viwili: "Msimamizi Mkuu" na "Wateja". Mazungumzo yasiyosomwa yanaonyeshwa na beji nyekundu.'))
+    el.append(note('Wateja hawawezi kupeleka ujumbe kwa Msimamizi Mkuu moja kwa moja, na Wafanyakazi hawaoni mazungumzo ya Msimamizi Mkuu. Wateja wanafikia duka kupitia ujumbe wa <b>Msaada</b>.'))
+    el.append(spacer())
+    el.append(section('Kikasha cha Mmiliki'))
+    el.append(body('Fungua Kikasha kutoka <b>Mmiliki → Kikasha</b>. Mazungumzo yamegawanywa katika vichupo: <b>"Zote"</b>, <b>"Wateja"</b>, <b>"Wafanyakazi"</b>, na <b>"Msimamizi"</b>. Mazungumzo yasiyosomwa yanaonyeshwa na beji nyekundu.'))
+    el.append(spacer())
+    el.append(body('Kuanzisha mazungumzo mpya, bofya kitufe cha <b>"+"</b>. Unaweza kuchagua mteja aliyenunua dukani kwako au mfanyakazi wako yeyote.'))
+    el.append(spacer())
+    el.append(section('Kikasha cha Mfanyakazi'))
+    el.append(body('Wafanyakazi wanaweza kupeleka ujumbe kwa mmiliki wao kutoka <b>Mfanyakazi → Kikasha</b> (karibu na kikasha cha Msaada). Orodha inaonyesha mazungumzo na mmiliki wako, na kitufe cha <b>"+"</b> kinakuwezesha kuanzisha mazungumzo mapya na mmiliki wako moja kwa moja.'))
     el.append(spacer())
     el.append(section('Kujibu Ujumbe'))
     el.append(steps_table([
@@ -1171,7 +1217,7 @@ def build_sw():
         'Bofya <b>"Tuma"</b>.',
     ]))
     el.append(spacer())
-    el.append(note('Mazungumzo yanajengwa kiotomatiki mteja anapoanzisha mwasiliano au msimamizi mkuu anapokufikia.'))
+    el.append(note('Kutuma ujumbe kwa mtu yuleyule kunatumia mazungumzo yaliyopo badala ya kuunda ya mara kwa mara.'))
     el.append(PageBreak())
 
     # ── Sura ya 14: Mfumo wa Uhasibu ──
@@ -1255,6 +1301,37 @@ def build_sw():
         '<b>Kamisheni Zilizolipwa</b> — Jumla ya kiasi kilicholipwa kwa mfanyakazi.',
     ]))
     el.append(note('Kamisheni ni za faida pekee bila mshahara wa msingi. Hii inahimiza wafanyakazi kuzingatia bidhaa zenye faida kubwa.'))
+    el.append(spacer())
+    el.append(section('Winga (Wakuza Biashara wa Mtaani)'))
+    el.append(body('A <b>Winga</b> ni mkuza biashara wa mtaani anayeleta wateja kwenye duka lako. Unaweza kusajili winga kwa biashara yako (hiari kwa kila tawi) na kuwalipa kamisheni kwa wateja wanaoleta. Winga husimamiwa kutoka <b>Mmiliki → Winga</b>; wafanyakazi pia wanaweza kuwaona na kuwahudumia.'))
+    el.append(spacer())
+    el.append(section('Jinsi Kamisheni ya Winga Inavyofanya Kazi'))
+    el.append(body('Oda inapowekwa na winga kuambatanishwa, kiwango cha kamisheni ya winga huongezwa kama <b>asilimia ya kuongeza bei ya bidhaa</b>. Hii "ada ya winga" imojumuishwa kwenye jumla ya mteja na inafadhili kamisheni ya winga. Kwa mfano, kiwango cha winga cha 10% kwenye oda ya TSh 100,000 kinaongeza TSh 10,000 kwenye jumla, ambayo inakuwa kamisheni ya winga.'))
+    el.append(spacer())
+    el.append(body('Kusajili winga:'))
+    el.extend(bullet_list([
+        'Nenda kwenye <b>Mmiliki → Winga</b> na ubofye <b>"Ongeza Winga"</b>.',
+        'Weka <b>jina</b> na <b>nambari ya simu</b>.',
+        'Weka <b>nambari ya TIN</b> ya winga (Nambari ya Kitambulisho cha Mlipa Kodi TRA) na <b>nambari ya NIDA</b> kwa kufuata sheria za kodi.',
+        'Weka <b>kiwango cha kamisheni (%)</b> — asilimia inayoongezwa kwenye mauzo.',
+        'Kwa hiari, mgawa winga kwa <b>tawi</b>.',
+        'Bofya <b>"Hifadhi"</b>.',
+    ]))
+    el.append(spacer())
+    el.append(section('Kodi ya Kuzuia (TDS)'))
+    el.append(body('Tanzania inahitaji <b>kodi ya kuzuia (TDS) ya 5%</b> kutolewa kwenye malipo ya kamisheni. Unapolipa winga, mfumo hutoa 5% kiotomatiki kutoka kwa kamisheni ya jumla na kuiweka kama <b>Kodi ya Kuzuia Inayolipwa</b> kwa ajili ya kuipeleka TRA.'))
+    el.append(spacer())
+    el.append(body('Mfano: Winga mwenye kamisheni ya TSh 10,000 anapokea <b>TSh 9,500</b>, na <b>TSh 500</b> huzuiliwa kwa TRA. Kuingiza jumla kunatokea kiotomatiki (debiti Winga Kamisheni Inayolipwa, mkopo Fedha Taslimu na Kodi ya Kuzuia Inayolipwa).'))
+    el.append(spacer())
+    el.append(section('Kulipa Kamisheni za Winga'))
+    el.append(body('Kutoka kwenye mtazamo wa kamisheni za winga, unaweza:'))
+    el.extend(bullet_list([
+        '<b>Ona</b> kamisheni zinazosubiri kwa kila winga na kiasi cha jumla, kodi (TDS), na halisi.',
+        '<b>Lipa</b> kamisheni moja — kiasi halisi hulipwa na kodi ya kuzuia inarekodiwa.',
+        '<b>Lipa Zote</b> — lipa kamisheni zote zinazosubiri kwa hatua moja.',
+    ]))
+    el.append(spacer())
+    el.append(note('Kamisheni zinaundwa kiotomatiki pale oda yenye winga inapowekwa kama imelipwa. Kughairi oda au kurejesha bidhaa kunarejesha kamisheni kwa uwiano.'))
     el.append(PageBreak())
 
     # ── Sura ya 16: Usimamizi wa Hifadhi ──
