@@ -28,6 +28,9 @@
             <input v-model="form.en[field]" type="text" :placeholder="$t('homeContent.enPlaceholder')" />
             <input v-model="form.sw[field]" type="text" :placeholder="$t('homeContent.swPlaceholder')" />
           </div>
+          <p v-if="isCountField(field)" class="count-hint">
+            <i class="fas fa-circle-info"></i> {{ $t('homeContent.countHint') }}
+          </p>
         </div>
       </div>
 
@@ -98,6 +101,12 @@ const sections = [
     fields: ['dirBadge', 'dirTitle', 'dirSubtitle', 'dirProductsCount', 'dirVisitStore', 'dirEmpty', 'dirNew', 'dirNewArrivals'],
   },
 ]
+
+const countFields = new Set(['productsCount', 'dirProductsCount', 'dirNewArrivals'])
+
+function isCountField(field) {
+  return countFields.has(field)
+}
 
 async function loadContent() {
   try {
@@ -223,6 +232,17 @@ onMounted(loadContent)
   outline: none;
   border-color: #e74c3c;
 }
+
+.count-hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.count-hint i { color: #e74c3c; }
 
 .save-footer {
   text-align: right;

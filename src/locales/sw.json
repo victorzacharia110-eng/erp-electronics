@@ -1203,6 +1203,7 @@
       "dirEmpty": "Maandishi ya sehemu tupu",
       "dirNew": "Beji ya Mpya",
       "dirNewArrivals": "Dokezo la bidhaa mpya ({count})"
-    }
+    },
+    "countHint": "Sehemu ya {count} inabadilishwa kiotomatiki na nambari halisi, mfano \"bidhaa 3\"."
   }
 }

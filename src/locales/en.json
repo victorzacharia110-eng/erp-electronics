@@ -1203,6 +1203,7 @@
       "dirEmpty": "Empty state text",
       "dirNew": "New badge",
       "dirNewArrivals": "New arrivals tooltip ({count})"
-    }
+    },
+    "countHint": "The {count} part is replaced automatically with the real number, e.g. \"3 products\"."
   }
 }
