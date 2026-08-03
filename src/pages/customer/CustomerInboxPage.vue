@@ -58,7 +58,7 @@
               <div class="msg-text">{{ msg.message }}</div>
               <div class="msg-time">
                 <span v-if="msg.sender_id === authStore.user?.id" class="msg-tick" :class="{ read: msg.is_read }" :title="msg.is_read ? $t('inbox.read') : $t('inbox.delivered')">
-                  <i class="fas fa-check-double"></i>
+                  <i :class="msg.is_read ? 'fas fa-check-double' : 'fas fa-check'"></i>
                 </span>
                 {{ new Date(msg.created_at).toLocaleTimeString('en-TZ', { hour: '2-digit', minute: '2-digit' }) }}
               </div>
