@@ -469,7 +469,7 @@ def ch_frontend():
         (mono('pages/account/OrdersPage.vue'), 'Order history for the logged-in user with status, items, and payments.'),
         (mono('pages/account/AccountPage.vue'), 'Profile + address book (CRUD via addressApi) and account settings.'),
         (mono('pages/account/SupportPage.vue'), 'Customer support tickets: create a ticket against an order, view replies and status.'),
-        (mono('pages/customer/CustomerInboxPage.vue'), 'Customer chat with the store owner (conversationApi); live unread badges; WhatsApp-style read ticks (grey = delivered, blue = read) on sent messages.'),
+        (mono('pages/customer/CustomerInboxPage.vue'), 'Customer chat with the store owner (conversationApi); live unread badges; WhatsApp-style ticks on sent messages (faded single check = delivered, solid double check = read).'),
         (mono('pages/dashboards/CustomerDashboard.vue'), 'Customer landing after login: quick stats, recent orders, quick links.'),
     ]))
     el.append(spacer(8))
@@ -490,7 +490,7 @@ def ch_frontend():
         (mono('pages/employee/OrderManagementPage.vue'), 'Order desk (shared owner/employee): filter by status/branch/search; confirm payment, advance status, add tracking, process returns.'),
         (mono('pages/employee/CustomerManagementPage.vue'), 'Customer list for staff: search, toggle active, delete.'),
         (mono('pages/employee/EmployeeEarningsPage.vue'), 'Employee commissions: pending/paid totals and recent commission records (my-earnings).'),
-        (mono('pages/employee/EmployeeInboxPage.vue'), 'Employee chat with the owner (owner_employee conversations); read ticks (grey = delivered, blue = read).'),
+        (mono('pages/employee/EmployeeInboxPage.vue'), 'Employee chat with the owner (owner_employee conversations); ticks on sent messages (faded single check = delivered, solid double check = read).'),
         (mono('pages/employee/SupportInboxPage.vue'), 'Staff support-ticket desk: reply, change status, unread/open counts.'),
         (mono('pages/owner/ProductManagementPage.vue'), 'Owner product list with search, stock value, active toggle, edit/delete links.'),
         (mono('pages/owner/ProductFormPage.vue'), 'Product create/edit form: SKU, prices, category, image upload or URL, variants with per-variant cost/price/quantity.'),
@@ -504,7 +504,7 @@ def ch_frontend():
         (mono('pages/owner/SupplierManagementPage.vue'), 'Supplier CRUD with legal fields (TIN/VAT/registration), documents, and purchase-order counts.'),
         (mono('pages/owner/StockAlertsPage.vue'), 'Low/out-of-stock alerts: acknowledge, resolve.'),
         (mono('pages/owner/CommissionManagementPage.vue'), 'Employee commissions: summary per employee, pay individually or pay-all.'),
-        (mono('pages/owner/OwnerInboxPage.vue'), 'Owner chat: with customers and with the platform superadmin, plus unread counts; read ticks on sent messages.'),
+        (mono('pages/owner/OwnerInboxPage.vue'), 'Owner chat: with customers and with the platform superadmin, plus unread counts; ticks on sent messages (faded single check = delivered, solid double check = read).'),
     ]))
     el.append(spacer(8))
 
@@ -535,7 +535,7 @@ def ch_frontend():
         (mono('pages/superadmin/OwnerManagementPage.vue'), 'Owners table: create owner, toggle active, delete, navigate to detail.'),
         (mono('pages/superadmin/OwnerDetailPage.vue'), 'Owner detail: subscription, limits, password status; reset/set password, force change, unlock account.'),
         (mono('pages/superadmin/BrandingPage.vue'), 'White-label branding editor: store name, tagline, logo upload, brand colors.'),
-        (mono('pages/superadmin/SuperadminInboxPage.vue'), 'Superadmin inbox with owners (superadmin_owner conversations); read ticks on sent messages.'),
+        (mono('pages/superadmin/SuperadminInboxPage.vue'), 'Superadmin inbox with owners (superadmin_owner conversations); ticks on sent messages (faded single check = delivered, solid double check = read).'),
         (mono('pages/superadmin/HomeContentPage.vue'), 'System-wide content editor: EN/SW inputs for the directory landing (dir* keys) and every white-label storefront hero/badge/count string; saves via PUT /superadmin/settings/home-content.'),
     ]))
     el.append(spacer(8))
@@ -638,7 +638,7 @@ def ch_backend():
         ('CustomerController', 'Customers', 'Staff customer list, toggle-status, destroy.'),
         ('ReportController', 'Reports', 'daily + summary reports; generateForDate builds the snapshot.'),
         ('AnalyticsController', 'Analytics', 'sales (SQLite strftime grouping, zero-filled months, summary metrics) + ai-suggestions (Gemini with fallback).'),
-        ('ConversationController', 'Messaging', 'Role-based conversations: index/store/show/sendMessage/updateStatus/unreadCount/contacts/ownerDetails/customerDetails/destroy/destroyMessage. show() marks incoming messages read (read receipts), powering the frontend WhatsApp-style ticks.'),
+        ('ConversationController', 'Messaging', 'Role-based conversations: index/store/show/sendMessage/updateStatus/unreadCount/contacts/ownerDetails/customerDetails/destroy/destroyMessage. show() marks incoming messages read (read receipts), powering the frontend WhatsApp-style ticks (faded single check = delivered, solid double check = read).'),
         ('SupportMessageController', 'Support', 'Tickets: index/store/show/reply/updateStatus/unreadCount.'),
         ('NotificationController', 'Notifications', 'index/count/markRead/markAllRead + static create factory.'),
         ('AccountController', 'Accounting', 'Chart of accounts index/tree/store/update/destroy with system-account protections.'),
@@ -932,7 +932,7 @@ def ch_api():
         ('DELETE', '/conversations/{conversation}', 'ConversationController@destroy', '—'),
         ('DELETE', '/conversations/{conversation}/messages/{messageId}', 'ConversationController@destroyMessage', '—'),
     ]))
-    el.append(note('Read receipts: every message carries an is_read flag. GET /conversations/{conversation} marks all incoming messages from the requesting user\'s counterpart as read; the sender picks this up via the 15 s polling in the inbox pages and renders grey (delivered) vs blue (read) ticks. There is no separate delivery flag — messages are server-stored, so unread is the only distinguishable state. Whole conversations (DELETE /conversations/{conversation}) and individual messages (DELETE /conversations/{conversation}/messages/{messageId}) can be removed by their participants.'))
+    el.append(note('Read receipts: every message carries an is_read flag. GET /conversations/{conversation} marks all incoming messages from the requesting user\'s counterpart as read; the sender picks this up via the 15 s polling in the inbox pages and renders a faded single check for delivered vs a solid double check for read. There is no separate delivery flag — messages are server-stored, so unread is the only distinguishable state. Whole conversations (DELETE /conversations/{conversation}) and individual messages (DELETE /conversations/{conversation}/messages/{messageId}) can be removed by their participants.'))
     el.append(spacer(8))
     el.append(section('9.6 Authenticated — Accounting (owner)'))
     el.append(info_table(header=['Method', 'URI', 'Controller@method'], col_widths=[48, 220, 212], rows=[
@@ -1282,9 +1282,9 @@ def ch_request_cycles():
     el.append(section('13.13 Messaging & Read-Receipts Cycle'))
     el.extend(bullet_list([
         'Threads: conversationApi.index / create → GET|POST /conversations; inbox pages list open threads (sidebar) with unread dots (hasUnread = any incoming message with is_read = false).',
-        'Send: inbox page → conversationApi.sendMessage → POST /conversations/{id}/messages → ConversationController@sendMessage stores the row (is_read = false) and returns it; the sender renders a grey double tick.',
+        'Send: inbox page → conversationApi.sendMessage → POST /conversations/{id}/messages → ConversationController@sendMessage stores the row (is_read = false) and returns it; the sender renders a faded single check.',
         'Read: recipient opens the thread → GET /conversations/{id} → show() validates the role/tenant then bulk-updates incoming messages (sender_id != user) to is_read = true before returning the conversation.',
-        'Receipt delivery: every inbox page polls GET /conversations and GET /conversations/{id} every 15 s; the sender\'s grey tick turns blue once the recipient has viewed the message. No websockets are used.',
+        'Receipt delivery: every inbox page polls GET /conversations and GET /conversations/{id} every 15 s; the sender\'s faded single check becomes a solid double check once the recipient has viewed the message. No websockets are used.',
     ]))
     el.append(PageBreak())
     return el
