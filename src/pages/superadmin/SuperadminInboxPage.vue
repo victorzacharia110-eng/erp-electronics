@@ -408,6 +408,7 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .inbox-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .inbox-welcome { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; position: relative; }
 .inbox-welcome .mobile-menu { position: absolute; top: 14px; left: 20px; }
+.inbox-welcome .mobile-menu i { font-size: 13px; }
 .inbox-welcome i { font-size: 60px; margin-bottom: 16px; }
 .inbox-welcome h3 { font-size: 18px; color: #999; margin-bottom: 6px; }
 .inbox-welcome p { font-size: 14px; }
