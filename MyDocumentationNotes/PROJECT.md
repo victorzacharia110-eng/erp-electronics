@@ -2110,3 +2110,12 @@ Owner pays commission
   → DR: Commission Expense 25,000
   → CR: Cash 25,000
 ```
+
+---
+
+## 20. Changelog
+
+### 2026-08-03 — Product form translations fixed
+- **Issue**: The owner product edit/create route (`/owner/products/:id/edit` and `/owner/products/new`) referenced `productForm.updateProduct`, `createProduct`, `updatedSuccessfully` and `createdSuccessfully` keys that were **missing from both `src/locales/en.json` and `src/locales/sw.json`**. vue-i18n rendered the raw key (e.g. `productForm.updateProduct`) on the submit button and success toast.
+- **Fix**: Added all four keys to both locale files. The Swahili submit label uses **"Sahihisha Bidhaa"** ("correct product") instead of the previously used wording, and the success toast uses **"Bidhaa imesahihishwa!"**.
+- **Files**: `src/locales/en.json`, `src/locales/sw.json`

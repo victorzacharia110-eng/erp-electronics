@@ -187,7 +187,7 @@ def cover_page():
         [Spacer(1, 30)],
         [HRFlowable(width="55%", thickness=2, color=RED, spaceBefore=4, spaceAfter=4)],
         [Spacer(1, 14)],
-        [Paragraph('Version 2.1 &nbsp;|&nbsp; August 2026', sCoverMeta)],
+        [Paragraph('Version 2.2 &nbsp;|&nbsp; August 2026', sCoverMeta)],
         [Paragraph('Software Developers &middot; System Administrators &middot; Superadmins', sCoverMeta)],
     ], colWidths=[480])
     txt.setStyle(TableStyle([
@@ -205,7 +205,7 @@ def add_page_number(canvas, doc):
     canvas.saveState()
     canvas.setFont('DejaVu', 8)
     canvas.setFillColor(GRAY)
-    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.1  ·  Page {doc.page}')
+    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.2  ·  Page {doc.page}')
     canvas.restoreState()
 
 
@@ -1290,7 +1290,7 @@ def ch_docs():
         ('User_Manual_EN.pdf', 'End users', 'English user manual, 24 chapters'),
         ('User_Manual_SW.pdf', 'End users', 'Swahili user manual, 24 chapters'),
         ('Supplier_Manual.pdf', 'Suppliers', 'Supplier portal manual'),
-        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.1)'),
+        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.2)'),
     ]))
     el.append(spacer(8))
     el.append(section('System Diagrams (docs/)'))
@@ -1442,8 +1442,11 @@ def ch_gotchas():
         ('11', 'Sanctum tokens have no expiration by default; sessions are protected by the frontend idle timeout and server-side token revocation on logout.'),
     ]))
     el.append(spacer(12))
+    el.append(section('Changelog — 2026-08-03'))
+    el.append(body('<b>Product form translations fixed</b>: the owner product create/edit routes referenced <font face="Mono">productForm.updateProduct</font>, <font face="Mono">createProduct</font>, <font face="Mono">updatedSuccessfully</font> and <font face="Mono">createdSuccessfully</font> keys that were missing from both <font face="Mono">en.json</font> and <font face="Mono">sw.json</font>, so vue-i18n rendered the raw key. All four keys were added to both locale files; the Swahili submit label now reads <b>"Sahihisha Bidhaa"</b> and the success toast <b>"Bidhaa imesahihishwa!"</b>.'))
+    el.append(spacer(12))
     el.append(hr())
-    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.1 — August 2026', sFooter))
+    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.2 — August 2026', sFooter))
     el.append(Paragraph('For internal development and administration use only.', sFooter))
     return el
 

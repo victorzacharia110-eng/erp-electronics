@@ -448,8 +448,8 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .message-bubble.mine .msg-sender { display: none; }
 .msg-text { font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
 .msg-time { font-size: 10px; opacity: 0.6; margin-top: 4px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
-.msg-tick { font-size: 11px; }
-.msg-tick.read { color: #4fc3f7; opacity: 1; }
+.msg-tick { font-size: 11px; color: rgba(255, 255, 255, 0.7); }
+.msg-tick.read { color: #fff; opacity: 1; }
 
 .message-input-area { padding: 12px 16px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: flex-end; }
 .message-input-area textarea { flex: 1; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; resize: none; outline: none; }
