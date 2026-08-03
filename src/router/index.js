@@ -404,6 +404,11 @@ const routes = [
         name: 'superadmin-inbox',
         component: () => import('@/pages/superadmin/SuperadminInboxPage.vue'),
       },
+      {
+        path: 'home-content',
+        name: 'superadmin-home-content',
+        component: () => import('@/pages/superadmin/HomeContentPage.vue'),
+      },
     ],
   },
 ]

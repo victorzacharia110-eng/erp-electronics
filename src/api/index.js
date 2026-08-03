@@ -263,6 +263,9 @@ export const settingsApi = {
   getBranding(params) {
     return api.get('/settings/branding', { params })
   },
+  getHomeContent() {
+    return api.get('/settings/home-content')
+  },
 }
 
 export const supportApi = {
@@ -384,6 +387,12 @@ export const superadminApi = {
   },
   unlockOwnerAccount(id) {
     return api.post(`/superadmin/owners/${id}/unlock-account`)
+  },
+  getHomeContent() {
+    return api.get('/settings/home-content')
+  },
+  updateHomeContent(data) {
+    return api.put('/superadmin/settings/home-content', data)
   },
 }
 

@@ -2,9 +2,9 @@
   <div class="directory-page">
     <section class="directory-hero">
       <div class="container">
-        <span class="hero-badge">{{ $t('directory.badge') }}</span>
-        <h1>{{ $t('directory.title') }}</h1>
-        <p>{{ $t('directory.subtitle') }}</p>
+        <span class="hero-badge">{{ dc('dirBadge') }}</span>
+        <h1>{{ dc('dirTitle') }}</h1>
+        <p>{{ dc('dirSubtitle') }}</p>
       </div>
     </section>
 
@@ -24,9 +24,9 @@
             <div
               v-if="store.new_arrivals_count > 0"
               class="new-badge"
-              :title="$t('directory.newArrivals', { count: store.new_arrivals_count })"
+              :title="dirNewArrivalsLabel(store.new_arrivals_count)"
             >
-              <span>{{ $t('directory.new') }}</span>
+              <span>{{ dc('dirNew') }}</span>
               <i v-if="store.new_arrivals_count > 1" class="new-count">{{ store.new_arrivals_count }}</i>
             </div>
             <div
@@ -41,18 +41,18 @@
               <p v-if="store.tagline" class="store-tagline">{{ store.tagline }}</p>
               <span class="store-meta">
                 <i class="fas fa-box-open"></i>
-                {{ $t('directory.productsCount', { count: store.products_count || 0 }) }}
+                {{ dirProductsCountLabel(store.products_count || 0) }}
               </span>
             </div>
             <div class="store-cta">
-              <span>{{ $t('directory.visitStore') }} <i class="fas fa-arrow-right"></i></span>
+              <span>{{ dc('dirVisitStore') }} <i class="fas fa-arrow-right"></i></span>
             </div>
           </router-link>
         </div>
 
         <div v-else class="empty-state">
           <i class="fas fa-store-slash"></i>
-          <p>{{ $t('directory.empty') }}</p>
+          <p>{{ dc('dirEmpty') }}</p>
         </div>
       </div>
     </section>
@@ -61,10 +61,48 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { businessApi } from '@/api'
+import { useI18n } from 'vue-i18n'
+import { businessApi, settingsApi } from '@/api'
 
+const { t, locale } = useI18n()
 const businesses = ref([])
 const loading = ref(true)
+const content = ref({ en: {}, sw: {} })
+
+const dirI18nMap = {
+  dirBadge: 'badge',
+  dirTitle: 'title',
+  dirSubtitle: 'subtitle',
+  dirProductsCount: 'productsCount',
+  dirVisitStore: 'visitStore',
+  dirEmpty: 'empty',
+  dirNew: 'new',
+  dirNewArrivals: 'newArrivals',
+}
+
+function dc(key) {
+  const current = content.value[locale.value]
+  if (current && current[key] && String(current[key]).trim()) {
+    return current[key]
+  }
+  return t(`directory.${dirI18nMap[key] || key}`)
+}
+
+function dirProductsCountLabel(count) {
+  const current = content.value[locale.value]
+  if (current && current.dirProductsCount && String(current.dirProductsCount).trim()) {
+    return String(current.dirProductsCount).replace('{count}', count)
+  }
+  return t('directory.productsCount', { count })
+}
+
+function dirNewArrivalsLabel(count) {
+  const current = content.value[locale.value]
+  if (current && current.dirNewArrivals && String(current.dirNewArrivals).trim()) {
+    return String(current.dirNewArrivals).replace('{count}', count)
+  }
+  return t('directory.newArrivals', { count })
+}
 
 function logoStyle(store) {
   return {
@@ -74,10 +112,16 @@ function logoStyle(store) {
 
 onMounted(async () => {
   try {
-    const res = await businessApi.list()
+    const [res] = await Promise.all([businessApi.list(), settingsApi.getHomeContent()])
     businesses.value = res.data.data || []
+    content.value = res.data
   } catch {
-    businesses.value = []
+    try {
+      const res = await businessApi.list()
+      businesses.value = res.data.data || []
+    } catch {
+      businesses.value = []
+    }
   } finally {
     loading.value = false
   }

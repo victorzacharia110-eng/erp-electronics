@@ -4,15 +4,15 @@
     <section class="hero-banner">
       <div class="container hero-inner">
         <div class="hero-content">
-          <span class="hero-badge">{{ $t('home.heroBadge') }}</span>
-          <h1>{{ $t('home.heroTitle') }} <span>{{ $t('home.heroTitleHighlight') }}</span></h1>
-          <p>{{ $t('home.heroDesc') }}</p>
+          <span class="hero-badge">{{ hc('heroBadge') }}</span>
+          <h1>{{ hc('heroTitle') }} <span>{{ hc('heroTitleHighlight') }}</span></h1>
+          <p>{{ hc('heroDesc') }}</p>
           <div class="hero-actions">
             <router-link :to="$storeLink('/products')" class="btn btn-primary">
-              <i class="fas fa-shopping-bag"></i> {{ $t('home.shopNow') }}
+              <i class="fas fa-shopping-bag"></i> {{ hc('shopNow') }}
             </router-link>
             <router-link :to="$storeLink('/products')" class="btn btn-outline-white">
-              {{ $t('home.viewCatalog') }} <i class="fas fa-arrow-right"></i>
+              {{ hc('viewCatalog') }} <i class="fas fa-arrow-right"></i>
             </router-link>
           </div>
         </div>
@@ -28,29 +28,29 @@
         <div class="feature-item">
           <i class="fas fa-truck-fast"></i>
           <div>
-            <strong>{{ $t('home.freeDelivery') }}</strong>
-            <span>{{ $t('home.freeDeliveryDesc') }}</span>
+            <strong>{{ hc('freeDelivery') }}</strong>
+            <span>{{ hc('freeDeliveryDesc') }}</span>
           </div>
         </div>
         <div class="feature-item">
           <i class="fas fa-shield-halved"></i>
           <div>
-            <strong>{{ $t('home.securePayment') }}</strong>
-            <span>{{ $t('home.securePaymentDesc') }}</span>
+            <strong>{{ hc('securePayment') }}</strong>
+            <span>{{ hc('securePaymentDesc') }}</span>
           </div>
         </div>
         <div class="feature-item">
           <i class="fas fa-rotate-left"></i>
           <div>
-            <strong>{{ $t('home.easyReturns') }}</strong>
-            <span>{{ $t('home.easyReturnsDesc') }}</span>
+            <strong>{{ hc('easyReturns') }}</strong>
+            <span>{{ hc('easyReturnsDesc') }}</span>
           </div>
         </div>
         <div class="feature-item">
           <i class="fas fa-headset"></i>
           <div>
-            <strong>{{ $t('home.support247') }}</strong>
-            <span>{{ $t('home.support247Desc') }}</span>
+            <strong>{{ hc('support247') }}</strong>
+            <span>{{ hc('support247Desc') }}</span>
           </div>
         </div>
       </div>
@@ -59,8 +59,8 @@
     <!-- Categories -->
     <section class="categories-section">
       <div class="container">
-        <h2 class="section-title">{{ $t('home.shopByCategory') }}</h2>
-        <p class="section-subtitle">{{ $t('home.browseCategories') }}</p>
+        <h2 class="section-title">{{ hc('shopByCategory') }}</h2>
+        <p class="section-subtitle">{{ hc('browseCategories') }}</p>
 
         <div v-if="productStore.categories.length > 0" class="categories-grid">
           <router-link v-for="cat in productStore.categories" :key="cat.id" :to="$storeLink(`/category/${cat.slug}`)"
@@ -69,12 +69,12 @@
               <i :class="getCategoryIcon(cat.name)"></i>
             </div>
             <h3>{{ cat.translated_name || cat.name }}</h3>
-            <span class="cat-count">{{ $t('home.productsCount', { count: cat.products_count || 0 }) }}</span>
+            <span class="cat-count">{{ productsCountLabel(cat.products_count || 0) }}</span>
           </router-link>
         </div>
         <div v-else class="empty-state">
           <i class="fas fa-layer-group"></i>
-          <p>{{ $t('home.categoriesComingSoon') }}</p>
+          <p>{{ hc('categoriesComingSoon') }}</p>
         </div>
       </div>
     </section>
@@ -82,8 +82,8 @@
     <!-- New Arrivals -->
     <section class="products-section">
       <div class="container">
-        <h2 class="section-title">{{ $t('home.newArrivals') }}</h2>
-        <p class="section-subtitle">{{ $t('home.newArrivalsDesc') }}</p>
+        <h2 class="section-title">{{ hc('newArrivals') }}</h2>
+        <p class="section-subtitle">{{ hc('newArrivalsDesc') }}</p>
 
         <SkeletonLoader v-if="loading" type="card" :count="4" />
 
@@ -93,12 +93,12 @@
 
         <div v-else class="empty-state">
           <i class="fas fa-box-open"></i>
-          <p>{{ $t('home.noProductsYet') }}</p>
+          <p>{{ hc('noProductsYet') }}</p>
         </div>
 
         <div class="section-action" v-if="productStore.featuredProducts.length > 0">
           <router-link :to="$storeLink('/products')" class="btn btn-outline">
-            {{ $t('home.viewMoreProducts') }} <i class="fas fa-arrow-right"></i>
+            {{ hc('viewMoreProducts') }} <i class="fas fa-arrow-right"></i>
           </router-link>
         </div>
       </div>
@@ -109,11 +109,11 @@
       <div class="container">
         <div class="promo-inner">
           <div class="promo-content">
-            <span class="promo-badge">{{ $t('home.hotDeals') }}</span>
-            <h2>{{ $t('home.hotDealsTitle') }}</h2>
-            <p>{{ $t('home.hotDealsDesc') }}</p>
+            <span class="promo-badge">{{ hc('hotDeals') }}</span>
+            <h2>{{ hc('hotDealsTitle') }}</h2>
+            <p>{{ hc('hotDealsDesc') }}</p>
             <router-link :to="$storeLink('/products')" class="btn btn-white">
-              {{ $t('home.shopTheSale') }} <i class="fas fa-arrow-right"></i>
+              {{ hc('shopTheSale') }} <i class="fas fa-arrow-right"></i>
             </router-link>
           </div>
         </div>
@@ -123,8 +123,8 @@
     <!-- Hot Selling Products -->
     <section class="products-section">
       <div class="container">
-        <h2 class="section-title">{{ $t('home.hotSelling') }}</h2>
-        <p class="section-subtitle">{{ $t('home.hotSellingDesc') }}</p>
+        <h2 class="section-title">{{ hc('hotSelling') }}</h2>
+        <p class="section-subtitle">{{ hc('hotSellingDesc') }}</p>
 
         <div v-if="allProducts.length > 0" class="products-grid">
           <ProductCard v-for="product in allProducts.slice(0, 8)" :key="product.id" :product="product" />
@@ -132,7 +132,7 @@
 
         <div class="section-action" v-if="allProducts.length > 0">
           <router-link :to="$storeLink('/products')" class="btn btn-outline">
-            {{ $t('home.viewAllProducts') }} <i class="fas fa-arrow-right"></i>
+            {{ hc('viewAllProducts') }} <i class="fas fa-arrow-right"></i>
           </router-link>
         </div>
       </div>
@@ -144,19 +144,19 @@
         <div class="cta-grid">
           <div class="cta-card">
             <i class="fas fa-user-plus"></i>
-            <h3>{{ $t('home.createAccount') }}</h3>
-            <p>{{ $t('home.createAccountDesc') }}</p>
-            <router-link to="/register" class="btn btn-primary btn-sm">{{ $t('home.register') }}</router-link>
+            <h3>{{ hc('createAccount') }}</h3>
+            <p>{{ hc('createAccountDesc') }}</p>
+            <router-link to="/register" class="btn btn-primary btn-sm">{{ hc('register') }}</router-link>
           </div>
           <div class="cta-card">
             <i class="fas fa-mobile-screen-button"></i>
-            <h3>{{ $t('home.mobileMoney') }}</h3>
-            <p>{{ $t('home.mobileMoneyDesc') }}</p>
+            <h3>{{ hc('mobileMoney') }}</h3>
+            <p>{{ hc('mobileMoneyDesc') }}</p>
           </div>
           <div class="cta-card">
             <i class="fas fa-truck"></i>
-            <h3>{{ $t('home.fastDeliveryTitle') }}</h3>
-            <p>{{ $t('home.fastDeliveryDesc') }}</p>
+            <h3>{{ hc('fastDeliveryTitle') }}</h3>
+            <p>{{ hc('fastDeliveryDesc') }}</p>
           </div>
         </div>
       </div>
@@ -166,13 +166,33 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useProductStore } from '@/stores/products'
 import ProductCard from '@/components/product/ProductCard.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import { settingsApi } from '@/api'
 
+const { t, locale } = useI18n()
 const productStore = useProductStore()
 const loading = ref(true)
 const allProducts = ref([])
+const content = ref({ en: {}, sw: {} })
+
+function hc(key) {
+  const current = content.value[locale.value]
+  if (current && current[key] && String(current[key]).trim()) {
+    return current[key]
+  }
+  return t(`home.${key}`)
+}
+
+function productsCountLabel(count) {
+  const current = content.value[locale.value]
+  if (current && current.productsCount && String(current.productsCount).trim()) {
+    return String(current.productsCount).replace('{count}', count)
+  }
+  return t('home.productsCount', { count })
+}
 
 function getCategoryIcon(name) {
   const icons = {
@@ -187,12 +207,23 @@ function getCategoryIcon(name) {
 
 onMounted(async () => {
   try {
-    await Promise.all([
+    const [res] = await Promise.all([
+      settingsApi.getHomeContent(),
       productStore.fetchCategories(),
       productStore.fetchFeatured(),
       productStore.fetchProducts({ per_page: 8 }),
     ])
+    content.value = res.data || { en: {}, sw: {} }
     allProducts.value = productStore.products
+  } catch (e) {
+    try {
+      await Promise.all([
+        productStore.fetchCategories(),
+        productStore.fetchFeatured(),
+        productStore.fetchProducts({ per_page: 8 }),
+      ])
+      allProducts.value = productStore.products
+    } catch (err) { /* empty */ }
   } finally {
     loading.value = false
   }

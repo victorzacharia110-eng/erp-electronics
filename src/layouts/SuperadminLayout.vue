@@ -20,6 +20,10 @@
           <span v-show="!sidebarCollapsed">Inbox</span>
           <span v-if="unreadCount > 0" class="nav-badge" v-show="!sidebarCollapsed">{{ unreadCount }}</span>
         </router-link>
+        <router-link to="/superadmin/home-content" class="sa-nav-link" :class="{ active: $route.path.startsWith('/superadmin/home-content') }" @click="sidebarMobileOpen = false">
+          <i class="fas fa-house"></i>
+          <span v-show="!sidebarCollapsed">Home Content</span>
+        </router-link>
       </nav>
       <div class="sa-sidebar-footer">
         <router-link to="/" class="sa-nav-link" @click="sidebarMobileOpen = false">
@@ -72,6 +76,7 @@ const pageTitle = computed(() => {
     'superadmin-owner-detail': 'Owner Details',
     'superadmin-branding': 'Brand Settings',
     'superadmin-inbox': 'Inbox',
+    'superadmin-home-content': 'Home Content',
   }
   return titles[route.name] || 'Dashboard'
 })
