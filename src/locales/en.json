@@ -383,6 +383,10 @@
     "deleteTitle": "Delete this conversation?",
     "deleteConfirm": "This permanently deletes the conversation and all its messages. You can start a new one anytime.",
     "deletedSuccessfully": "Conversation deleted",
+    "deleteMessage": "Delete Message",
+    "deleteMessageTitle": "Delete this message?",
+    "deleteMessageConfirm": "This permanently removes this message from the conversation.",
+    "messageDeleted": "Message deleted",
     "statuses": {
       "open": "Open",
       "inProgress": "In Progress",

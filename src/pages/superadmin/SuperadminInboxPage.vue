@@ -101,6 +101,7 @@
 
           <div class="messages-area" ref="messagesArea">
             <div v-for="msg in activeConversation.messages" :key="msg.id" class="message-bubble" :class="{ mine: msg.sender_id === authStore.user?.id }">
+              <button v-if="msg.sender_id === authStore.user?.id" class="msg-delete-btn" :title="$t('inbox.deleteMessage')" @click="showDeleteMsgModal = true; deleteMsgTarget = msg"><i class="fas fa-trash"></i></button>
               <div class="msg-sender">{{ msg.sender?.name }}</div>
               <div class="msg-text">{{ msg.message }}</div>
               <div class="msg-time">
@@ -144,6 +145,19 @@
         </form>
       </div>
     </div>
+    <div class="modal-overlay" v-if="showDeleteMsgModal" @click.self="showDeleteMsgModal = false">
+      <div class="modal-card card delete-modal">
+        <h2><i class="fas fa-trash"></i> {{ $t('inbox.deleteMessageTitle') }}</h2>
+        <p class="delete-confirm">{{ $t('inbox.deleteMessageConfirm') }}</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" @click="showDeleteMsgModal = false">{{ $t('common.cancel') }}</button>
+          <button type="button" class="btn btn-danger" :disabled="deletingMsg" @click="confirmDeleteMessage">
+            <i class="fas" :class="deletingMsg ? 'fa-spinner fa-spin' : 'fa-trash'"></i> {{ $t('inbox.deleteMessage') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="modal-overlay" v-if="showDeleteModal" @click.self="showDeleteModal = false">
       <div class="modal-card card delete-modal">
         <h2><i class="fas fa-trash"></i> {{ $t('inbox.deleteTitle') }}</h2>
@@ -190,6 +204,9 @@ const newConv = ref({ subject: 'Support', message: '' })
 const creating = ref(false)
 const showDeleteModal = ref(false)
 const deleting = ref(false)
+const showDeleteMsgModal = ref(false)
+const deleteMsgTarget = ref(null)
+const deletingMsg = ref(false)
 const toastMsg = ref('')
 
 function showToast(msg) {
@@ -345,6 +362,19 @@ async function confirmDelete() {
   deleting.value = false
 }
 
+async function confirmDeleteMessage() {
+  if (!activeConversation.value || !deleteMsgTarget.value || deletingMsg.value) return
+  deletingMsg.value = true
+  try {
+    await conversationApi.deleteMessage(activeConversation.value.id, deleteMsgTarget.value.id)
+    activeConversation.value.messages = activeConversation.value.messages.filter(m => m.id !== deleteMsgTarget.value.id)
+    showDeleteMsgModal.value = false
+    deleteMsgTarget.value = null
+    showToast(t('inbox.messageDeleted'))
+  } catch { /* empty */ }
+  deletingMsg.value = false
+}
+
 let pollTimer = null
 async function pollConversations() {
   try {
@@ -427,8 +457,11 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .plan-badge { background: #fef9e7; color: #b7950b; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 500; }
 
 .messages-area { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
-.message-bubble { max-width: 65%; padding: 10px 14px; border-radius: 12px; background: #f0f0f0; align-self: flex-start; }
-.message-bubble.mine { background: #e74c3c; color: #fff; align-self: flex-end; }
+.message-bubble { max-width: 65%; padding: 10px 14px; border-radius: 12px; background: #f0f0f0; align-self: flex-start; position: relative; }
+.message-bubble.mine { background: #e74c3c; color: #fff; align-self: flex-end; padding-right: 30px; }
+.msg-delete-btn { position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%; border: none; background: rgba(255,255,255,0.9); color: #e74c3c; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; opacity: 0; transition: opacity 0.15s; }
+.message-bubble.mine:hover .msg-delete-btn { opacity: 1; }
+.msg-delete-btn:hover { background: #e74c3c; color: #fff; }
 .msg-sender { font-size: 11px; font-weight: 600; margin-bottom: 4px; opacity: 0.7; }
 .message-bubble.mine .msg-sender { display: none; }
 .msg-text { font-size: 14px; line-height: 1.5; white-space: pre-wrap; }

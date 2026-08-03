@@ -383,6 +383,10 @@
     "deleteTitle": "Futa mazungumzo haya?",
     "deleteConfirm": "Hii itafuta kabisa mazungumzo na ujumbe wake wote. Unaweza kuanza mpya wakati wowote.",
     "deletedSuccessfully": "Mazungumzo yamefutwa",
+    "deleteMessage": "Futa Ujumbe",
+    "deleteMessageTitle": "Futa ujumbe huu?",
+    "deleteMessageConfirm": "Hii itaondoa kabisa ujumbe huu kwenye mazungumzo.",
+    "messageDeleted": "Ujumbe umefutwa",
     "statuses": {
       "open": "Fungua",
       "inProgress": "Inaendelea",

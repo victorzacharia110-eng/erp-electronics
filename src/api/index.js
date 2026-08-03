@@ -96,6 +96,9 @@ export const conversationApi = {
   sendMessage(id, data) {
     return api.post(`/conversations/${id}/messages`, data)
   },
+  deleteMessage(id, messageId) {
+    return api.delete(`/conversations/${id}/messages/${messageId}`)
+  },
   updateStatus(id, data) {
     return api.patch(`/conversations/${id}/status`, data)
   },
