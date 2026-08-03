@@ -517,6 +517,13 @@ def build_en():
     el.append(spacer())
     el.append(section('Message Read Status (Ticks)'))
     el.append(body('Messages you send show a WhatsApp-style read indicator next to the time stamp. A <b>grey double tick</b> means your message was delivered; it turns <b>blue</b> when the other person opens the conversation and reads it. The status refreshes automatically every few seconds while the Inbox is open.'))
+    el.append(spacer())
+    el.append(section('Deleting Conversations and Messages'))
+    el.extend(bullet_list([
+        '<b>Delete a message</b> — hover over one of your own sent messages and click the trash icon that appears. Confirm the deletion; only your own messages can be removed.',
+        '<b>Delete a conversation</b> — click the trash icon at the top of an open conversation. Confirm to remove the whole chat thread for both sides.',
+    ]))
+    el.append(note('Deleting a conversation removes the entire thread. Deleting a single message removes just that message from the thread; the rest of the conversation stays intact.'))
     el.append(PageBreak())
 
     # ── Chapter 14: Accounting System ──
@@ -795,6 +802,7 @@ def build_en():
         '<b>Dashboard</b> — See order stats: Total Orders, In Progress, Delivered.',
         '<b>Order History</b> — View all past orders with status and details.',
         '<b>Support</b> — Send messages about payment issues, order status, delivery, or refund requests. View replies from staff.',
+        '<b>Inbox</b> — Chat with the store owner about your orders. You can delete one of your own sent messages (trash icon on the message) or the entire conversation (trash icon at the top of the chat).',
         '<b>Profile</b> — Update name and personal information.',
         '<b>Password</b> — Change your password (must meet security requirements).',
         '<b>Addresses</b> — Manage saved delivery addresses.',
@@ -1224,6 +1232,13 @@ def build_sw():
     el.append(spacer())
     el.append(section('Hali ya Ujumbe (Tiki)'))
     el.append(body('Ujumbe unaotuma unaonyesha alama ya usomaji kama WhatsApp karibu na muda. <b>Tiki mbili za kijivu</b> zinamaanisha ujumbe wako umefikishwa; hubadilika kuwa <b>buluu</b> wakati mtu mwingine anafungua mazungumzo na kuisoma. Hali inasasishwa kiotomatiki kila sekunde chache wakati Kikasha kimefunguliwa.'))
+    el.append(spacer())
+    el.append(section('Kufuta Mazungumzo na Ujumbe'))
+    el.extend(bullet_list([
+        '<b>Kufuta ujumbe</b> — weka kielekezi juu ya ujumbe wako uliotumwa na ubofye aikoni ya takataka inayoonekana. Thibitisha kufutwa; ni ujumbe wako mwenyewe pekee unaoweza kuondolewa.',
+        '<b>Kufuta mazungumzo</b> — bofya aikoni ya takataka juu ya mazungumzo yaliyofunguliwa. Thibitisha ili kuondoa mazungumzo yote kwa pande zote mbili.',
+    ]))
+    el.append(note('Kufuta mazungumzo kunaondoa mazungumzo yote. Kufuta ujumbe mmoja kunaondoa ujumbe huo tu kwenye mazungumzo; yaliyosalia yanabaki.'))
     el.append(PageBreak())
 
     # ── Sura ya 14: Mfumo wa Uhasibu ──
@@ -1502,6 +1517,7 @@ def build_sw():
         '<b>Dashibodi</b> — Ona takwimu za oda: Oda Jumla, Inachakatwa, Imefikishwa.',
         '<b>Historia ya Oda</b> — Angalia oda zote za zamani kwa hali na maelezo.',
         '<b>Msaada</b> — Tuma ujumbe kuhusu masuala ya malipo, hali ya oda, usafirishaji, au maombi ya kurejeshewa pesa. Angalia majibu kutoka kwa wafanyakazi.',
+        '<b>Kikasha</b> — Mazungumzo na mmiliki wa duka kuhusu oda zako. Unaweza kufuta ujumbe wako uliotumwa (aikoni ya takataka kwenye ujumbe) au mazungumzo yote (aikoni ya takataka juu ya mazungumzo).',
         '<b>Wasifu</b> — Sahihisha jina na taarifa za kibinafsi.',
         '<b>Nenosiri</b> — Badilisha nenosiri lako (lazima lifikie mahitaji ya usalama).',
         '<b>Anwani</b> — Simamia anwani zilizohifadhiwa za usafirishaji.',

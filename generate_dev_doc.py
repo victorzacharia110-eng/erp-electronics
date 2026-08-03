@@ -187,7 +187,7 @@ def cover_page():
         [Spacer(1, 30)],
         [HRFlowable(width="55%", thickness=2, color=RED, spaceBefore=4, spaceAfter=4)],
         [Spacer(1, 14)],
-        [Paragraph('Version 2.2 &nbsp;|&nbsp; August 2026', sCoverMeta)],
+        [Paragraph('Version 2.3 &nbsp;|&nbsp; August 2026', sCoverMeta)],
         [Paragraph('Software Developers &middot; System Administrators &middot; Superadmins', sCoverMeta)],
     ], colWidths=[480])
     txt.setStyle(TableStyle([
@@ -205,7 +205,7 @@ def add_page_number(canvas, doc):
     canvas.saveState()
     canvas.setFont('DejaVu', 8)
     canvas.setFillColor(GRAY)
-    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.2  ·  Page {doc.page}')
+    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.3  ·  Page {doc.page}')
     canvas.restoreState()
 
 
@@ -232,7 +232,7 @@ def ch_document_control():
     el.append(chapter('1. Document Control'))
     el.append(hr())
     el.append(info_table([
-        ('Version', '2.1'),
+        ('Version', '2.3'),
         ('Date', 'August 2026'),
         ('Status', 'Released'),
         ('Audience', 'Software developers, system administrators, superadmins, and technical stakeholders'),
@@ -459,8 +459,8 @@ def ch_frontend():
 
     el.append(section('5.7 Pages — Storefront & Customer'))
     el.append(info_table(header=['Page', 'Purpose'], col_widths=[230, 250], rows=[
-        (mono('pages/home/DirectoryPage.vue'), 'Landing page of the platform (route /): lists all active businesses from the public /businesses API as store cards and lets the visitor open a white-label store.'),
-        (mono('pages/home/HomePage.vue'), 'Storefront homepage of a business (route /:businessSlug): hero, featured products, categories, brand-colored UI.'),
+        (mono('pages/home/DirectoryPage.vue'), 'Landing page of the platform (route /): lists all active businesses from the public /businesses API as store cards and lets the visitor open a white-label store. Headline, badge, counts and empty-state copy load from the DB-driven home content setting (dir* keys) with i18n fallback.'),
+        (mono('pages/home/HomePage.vue'), 'Storefront homepage of a business (route /:businessSlug): hero, featured products, categories, brand-colored UI. Hero/badge/count copy loads from the DB-driven home content setting with i18n fallback; {count} placeholders are substituted with live product counts.'),
         (mono('pages/products/ProductListPage.vue'), 'Searchable, paginated product grid (public /products with ?search, ?category_id, ?business).'),
         (mono('pages/products/ProductDetailPage.vue'), 'Product detail: images, variant picker (color/storage), price, stock, add-to-cart.'),
         (mono('pages/products/CategoryPage.vue'), 'Category listing with its products and children.'),
@@ -536,6 +536,7 @@ def ch_frontend():
         (mono('pages/superadmin/OwnerDetailPage.vue'), 'Owner detail: subscription, limits, password status; reset/set password, force change, unlock account.'),
         (mono('pages/superadmin/BrandingPage.vue'), 'White-label branding editor: store name, tagline, logo upload, brand colors.'),
         (mono('pages/superadmin/SuperadminInboxPage.vue'), 'Superadmin inbox with owners (superadmin_owner conversations); read ticks on sent messages.'),
+        (mono('pages/superadmin/HomeContentPage.vue'), 'System-wide content editor: EN/SW inputs for the directory landing (dir* keys) and every white-label storefront hero/badge/count string; saves via PUT /superadmin/settings/home-content.'),
     ]))
     el.append(spacer(8))
 
@@ -637,7 +638,7 @@ def ch_backend():
         ('CustomerController', 'Customers', 'Staff customer list, toggle-status, destroy.'),
         ('ReportController', 'Reports', 'daily + summary reports; generateForDate builds the snapshot.'),
         ('AnalyticsController', 'Analytics', 'sales (SQLite strftime grouping, zero-filled months, summary metrics) + ai-suggestions (Gemini with fallback).'),
-        ('ConversationController', 'Messaging', 'Role-based conversations: index/store/show/sendMessage/updateStatus/unreadCount/contacts/ownerDetails/customerDetails. show() marks incoming messages read (read receipts), powering the frontend WhatsApp-style ticks.'),
+        ('ConversationController', 'Messaging', 'Role-based conversations: index/store/show/sendMessage/updateStatus/unreadCount/contacts/ownerDetails/customerDetails/destroy/destroyMessage. show() marks incoming messages read (read receipts), powering the frontend WhatsApp-style ticks.'),
         ('SupportMessageController', 'Support', 'Tickets: index/store/show/reply/updateStatus/unreadCount.'),
         ('NotificationController', 'Notifications', 'index/count/markRead/markAllRead + static create factory.'),
         ('AccountController', 'Accounting', 'Chart of accounts index/tree/store/update/destroy with system-account protections.'),
@@ -651,7 +652,7 @@ def ch_backend():
         ('PurchaseOrderController', 'Procurement', 'PO index/store/show/receive/destroy + supplier-portal supplierOrders/supplierShow/supplierUpdateStatus.'),
         ('SupplierController', 'Procurement', 'Supplier CRUD + documents + portal profile.'),
         ('StockAlertController', 'Inventory', 'index/count/acknowledge/resolve + static checkLowStock used by other flows.'),
-        ('SettingsController', 'Platform', 'Public payment flag + branding; owner updatePayment.'),
+        ('SettingsController', 'Platform', 'Public payment flag + branding + home content (defaults merged over stored JSON); owner updatePayment; superadmin updateHomeContent (whitelisted keys).'),
         ('SuperadminController', 'Platform', 'Stats, owner CRUD, subscription/limits/branding/logo, password status/reset/set/force/unlock, all-password status.'),
     ]))
     el.append(spacer(8))
@@ -816,7 +817,7 @@ def ch_auth():
 
 def ch_api():
     el = []
-    el.append(chapter('9. API Reference — All 175 Routes'))
+    el.append(chapter('9. API Reference — All 179 Routes'))
     el.append(hr())
     el.append(body('All endpoints are JSON and mounted under the <font face="Mono">/api</font> prefix. Development base: ' + mono(DEV_API) + '. Production base: ' + mono(PROD_API) + '. Of the 175 routes, <b>14 are public</b> and <b>161 require a Bearer token</b>; 35 are gated by the owner middleware, 16 by superadmin, and 4 by supplier. The only named routes are the 5 auto-generated addresses.* routes.'))
     el.append(spacer(8))
@@ -836,6 +837,7 @@ def ch_api():
         ('POST', '/shipping/calculate', 'ShippingController@calculate', '—'),
         ('GET', '/settings/payment', 'SettingsController@payment', '—'),
         ('GET', '/settings/branding', 'SettingsController@branding', '—'),
+        ('GET', '/settings/home-content', 'SettingsController@homeContent', '—'),
     ]))
     el.append(spacer(8))
     el.append(section('9.2 Authenticated — Auth, Businesses, Branches, Employees'))
@@ -927,8 +929,10 @@ def ch_api():
         ('PATCH', '/conversations/{conversation}/status', 'ConversationController@updateStatus', '—'),
         ('GET', '/conversations/{conversation}/owner-details', 'ConversationController@ownerDetails', '—'),
         ('GET', '/conversations/{conversation}/customer-details', 'ConversationController@customerDetails', '—'),
+        ('DELETE', '/conversations/{conversation}', 'ConversationController@destroy', '—'),
+        ('DELETE', '/conversations/{conversation}/messages/{messageId}', 'ConversationController@destroyMessage', '—'),
     ]))
-    el.append(note('Read receipts: every message carries an is_read flag. GET /conversations/{conversation} marks all incoming messages from the requesting user\'s counterpart as read; the sender picks this up via the 15 s polling in the inbox pages and renders grey (delivered) vs blue (read) ticks. There is no separate delivery flag — messages are server-stored, so unread is the only distinguishable state.'))
+    el.append(note('Read receipts: every message carries an is_read flag. GET /conversations/{conversation} marks all incoming messages from the requesting user\'s counterpart as read; the sender picks this up via the 15 s polling in the inbox pages and renders grey (delivered) vs blue (read) ticks. There is no separate delivery flag — messages are server-stored, so unread is the only distinguishable state. Whole conversations (DELETE /conversations/{conversation}) and individual messages (DELETE /conversations/{conversation}/messages/{messageId}) can be removed by their participants.'))
     el.append(spacer(8))
     el.append(section('9.6 Authenticated — Accounting (owner)'))
     el.append(info_table(header=['Method', 'URI', 'Controller@method'], col_widths=[48, 220, 212], rows=[
@@ -1030,6 +1034,7 @@ def ch_api():
         ('POST', '/superadmin/owners/{id}/set-password', 'SuperadminController@setPassword'),
         ('POST', '/superadmin/owners/{id}/force-password-change', 'SuperadminController@forcePasswordChange'),
         ('POST', '/superadmin/owners/{id}/unlock-account', 'SuperadminController@unlockAccount'),
+        ('PUT', '/superadmin/settings/home-content', 'SettingsController@updateHomeContent'),
     ]))
     el.append(spacer(8))
     el.append(section('Rate Limits'))
@@ -1081,6 +1086,10 @@ def ch_superadmin():
     el.append(spacer(6))
     el.append(section('10.5 Superadmin Inbox'))
     el.append(body('The superadmin communicates with owners through the <b>Inbox</b> (owner ↔ superadmin conversations). Conversations appear in real time with unread badges.'))
+    el.append(spacer(6))
+    el.append(section('10.6 Home Content Editor'))
+    el.append(body('The <b>Home Content</b> page (route <font face="Mono">/superadmin/home-content</font>) edits the platform-wide text shown to visitors and customers: the directory landing copy (<font face="Mono">dir*</font> keys) and every white-label storefront hero/badge/count string. Content is stored as one <font face="Mono">home_content</font> setting (type <font face="Mono">json</font>) holding <font face="Mono">en</font> and <font face="Mono">sw</font> objects.'))
+    el.append(body('Fields containing <font face="Mono">{count}</font> (e.g. <font face="Mono">productsCount</font>, <font face="Mono">dirProductsCount</font>, <font face="Mono">dirNewArrivals</font>) are templates: the placeholder is replaced at render time with the real product count. The public <font face="Mono">GET /settings/home-content</font> returns stored values merged over the seeded defaults, so the storefront never sees empty strings; empty stored values fall back to the i18n keys (<font face="Mono">home.*</font> / <font face="Mono">directory.*</font>). Only superadmins can write via <font face="Mono">PUT /superadmin/settings/home-content</font>; keys outside the whitelist are stripped.'))
     el.append(spacer(6))
     el.append(section('10.6 Superadmin Password Lifecycle'))
     el.append(body('The default superadmin password is <b>SuperAdmin@2026</b>. A scheduled command (<font face="Mono">php artisan superadmin:reset-password</font>) auto-resets it every <b>6 months</b>; login and profile responses expose <font face="Mono">superadmin_password_expired</font> so the UI can prompt for a change.'))
@@ -1290,7 +1299,7 @@ def ch_docs():
         ('User_Manual_EN.pdf', 'End users', 'English user manual, 24 chapters'),
         ('User_Manual_SW.pdf', 'End users', 'Swahili user manual, 24 chapters'),
         ('Supplier_Manual.pdf', 'Suppliers', 'Supplier portal manual'),
-        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.2)'),
+        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.3)'),
     ]))
     el.append(spacer(8))
     el.append(section('System Diagrams (docs/)'))
@@ -1444,9 +1453,13 @@ def ch_gotchas():
     el.append(spacer(12))
     el.append(section('Changelog — 2026-08-03'))
     el.append(body('<b>Product form translations fixed</b>: the owner product create/edit routes referenced <font face="Mono">productForm.updateProduct</font>, <font face="Mono">createProduct</font>, <font face="Mono">updatedSuccessfully</font> and <font face="Mono">createdSuccessfully</font> keys that were missing from both <font face="Mono">en.json</font> and <font face="Mono">sw.json</font>, so vue-i18n rendered the raw key. All four keys were added to both locale files; the Swahili submit label now reads <b>"Sahihisha Bidhaa"</b> and the success toast <b>"Bidhaa imesahihishwa!"</b>.'))
+    el.append(spacer(10))
+    el.append(body('<b>DB-driven home content</b>: storefront (HomePage) and directory (DirectoryPage) copy moved from hardcoded i18n keys to a superadmin-editable <font face="Mono">home_content</font> setting (EN + SW, seeded defaults, 44 keys). New <font face="Mono">SettingsController@homeContent</font> / <font face="Mono">updateHomeContent</font> endpoints and the <font face="Mono">HomeContentPage</font> editor were added; render-time <font face="Mono">{count}</font> placeholders are substituted with live product counts, and empty stored values fall back to the i18n keys. Backend-only endpoints: <font face="Mono">GET /settings/home-content</font> (public), <font face="Mono">PUT /superadmin/settings/home-content</font> (superadmin).'))
+    el.append(spacer(10))
+    el.append(body('<b>Conversation & message deletion</b>: chat threads can now be deleted (<font face="Mono">DELETE /conversations/{conversation}</font>) and individual messages removed (<font face="Mono">DELETE /conversations/{conversation}/messages/{messageId}</font>), scoped to the participants. The API reference (§9.5) and controller listing were updated; route count revised from 175 to 179.'))
     el.append(spacer(12))
     el.append(hr())
-    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.2 — August 2026', sFooter))
+    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.3 — August 2026', sFooter))
     el.append(Paragraph('For internal development and administration use only.', sFooter))
     return el
 
@@ -1467,7 +1480,7 @@ def build():
         ('6.', 'Backend Deep Dive — Every File'),
         ('7.', 'Database Schema & Models'),
         ('8.', 'Authentication & Authorization'),
-        ('9.', 'API Reference — All 175 Routes'),
+        ('9.', 'API Reference — All 179 Routes'),
         ('10.', 'Superadmin Module'),
         ('11.', 'Security Measures'),
         ('12.', 'Analytics & AI Insights'),

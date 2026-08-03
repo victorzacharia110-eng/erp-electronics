@@ -2119,3 +2119,15 @@ Owner pays commission
 - **Issue**: The owner product edit/create route (`/owner/products/:id/edit` and `/owner/products/new`) referenced `productForm.updateProduct`, `createProduct`, `updatedSuccessfully` and `createdSuccessfully` keys that were **missing from both `src/locales/en.json` and `src/locales/sw.json`**. vue-i18n rendered the raw key (e.g. `productForm.updateProduct`) on the submit button and success toast.
 - **Fix**: Added all four keys to both locale files. The Swahili submit label uses **"Sahihisha Bidhaa"** ("correct product") instead of the previously used wording, and the success toast uses **"Bidhaa imesahihishwa!"**.
 - **Files**: `src/locales/en.json`, `src/locales/sw.json`
+
+### 2026-08-03 — DB-driven home content (superadmin Home Content editor)
+- **What**: The storefront (`HomePage.vue`) and directory (`DirectoryPage.vue`) copy was previously hardcoded in `src/locales/*.json` under the `home.*` and `directory.*` keys. It is now stored in the DB as a single `home_content` setting (type `json`) holding `en` and `sw` objects — 44 keys (36 storefront + 8 directory prefixed `dir*`).
+- **Backend** (`erp-electronics-api`): `SettingsController` gained `homeContent()` (public GET, returns stored values merged over seeded defaults so no key is ever empty) and `updateHomeContent()` (superadmin PUT, whitelist-sanitized). Routes: `GET /api/settings/home-content`, `PUT /api/superadmin/settings/home-content`. Migration `2026_08_03_000001_seed_home_content_setting.php` seeds the EN/SW defaults. Tests in `tests/Feature/HomeContentTest.php` (4 tests).
+- **Frontend**: New `src/pages/superadmin/HomeContentPage.vue` (route `/superadmin/home-content`, nav "Home Content" in `SuperadminLayout.vue`) with 8 grouped sections, EN+SW inputs per field and Save All. `settingsApi.getHomeContent()` + `superadminApi.updateHomeContent()` in `src/api/index.js`. `HomePage.vue`/`DirectoryPage.vue` load DB content on mount via `hc()`/`dc()` helpers with i18n fallback.
+- **`{count}` placeholders**: Fields like `productsCount`, `dirProductsCount`, `dirNewArrivals` contain `{count}`, substituted at render time with the real product/new-item count (`productsCountLabel()`, `dirProductsCountLabel()`, `dirNewArrivalsLabel()`). The literal `{count}` shown in the admin editor inputs is intentional — visitors always see the number. A helper hint under those fields explains this.
+- **Notes**: Home content is a **superadmin-only** feature — it must NOT be documented in the user/supplier manuals. Local dev stores under slug `electroshop`; public GET verified live returning 44 keys.
+
+### 2026-08-03 — Conversation & message deletion
+- **Backend** (`erp-electronics-api`): `DELETE /api/conversations/{conversation}` (remove a whole chat thread) and `DELETE /api/conversations/{conversation}/messages/{messageId}` (remove a single message), scoped to participants.
+- **Frontend**: inbox pages expose delete actions for the whole conversation and individual messages.
+- **API route count**: revised from 175 to 179 in the developer documentation.
