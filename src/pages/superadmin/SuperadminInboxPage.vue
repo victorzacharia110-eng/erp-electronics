@@ -6,6 +6,9 @@
       <div class="inbox-sidebar" :class="{ 'show-mobile': showSidebar }">
         <div class="inbox-sidebar-header">
           <h3>Conversations</h3>
+          <button class="btn btn-sm btn-primary new-chat-btn" title="New Conversation" @click="viewMode = 'contacts'">
+            <i class="fas fa-plus"></i>
+          </button>
           <button class="btn-icon mobile-close" @click="showSidebar = false"><i class="fas fa-times"></i></button>
         </div>
         <div class="inbox-tabs">
@@ -62,6 +65,7 @@
 
       <div class="inbox-main">
         <div v-if="!activeConversation" class="inbox-welcome">
+          <button class="btn-icon mobile-menu" @click="showSidebar = true"><i class="fas fa-bars"></i></button>
           <i class="fas fa-comments"></i>
           <h3>Select a conversation</h3>
           <p>Choose a conversation from the sidebar to view messages</p>
@@ -366,9 +370,10 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .inbox-layout { display: flex; height: 100%; border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
 
 .inbox-sidebar { width: 340px; border-right: 1px solid #eee; display: flex; flex-direction: column; flex-shrink: 0; }
-.inbox-sidebar-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
-.inbox-sidebar-header h3 { font-size: 18px; font-weight: 700; }
+.inbox-sidebar-header { padding: 16px 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.inbox-sidebar-header h3 { font-size: 18px; font-weight: 700; flex: 1; }
 .mobile-close { display: none; }
+.new-chat-btn { padding: 6px 12px; font-size: 12px; border-radius: 6px; flex-shrink: 0; }
 
 .inbox-tabs { display: flex; border-bottom: 1px solid #eee; }
 .tab-btn { flex: 1; padding: 10px; font-size: 12px; font-weight: 600; border: none; background: none; cursor: pointer; color: #888; border-bottom: 2px solid transparent; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 4px; font-family: inherit; }
@@ -401,7 +406,8 @@ onUnmounted(() => { clearInterval(pollTimer) })
 @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
 
 .inbox-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.inbox-welcome { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; }
+.inbox-welcome { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; position: relative; }
+.inbox-welcome .mobile-menu { position: absolute; top: 14px; left: 20px; }
 .inbox-welcome i { font-size: 60px; margin-bottom: 16px; }
 .inbox-welcome h3 { font-size: 18px; color: #999; margin-bottom: 6px; }
 .inbox-welcome p { font-size: 14px; }
