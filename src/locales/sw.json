@@ -487,6 +487,8 @@
     "imageUrlPlaceholder": "https://mfano.com/picha.jpg",
     "removeImage": "Ondoa picha",
     "saveProduct": "Hifadhi Bidhaa",
+    "updateProduct": "Sahihisha Bidhaa",
+    "createProduct": "Ongeza Bidhaa",
     "saving": "Inahifadhi...",
     "namePlaceholder": "mfano Samsung Galaxy A15",
     "skuPlaceholder": "mfano SAM-GAL-A15",
@@ -504,6 +506,8 @@
       "imageTooBig": "Picha ni kubwa sana. Kiwango cha juu ni 5MB."
     },
     "savedSuccess": "Bidhaa imehifadhiwa!",
+    "updatedSuccessfully": "Bidhaa imesahihishwa!",
+    "createdSuccessfully": "Bidhaa imeongezwa!",
     "savedError": "Kumekuwa na hitilafu wakati wa kuhifadhi."
   },
   "paymentSettings": {

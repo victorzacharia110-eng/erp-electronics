@@ -487,6 +487,8 @@
     "imageUrlPlaceholder": "https://example.com/image.jpg",
     "removeImage": "Remove image",
     "saveProduct": "Save Product",
+    "updateProduct": "Update Product",
+    "createProduct": "Create Product",
     "saving": "Saving...",
     "namePlaceholder": "e.g. Samsung Galaxy A15",
     "skuPlaceholder": "e.g. SAM-GAL-A15",
@@ -504,6 +506,8 @@
       "imageTooBig": "Image is too large. Maximum size is 5MB."
     },
     "savedSuccess": "Product saved successfully!",
+    "updatedSuccessfully": "Product updated successfully!",
+    "createdSuccessfully": "Product created successfully!",
     "savedError": "An error occurred while saving."
   },
   "paymentSettings": {
