@@ -379,6 +379,10 @@
     "delivered": "Delivered",
     "read": "Read",
     "details": "Details",
+    "deleteChat": "Delete Chat",
+    "deleteTitle": "Delete this conversation?",
+    "deleteConfirm": "This permanently deletes the conversation and all its messages. You can start a new one anytime.",
+    "deletedSuccessfully": "Conversation deleted",
     "statuses": {
       "open": "Open",
       "inProgress": "In Progress",

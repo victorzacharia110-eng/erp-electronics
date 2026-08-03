@@ -99,6 +99,9 @@ export const conversationApi = {
   updateStatus(id, data) {
     return api.patch(`/conversations/${id}/status`, data)
   },
+  delete(id) {
+    return api.delete(`/conversations/${id}`)
+  },
   getOwnerDetails(id) {
     return api.get(`/conversations/${id}/owner-details`)
   },

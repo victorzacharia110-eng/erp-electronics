@@ -379,6 +379,10 @@
     "delivered": "Imefikishwa",
     "read": "Imesomwa",
     "details": "Maelezo",
+    "deleteChat": "Futa Mazungumzo",
+    "deleteTitle": "Futa mazungumzo haya?",
+    "deleteConfirm": "Hii itafuta kabisa mazungumzo na ujumbe wake wote. Unaweza kuanza mpya wakati wowote.",
+    "deletedSuccessfully": "Mazungumzo yamefutwa",
     "statuses": {
       "open": "Fungua",
       "inProgress": "Inaendelea",

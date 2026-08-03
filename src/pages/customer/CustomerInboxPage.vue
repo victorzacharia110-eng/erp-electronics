@@ -49,6 +49,7 @@
             </div>
             <div class="header-actions">
               <span :class="['status-pill', activeConversation.status]">{{ $t(`inbox.statuses.${activeConversation.status}`) }}</span>
+              <button class="btn-icon delete-chat-btn" :title="$t('inbox.deleteChat')" @click="showDeleteModal = true"><i class="fas fa-trash"></i></button>
             </div>
           </div>
 
@@ -99,16 +100,34 @@
         </form>
       </div>
     </div>
+    <div class="modal-overlay" v-if="showDeleteModal" @click.self="showDeleteModal = false">
+      <div class="modal-card card delete-modal">
+        <h2><i class="fas fa-trash"></i> {{ $t('inbox.deleteTitle') }}</h2>
+        <p class="delete-confirm">{{ $t('inbox.deleteConfirm') }}</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-outline" @click="showDeleteModal = false">{{ $t('common.cancel') }}</button>
+          <button type="button" class="btn btn-danger" :disabled="deleting" @click="confirmDelete">
+            <i class="fas" :class="deleting ? 'fa-spinner fa-spin' : 'fa-trash'"></i> {{ $t('inbox.deleteChat') }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" v-if="toastMsg" @click="toastMsg = ''">
+      <i class="fas fa-check-circle"></i> {{ toastMsg }}
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, nextTick } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { conversationApi } from '@/api'
 import { useAuthStore } from '@/stores/auth'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
 const authStore = useAuthStore()
+const { t } = useI18n()
 const conversations = ref([])
 const activeConversation = ref(null)
 const loading = ref(true)
@@ -120,6 +139,14 @@ const messagesArea = ref(null)
 const showNewModal = ref(false)
 const creating = ref(false)
 const newConv = ref({ subject: '', message: '' })
+const showDeleteModal = ref(false)
+const deleting = ref(false)
+const toastMsg = ref('')
+
+function showToast(msg) {
+  toastMsg.value = msg
+  setTimeout(() => (toastMsg.value = ''), 3000)
+}
 
 const canCreate = computed(() => newConv.value.subject.trim() && newConv.value.message.trim())
 
@@ -196,6 +223,20 @@ async function createConversation() {
     await openConversation(res.data)
   } catch { /* empty */ }
   creating.value = false
+}
+
+async function confirmDelete() {
+  if (!activeConversation.value || deleting.value) return
+  deleting.value = true
+  try {
+    await conversationApi.delete(activeConversation.value.id)
+    const deletedId = activeConversation.value.id
+    activeConversation.value = null
+    conversations.value = conversations.value.filter(c => c.id !== deletedId)
+    showDeleteModal.value = false
+    showToast(t('inbox.deletedSuccessfully'))
+  } catch { /* empty */ }
+  deleting.value = false
 }
 
 let pollTimer = null
@@ -290,6 +331,15 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn-outline { background: #fff; color: #333; border: 1px solid #ddd; }
 .btn-outline:hover { border-color: #999; }
+.btn-danger { background: #e74c3c; color: #fff; }
+.btn-danger:hover { background: #c0392b; }
+.btn-danger:disabled { opacity: 0.5; cursor: not-allowed; }
+.delete-chat-btn:hover { border-color: #e74c3c; color: #e74c3c; }
+.delete-modal h2 i { color: #e74c3c; }
+.delete-confirm { font-size: 14px; color: #666; line-height: 1.6; margin-bottom: 4px; }
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #2c3e50; color: #fff; padding: 14px 24px; border-radius: 8px; font-size: 14px; font-weight: 500; z-index: 2000; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
+.toast i { color: #27ae60; }
+@keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 .btn-icon { width: 32px; height: 32px; border-radius: 6px; border: 1px solid #eee; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 13px; color: #666; }
 .btn-icon:hover { border-color: #e74c3c; color: #e74c3c; }
 
