@@ -376,6 +376,8 @@
     "sendMessage": "Tuma Ujumbe",
     "typeMessage": "Andika ujumbe wako...",
     "conversationClosed": "Mazungumzo hii yamefungwa",
+    "delivered": "Imefikishwa",
+    "read": "Imesomwa",
     "details": "Maelezo",
     "statuses": {
       "open": "Fungua",

@@ -380,7 +380,7 @@
         <mxCell id="127" value="- message: text" style="text;strokeColor=none;fillColor=#ffe9d3;align=left;verticalAlign=middle;spacingLeft=8;fontSize=12;fontColor=#111111;" vertex="1" parent="123">
           <mxGeometry y="116" width="330" height="26" as="geometry"/>
         </mxCell>
-        <mxCell id="128" value="- read_at: timestamp" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=8;fontSize=12;fontColor=#111111;" vertex="1" parent="123">
+        <mxCell id="128" value="- is_read: bool (default false)" style="text;strokeColor=none;fillColor=#ffffff;align=left;verticalAlign=middle;spacingLeft=8;fontSize=12;fontColor=#111111;" vertex="1" parent="123">
           <mxGeometry y="142" width="330" height="26" as="geometry"/>
         </mxCell>
         <mxCell id="129" value="" style="line;strokeWidth=2;fillColor=none;strokeColor=#665c51;" vertex="1" parent="123">

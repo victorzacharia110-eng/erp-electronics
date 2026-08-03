@@ -376,6 +376,8 @@
     "sendMessage": "Send Message",
     "typeMessage": "Type your message...",
     "conversationClosed": "This conversation is closed",
+    "delivered": "Delivered",
+    "read": "Read",
     "details": "Details",
     "statuses": {
       "open": "Open",

@@ -98,7 +98,12 @@
             <div v-for="msg in activeConversation.messages" :key="msg.id" class="message-bubble" :class="{ mine: msg.sender_id === authStore.user?.id }">
               <div class="msg-sender">{{ msg.sender?.name }}</div>
               <div class="msg-text">{{ msg.message }}</div>
-              <div class="msg-time">{{ new Date(msg.created_at).toLocaleTimeString('en-TZ', { hour: '2-digit', minute: '2-digit' }) }}</div>
+              <div class="msg-time">
+                <span v-if="msg.sender_id === authStore.user?.id" class="msg-tick" :class="{ read: msg.is_read }" :title="msg.is_read ? $t('inbox.read') : $t('inbox.delivered')">
+                  <i class="fas fa-check-double"></i>
+                </span>
+                {{ new Date(msg.created_at).toLocaleTimeString('en-TZ', { hour: '2-digit', minute: '2-digit' }) }}
+              </div>
             </div>
           </div>
 
@@ -379,7 +384,9 @@ onUnmounted(() => { clearInterval(pollTimer) })
 .msg-sender { font-size: 11px; font-weight: 600; margin-bottom: 4px; opacity: 0.7; }
 .message-bubble.mine .msg-sender { display: none; }
 .msg-text { font-size: 14px; line-height: 1.5; white-space: pre-wrap; }
-.msg-time { font-size: 10px; opacity: 0.6; margin-top: 4px; text-align: right; }
+.msg-time { font-size: 10px; opacity: 0.6; margin-top: 4px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 5px; }
+.msg-tick { font-size: 11px; }
+.msg-tick.read { color: #4fc3f7; opacity: 1; }
 
 .message-input-area { padding: 12px 16px; border-top: 1px solid #eee; display: flex; gap: 10px; align-items: flex-end; }
 .message-input-area textarea { flex: 1; padding: 10px 14px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; font-family: inherit; resize: none; outline: none; }

@@ -396,7 +396,7 @@ def gen_erd():
         ('conversation_id', 'FK → conversations', False),
         ('sender_id', 'FK → users', False),
         ('message', 'TEXT', False),
-        ('read_at', 'TIMESTAMP NULL', False),
+        ('is_read', 'BOOLEAN DEFAULT false', False),
     ], fill='#ffe6cc', stroke='#d79b00', cw=CW)
 
     # ══════════════════════════════════════════════════════════════
@@ -620,7 +620,7 @@ def gen_class():
         '- conversation_id: FK',
         '- sender_id: FK',
         '- message: text',
-        '- read_at: timestamp',
+        '- is_read: bool (default false)',
     ], [
         '+ conversation(): BelongsTo',
         '+ sender(): BelongsTo',
@@ -970,7 +970,7 @@ def pdf_seq():
     el.append(bd('Employee opens pending orders → clicks confirm → types customer name IN CAPS → payment confirmed → stock deducted.'))
     el.append(sp(10))
     el.append(sc('Flow 3: Customer-Owner Conversation'))
-    el.append(bd('Customer opens inbox → creates conversation → sends message → owner polls every 15s → reads and replies.'))
+    el.append(bd('Customer opens inbox → creates conversation → sends message (grey tick) → owner polls every 15s → reads and replies → sender tick turns blue (read receipt).'))
     el.append(sp(10))
     el.append(sc('Flow 4: Superadmin Creates Owner'))
     el.append(bd('Superadmin fills form → creates owner with UPPERCASE password → owner logs in → forced password change.'))

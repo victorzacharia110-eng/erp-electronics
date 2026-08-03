@@ -514,6 +514,9 @@ def build_en():
     ]))
     el.append(spacer())
     el.append(note('Re-sending a message to the same person reuses the existing conversation thread instead of creating duplicates.'))
+    el.append(spacer())
+    el.append(section('Message Read Status (Ticks)'))
+    el.append(body('Messages you send show a WhatsApp-style read indicator next to the time stamp. A <b>grey double tick</b> means your message was delivered; it turns <b>blue</b> when the other person opens the conversation and reads it. The status refreshes automatically every few seconds while the Inbox is open.'))
     el.append(PageBreak())
 
     # ── Chapter 14: Accounting System ──
@@ -1218,6 +1221,9 @@ def build_sw():
     ]))
     el.append(spacer())
     el.append(note('Kutuma ujumbe kwa mtu yuleyule kunatumia mazungumzo yaliyopo badala ya kuunda ya mara kwa mara.'))
+    el.append(spacer())
+    el.append(section('Hali ya Ujumbe (Tiki)'))
+    el.append(body('Ujumbe unaotuma unaonyesha alama ya usomaji kama WhatsApp karibu na muda. <b>Tiki mbili za kijivu</b> zinamaanisha ujumbe wako umefikishwa; hubadilika kuwa <b>buluu</b> wakati mtu mwingine anafungua mazungumzo na kuisoma. Hali inasasishwa kiotomatiki kila sekunde chache wakati Kikasha kimefunguliwa.'))
     el.append(PageBreak())
 
     # ── Sura ya 14: Mfumo wa Uhasibu ──

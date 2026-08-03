@@ -1292,10 +1292,10 @@
         <mxCell id="431" value="" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;fillColor=#ffffff;collapsible=0;dropTarget=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;strokeColor=#d79b00;" vertex="1" parent="418">
           <mxGeometry y="166" width="320" height="32" as="geometry"/>
         </mxCell>
-        <mxCell id="432" value="read_at" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontSize=12;align=left;fontColor=#111111;" vertex="1" parent="431">
+        <mxCell id="432" value="is_read" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontSize=12;align=left;fontColor=#111111;" vertex="1" parent="431">
           <mxGeometry width="176.0" height="32" as="geometry"><mxRectangle width="176.0" height="32" as="alternateBounds"/></mxGeometry>
         </mxCell>
-        <mxCell id="433" value="TIMESTAMP NULL" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontStyle=5;fontSize=11;align=left;fontColor=#333333;" vertex="1" parent="431">
+        <mxCell id="433" value="BOOLEAN DEFAULT false" style="shape=partialRectangle;connectable=0;fillColor=none;top=0;left=0;bottom=0;right=0;overflow=hidden;strokeColor=inherit;fontStyle=5;fontSize=11;align=left;fontColor=#333333;" vertex="1" parent="431">
           <mxGeometry x="176.0" width="144.0" height="32" as="geometry"><mxRectangle width="144.0" height="32" as="alternateBounds"/></mxGeometry>
         </mxCell>
         <mxCell id="434" value="1:1" style="relative=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.1;exitY=1;entryX=0.5;entryY=0;strokeColor=#2980b9;strokeWidth=2;fontColor=#000000;fontSize=15;fontStyle=1;endArrow=classic;endFill=1;endSize=8;labelBackgroundColor=#d6eaf8;" edge="1" source="10" target="38" parent="1">
