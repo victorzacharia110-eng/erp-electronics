@@ -850,7 +850,7 @@ footer p i {
   }
 
   .main-header-inner {
-    gap: 0;
+    gap: 6px;
     justify-content: space-between;
   }
 
@@ -859,7 +859,26 @@ footer p i {
   }
 
   .header-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .header-actions .action-label {
     display: none;
+  }
+
+  .header-actions .action-link {
+    gap: 0;
+  }
+
+  .logo-text {
+    font-size: 17px;
+  }
+
+  .logo-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 15px;
   }
 
   .hamburger {
