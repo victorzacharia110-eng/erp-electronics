@@ -416,6 +416,16 @@ const router = createRouter({
   },
 })
 
+router.onError((error) => {
+  const isChunkError =
+    /dynamically imported module|Failed to fetch dynamically imported|error loading dynamically/i.test(error?.message || '')
+
+  if (isChunkError && !sessionStorage.getItem('chunk_reload')) {
+    sessionStorage.setItem('chunk_reload', '1')
+    window.location.reload()
+  }
+})
+
 router.beforeEach(async (to) => {
   const token = localStorage.getItem('auth_token')
 
