@@ -368,6 +368,9 @@ export const superadminApi = {
   updateSubscription(id, data) {
     return api.put(`/superadmin/owners/${id}/subscription`, data)
   },
+  extendTrial(id, data) {
+    return api.post(`/superadmin/owners/${id}/extend-trial`, data)
+  },
   updateLimits(id, data) {
     return api.put(`/superadmin/owners/${id}/limits`, data)
   },

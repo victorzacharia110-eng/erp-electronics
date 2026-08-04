@@ -2,6 +2,22 @@
   <div class="sa-dashboard">
     <SkeletonLoader v-if="loading" type="stats" :count="4" />
     <template v-else>
+      <div v-if="trialExpiredOwners.length" class="trial-alert">
+        <div class="trial-alert-icon"><i class="fas fa-hourglass-end"></i></div>
+        <div class="trial-alert-body">
+          <strong>Trial period ended</strong>
+          <p>The following store(s) were deactivated automatically because their trial ended. Would you like to extend their trial?</p>
+          <ul>
+            <li v-for="o in trialExpiredOwners" :key="o.id">
+              <router-link :to="`/superadmin/owners/${o.id}`">{{ o.name }}</router-link>
+              <span class="trial-alert-meta">{{ o.email }}</span>
+              <button class="btn btn-primary btn-sm" @click="extendTrial(o)">
+                <i class="fas fa-plus-circle"></i> Extend trial (30 days)
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-icon owners"><i class="fas fa-store"></i></div>
@@ -218,7 +234,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { superadminApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
@@ -244,6 +260,21 @@ const newOwner = ref({
 
 function cap(s) {
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
+}
+
+const trialExpiredOwners = computed(() =>
+  owners.value.filter(o => o.owner_profile?.deactivation_reason === 'trial_expired')
+)
+
+async function extendTrial(owner, days = 30) {
+  try {
+    const res = await superadminApi.extendTrial(owner.id, { days })
+    toastMsg.value = res.data.message || 'Trial extended'
+    await loadData()
+  } catch {
+    toastMsg.value = 'Failed to extend trial'
+  }
+  setTimeout(() => toastMsg.value = '', 3000)
 }
 
 function formatPrice(v) {
@@ -323,6 +354,25 @@ onMounted(loadData)
 .sa-dashboard {
   max-width: 1200px;
 }
+
+.trial-alert {
+  display: flex;
+  gap: 16px;
+  background: #fff8e6;
+  border: 1px solid #f5d78e;
+  border-left: 4px solid #f39c12;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.trial-alert-icon { color: #f39c12; font-size: 24px; flex-shrink: 0; }
+.trial-alert-body strong { color: #8a6d1a; font-size: 15px; }
+.trial-alert-body p { color: #8a6d1a; font-size: 13px; margin: 4px 0 12px; line-height: 1.5; }
+.trial-alert-body ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.trial-alert-body li { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.trial-alert-body li a { color: #b57f0a; font-weight: 600; text-decoration: none; }
+.trial-alert-body li a:hover { text-decoration: underline; }
+.trial-alert-meta { color: #b08c3a; font-size: 12px; }
 
 .stats-grid {
   display: grid;

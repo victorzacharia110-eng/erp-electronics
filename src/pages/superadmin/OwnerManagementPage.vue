@@ -8,6 +8,24 @@
       <button class="btn btn-primary" @click="showCreateModal = true"><i class="fas fa-user-plus"></i> Add Owner</button>
     </div>
 
+    <div v-if="trialExpiredOwners.length" class="trial-alert">
+      <div class="trial-alert-icon"><i class="fas fa-hourglass-end"></i></div>
+      <div class="trial-alert-body">
+        <strong>Trial period ended</strong>
+        <p>The following store(s) were deactivated automatically because their trial period ended.
+          Would you like to extend their trial?</p>
+        <ul>
+          <li v-for="o in trialExpiredOwners" :key="o.id">
+            <router-link :to="`/superadmin/owners/${o.id}`">{{ o.name }}</router-link>
+            <span class="trial-alert-meta">{{ o.email }} · expired {{ new Date(o.owner_profile.subscription_expires_at).toLocaleDateString() }}</span>
+            <button class="btn btn-primary btn-sm" @click="extendTrial(o)">
+              <i class="fas fa-plus-circle"></i> Extend trial (30 days)
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
     <SkeletonLoader v-if="loading" type="table" />
 
     <div v-else-if="owners.length === 0" class="empty-state card">
@@ -65,6 +83,9 @@
               <td>
                 <span :class="['status-badge', owner.owner_profile?.is_active ? 'active' : 'inactive']">
                   {{ owner.owner_profile?.is_active ? 'Active' : 'Inactive' }}
+                </span>
+                <span v-if="isTrialExpired(owner)" class="trial-expired-badge">
+                  <i class="fas fa-hourglass-end"></i> Trial ended
                 </span>
               </td>
               <td>
@@ -211,6 +232,25 @@ const addErrors = ref({})
 const addServerErrors = ref([])
 const passwordTarget = ref(null)
 
+function isTrialExpired(owner) {
+  return owner.owner_profile?.deactivation_reason === 'trial_expired'
+}
+
+const trialExpiredOwners = computed(() =>
+  owners.value.filter(isTrialExpired)
+)
+
+async function extendTrial(owner, days = 30) {
+  try {
+    const res = await superadminApi.extendTrial(owner.id, { days })
+    toastMsg.value = res.data.message || 'Trial extended'
+    await loadData()
+  } catch {
+    toastMsg.value = 'Failed to extend trial'
+  }
+  setTimeout(() => toastMsg.value = '', 3000)
+}
+
 const newOwner = ref({
   name: '',
   email: '',
@@ -355,6 +395,40 @@ onMounted(loadData)
 
 .page-header h1 { font-size: 26px; margin-bottom: 4px; }
 .subtitle { color: #888; font-size: 14px; }
+
+.trial-alert {
+  display: flex;
+  gap: 16px;
+  background: #fff8e6;
+  border: 1px solid #f5d78e;
+  border-left: 4px solid #f39c12;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 24px;
+}
+.trial-alert-icon { color: #f39c12; font-size: 24px; flex-shrink: 0; }
+.trial-alert-body strong { color: #8a6d1a; font-size: 15px; }
+.trial-alert-body p { color: #8a6d1a; font-size: 13px; margin: 4px 0 12px; line-height: 1.5; }
+.trial-alert-body ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.trial-alert-body li { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 13px; }
+.trial-alert-body li a { color: #b57f0a; font-weight: 600; text-decoration: none; }
+.trial-alert-body li a:hover { text-decoration: underline; }
+.trial-alert-meta { color: #b08c3a; font-size: 12px; }
+
+.trial-expired-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: 8px;
+  background: #fef3e2;
+  color: #b57f0a;
+  border: 1px solid #f5d78e;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+}
 
 .empty-state { text-align: center; padding: 60px 24px; }
 .empty-icon { width: 80px; height: 80px; background: #f5f5f5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
