@@ -258,7 +258,10 @@
     "addressStreet": "Street",
     "addressCity": "City",
     "addressCountry": "Country",
-    "address": "Address"
+    "address": "Address",
+    "whatsappNumber": "WhatsApp Number",
+    "whatsappMessage": "WhatsApp Default Message",
+    "whatsappHelp": "Customers chat with this number on the storefront. If left empty, an employee's number is used if one exists, otherwise your phone number."
   },
   "employees": {
     "title": "Employee Management",

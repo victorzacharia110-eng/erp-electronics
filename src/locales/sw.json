@@ -258,7 +258,10 @@
     "addressStreet": "Barabara",
     "addressCity": "Jiji",
     "addressCountry": "Nchi",
-    "address": "Anwani"
+    "address": "Anwani",
+    "whatsappNumber": "Namba ya WhatsApp",
+    "whatsappMessage": "Ujumbe wa Kawaida wa WhatsApp",
+    "whatsappHelp": "Wateja wanawasiliana na namba hii kwenye duka. Ikiwa umeiacha wazi, namba ya mfanyakazi inatumika ikiwa kuna mfanyakazi, la sivyo namba yako ya simu."
   },
   "employees": {
     "title": "Usimamizi wa Wafanyakazi",
