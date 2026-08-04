@@ -362,6 +362,7 @@ async function applyBusinessContext() {
     if (authStore.isOwner) {
       await businessStore.fetchMine()
     }
+    businessStore.restoreFromStorage()
     businessStore.pickFallback()
   }
 }
