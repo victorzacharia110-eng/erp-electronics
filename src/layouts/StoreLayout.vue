@@ -271,10 +271,10 @@ const businessSlug = computed(() => route.params.businessSlug || null)
 const isDirectory = computed(() => route.name === 'home' && !businessSlug.value)
 
 const brandColor = computed(() =>
-  businessSlug.value ? businessStore.current?.brand_color || 'var(--brand)' : 'var(--brand)'
+  businessSlug.value ? businessStore.current?.brand_color || '#e74c3c' : '#e74c3c'
 )
 const brandColorDark = computed(() =>
-  businessSlug.value ? businessStore.current?.brand_color_secondary || 'var(--brand-dark)' : 'var(--brand-dark)'
+  businessSlug.value ? businessStore.current?.brand_color_secondary || '#2c3e50' : '#2c3e50'
 )
 const storeName = computed(() =>
   businessSlug.value ? businessStore.current?.store_name || 'ElectroShop' : 'ElectroShop'
