@@ -258,6 +258,12 @@ const routes = [
         meta: { requiresAuth: true, role: 'owner' },
       },
       {
+        path: 'owner/billing',
+        name: 'owner-billing',
+        component: () => import('@/pages/owner/BillingPage.vue'),
+        meta: { requiresAuth: true, role: 'owner' },
+      },
+      {
         path: 'supplier',
         name: 'supplier-dashboard',
         component: () => import('@/pages/supplier/SupplierPortalPage.vue'),
@@ -408,6 +414,11 @@ const routes = [
         path: 'home-content',
         name: 'superadmin-home-content',
         component: () => import('@/pages/superadmin/HomeContentPage.vue'),
+      },
+      {
+        path: 'profile',
+        name: 'superadmin-profile',
+        component: () => import('@/pages/superadmin/SuperadminProfilePage.vue'),
       },
     ],
   },

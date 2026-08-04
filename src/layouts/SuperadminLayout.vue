@@ -24,6 +24,10 @@
           <i class="fas fa-house"></i>
           <span v-show="!sidebarCollapsed">Home Content</span>
         </router-link>
+        <router-link to="/superadmin/profile" class="sa-nav-link" :class="{ active: $route.path.startsWith('/superadmin/profile') }" @click="sidebarMobileOpen = false">
+          <i class="fas fa-user-circle"></i>
+          <span v-show="!sidebarCollapsed">My Profile</span>
+        </router-link>
       </nav>
       <div class="sa-sidebar-footer">
         <router-link to="/" class="sa-nav-link" @click="sidebarMobileOpen = false">
@@ -77,6 +81,7 @@ const pageTitle = computed(() => {
     'superadmin-branding': 'Brand Settings',
     'superadmin-inbox': 'Inbox',
     'superadmin-home-content': 'Home Content',
+    'superadmin-profile': 'My Profile',
   }
   return titles[route.name] || 'Dashboard'
 })

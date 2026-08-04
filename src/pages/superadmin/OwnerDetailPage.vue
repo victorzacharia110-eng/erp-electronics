@@ -86,10 +86,54 @@
         </div>
       </div>
 
+      <!-- Subscription Payments -->
+      <div class="card detail-section">
+        <h4><i class="fas fa-credit-card"></i> Subscription Payments</h4>
+        <div v-if="subPaymentsLoading" class="loading-inline">
+          <i class="fas fa-spinner fa-spin"></i> Loading payments...
+        </div>
+        <template v-else-if="subPayments.length">
+          <div class="table-wrap">
+            <table class="sa-table">
+              <thead>
+                <tr>
+                  <th>Plan</th>
+                  <th>Period</th>
+                  <th>Provider</th>
+                  <th>Phone</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="p in subPayments" :key="p.id">
+                  <td><strong>{{ cap(p.plan) }}</strong></td>
+                  <td>{{ p.months }} mo</td>
+                  <td>{{ p.provider }}</td>
+                  <td>{{ p.phone_number || '—' }}</td>
+                  <td>TSh {{ formatPrice(p.amount) }}</td>
+                  <td>{{ new Date(p.created_at).toLocaleDateString() }}</td>
+                  <td>
+                    <span :class="['status-badge', `status-${p.status}`]">{{ p.status }}</span>
+                  </td>
+                  <td>
+                    <button v-if="p.status === 'pending'" class="btn btn-success btn-sm" @click="confirmPayment(p)" :disabled="confirmingId === p.id">
+                      {{ confirmingId === p.id ? 'Confirming...' : 'Confirm' }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </template>
+        <div v-else class="empty-text">No subscription payments yet</div>
+      </div>
+
       <!-- Password Management -->
       <div class="card detail-section">
-        <h4><i class="fas fa-shield-alt"></i> Password Management</h4>
-        <div v-if="pwLoading" class="loading-inline">
+        <h4><i class="fas fa-shield-alt"></i> Password Management</h4>        <div v-if="pwLoading" class="loading-inline">
           <i class="fas fa-spinner fa-spin"></i> Loading password status...
         </div>
         <template v-else-if="pwStatus">
@@ -207,6 +251,14 @@ const limitsForm = ref({
 const savingSub = ref(false)
 const savingLimits = ref(false)
 
+const subPayments = ref([])
+const subPaymentsLoading = ref(true)
+const confirmingId = ref(null)
+
+function cap(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
+}
+
 function formatPrice(v) {
   return Number(v || 0).toLocaleString('en-TZ')
 }
@@ -272,6 +324,29 @@ async function loadPasswordStatus() {
   pwLoading.value = false
 }
 
+async function loadSubPayments() {
+  subPaymentsLoading.value = true
+  try {
+    const res = await superadminApi.getOwnerSubscriptionPayments(route.params.id)
+    subPayments.value = res.data
+  } catch { /* empty */ }
+  subPaymentsLoading.value = false
+}
+
+async function confirmPayment(p) {
+  confirmingId.value = p.id
+  try {
+    await superadminApi.confirmSubscriptionPayment(p.id)
+    toastMsg.value = 'Payment confirmed and subscription activated'
+    await loadSubPayments()
+    await loadData()
+  } catch {
+    toastMsg.value = 'Failed to confirm payment'
+  }
+  confirmingId.value = null
+  setTimeout(() => toastMsg.value = '', 3000)
+}
+
 async function forceChange() {
   forcingChange.value = true
   try {
@@ -308,6 +383,7 @@ function onPasswordUpdated() {
 onMounted(async () => {
   await loadData()
   await loadPasswordStatus()
+  await loadSubPayments()
 })
 </script>
 
@@ -433,6 +509,8 @@ onMounted(async () => {
 .status-badge.status-shipped { background: #e2d5f1; color: #563d7c; }
 .status-badge.status-delivered { background: #d4edda; color: #155724; }
 .status-badge.status-cancelled { background: #f8d7da; color: #721c24; }
+.status-badge.status-completed { background: #d4edda; color: #155724; }
+.status-badge.status-failed { background: #f8d7da; color: #721c24; }
 
 .table-wrap { overflow-x: auto; }
 

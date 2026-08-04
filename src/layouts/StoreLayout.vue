@@ -310,6 +310,9 @@ async function applyBusinessContext() {
     }
   } else {
     await businessStore.fetchDirectory()
+    if (authStore.isOwner) {
+      await businessStore.fetchMine()
+    }
     businessStore.pickFallback()
   }
 }

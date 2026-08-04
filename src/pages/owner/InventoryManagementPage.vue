@@ -2,15 +2,15 @@
   <div class="dashboard-page container">
     <div class="dash-header">
       <div>
-        <h1><i class="fas fa-warehouse" style="color: #e74c3c; margin-right: 12px;"></i>Inventory Management</h1>
-        <p>Track stock levels, adjust inventory, and monitor low stock alerts</p>
+        <h1><i class="fas fa-warehouse" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('inventory.title') }}</h1>
+        <p>{{ $t('inventory.subtitle') }}</p>
       </div>
       <div class="header-actions">
         <button class="btn btn-primary" @click="activeTab = activeTab === 'inventory' ? 'transactions' : 'inventory'">
           <i :class="activeTab === 'inventory' ? 'fas fa-history' : 'fas fa-boxes'"></i>
-          {{ activeTab === 'inventory' ? 'Transactions' : 'Inventory' }}
+          {{ activeTab === 'inventory' ? $t('inventory.transactions') : $t('inventory.inventory') }}
         </button>
-        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> Back</router-link>
+        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('inventory.back') }}</router-link>
       </div>
     </div>
 
@@ -20,28 +20,28 @@
         <div class="stat-icon blue"><i class="fas fa-boxes-stacked"></i></div>
         <div class="stat-info">
           <span class="stat-value">{{ dashboardStats.total_items }}</span>
-          <span class="stat-label">Total Items</span>
+          <span class="stat-label">{{ $t('inventory.totalItems') }}</span>
         </div>
       </div>
       <div class="stat-card card">
         <div class="stat-icon green"><i class="fas fa-cubes"></i></div>
         <div class="stat-info">
           <span class="stat-value">{{ dashboardStats.total_stock }}</span>
-          <span class="stat-label">Total Stock Units</span>
+          <span class="stat-label">{{ $t('inventory.totalStockUnits') }}</span>
         </div>
       </div>
       <div class="stat-card card">
         <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="stat-info">
           <span class="stat-value">{{ dashboardStats.low_stock_count }}</span>
-          <span class="stat-label">Low Stock Items</span>
+          <span class="stat-label">{{ $t('inventory.lowStockItems') }}</span>
         </div>
       </div>
       <div class="stat-card card">
         <div class="stat-icon purple"><i class="fas fa-coins"></i></div>
         <div class="stat-info">
           <span class="stat-value">TSh {{ formatPrice(dashboardStats.total_value) }}</span>
-          <span class="stat-label">Total Stock Value</span>
+          <span class="stat-label">{{ $t('inventory.totalStockValue') }}</span>
         </div>
       </div>
     </div>
@@ -50,19 +50,19 @@
     <div v-if="lowStockItems.length > 0" class="low-stock-alert card">
       <div class="alert-header">
         <i class="fas fa-exclamation-triangle"></i>
-        <h3>Low Stock Alerts</h3>
-        <span class="alert-count">{{ lowStockItems.length }} items below reorder level</span>
+        <h3>{{ $t('inventory.lowStockAlerts') }}</h3>
+        <span class="alert-count">{{ $t('inventory.itemsBelowReorder', { count: lowStockItems.length }) }}</span>
       </div>
       <div class="alert-list">
         <div v-for="item in lowStockItems" :key="item.id" class="alert-item">
           <div class="alert-product">
-            <strong>{{ item.product?.name || 'Unknown Product' }}</strong>
-            <span class="alert-sku">SKU: {{ item.product?.sku || 'N/A' }}</span>
+            <strong>{{ item.product?.name || $t('inventory.unknownProduct') }}</strong>
+            <span class="alert-sku">{{ $t('inventory.sku') }}: {{ item.product?.sku || $t('inventory.nA') }}</span>
           </div>
           <div class="alert-stock">
-            <span class="current">{{ item.quantity_on_hand }} units</span>
+            <span class="current">{{ $t('inventory.units', { count: item.quantity_on_hand }) }}</span>
             <span class="arrow">→</span>
-            <span class="reorder">Reorder at {{ item.reorder_level }}</span>
+            <span class="reorder">{{ $t('inventory.reorderAt', { level: item.reorder_level }) }}</span>
           </div>
         </div>
       </div>
@@ -75,20 +75,20 @@
         <div class="filter-row">
           <div class="search-box">
             <i class="fas fa-search"></i>
-            <input v-model="search" placeholder="Search products, SKU..." @input="debouncedFilter" />
+            <input v-model="search" :placeholder="$t('inventory.searchPlaceholder')" @input="debouncedFilter" />
           </div>
           <select v-model="statusFilter" class="filter-select" @change="filterInventory">
-            <option value="">All Status</option>
-            <option value="ok">OK</option>
-            <option value="low">Low Stock</option>
-            <option value="out">Out of Stock</option>
+            <option value="">{{ $t('inventory.allStatus') }}</option>
+            <option value="ok">{{ $t('inventory.statusOk') }}</option>
+            <option value="low">{{ $t('inventory.statusLow') }}</option>
+            <option value="out">{{ $t('inventory.statusOut') }}</option>
           </select>
         </div>
 
         <div v-if="filteredItems.length === 0" class="empty-state card">
           <i class="fas fa-box-open"></i>
-          <h3>No inventory items found</h3>
-          <p>Add products with variants to see inventory data here.</p>
+          <h3>{{ $t('inventory.noInventoryItems') }}</h3>
+          <p>{{ $t('inventory.noInventoryHint') }}</p>
         </div>
 
         <div v-else class="card">
@@ -96,20 +96,20 @@
             <table class="sa-table">
               <thead>
                 <tr>
-                  <th>Product</th>
-                  <th>Variant</th>
-                  <th>Qty On Hand</th>
-                  <th>Reorder Level</th>
-                  <th>Stock Value</th>
-                  <th>Status</th>
-                  <th>Actions</th>
+                  <th>{{ $t('inventory.product') }}</th>
+                  <th>{{ $t('inventory.variant') }}</th>
+                  <th>{{ $t('inventory.qtyOnHand') }}</th>
+                  <th>{{ $t('inventory.reorderLevel') }}</th>
+                  <th>{{ $t('inventory.stockValue') }}</th>
+                  <th>{{ $t('inventory.status') }}</th>
+                  <th>{{ $t('inventory.actions') }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="item in paginatedItems" :key="item.id">
                   <td>
-                    <strong>{{ item.product?.name || 'Unknown' }}</strong>
-                    <span class="muted">SKU: {{ item.product?.sku || 'N/A' }}</span>
+                    <strong>{{ item.product?.name || $t('inventory.unknown') }}</strong>
+                    <span class="muted">{{ $t('inventory.sku') }}: {{ item.product?.sku || $t('inventory.nA') }}</span>
                   </td>
                   <td>
                     <span v-if="item.color || item.storage" class="variant-info">
@@ -119,7 +119,7 @@
                       </span>
                       <span v-if="item.storage" class="variant-tag storage">{{ item.storage }}</span>
                     </span>
-                    <span v-else class="muted">Base</span>
+                    <span v-else class="muted">{{ $t('inventory.base') }}</span>
                   </td>
                   <td class="qty-cell" :class="{ 'qty-zero': item.quantity_on_hand === 0 }">
                     {{ item.quantity_on_hand }}
@@ -134,7 +134,7 @@
                     </span>
                   </td>
                   <td class="actions-cell">
-                    <button class="btn-icon" @click="openAdjustModal(item)" title="Adjust Stock">
+                    <button class="btn-icon" @click="openAdjustModal(item)" :title="$t('inventory.adjustStock')">
                       <i class="fas fa-sliders-h"></i>
                     </button>
                   </td>
@@ -161,14 +161,14 @@
         <div class="filter-row">
           <div class="search-box">
             <i class="fas fa-search"></i>
-            <input v-model="transactionSearch" placeholder="Search transactions..." @input="debouncedFilterTransactions" />
+            <input v-model="transactionSearch" :placeholder="$t('inventory.searchTransactionsPlaceholder')" @input="debouncedFilterTransactions" />
           </div>
         </div>
 
         <div v-if="filteredTransactions.length === 0" class="empty-state card">
           <i class="fas fa-history"></i>
-          <h3>No transactions yet</h3>
-          <p>Stock adjustments will appear here once you start managing inventory.</p>
+          <h3>{{ $t('inventory.noTransactions') }}</h3>
+          <p>{{ $t('inventory.noTransactionsHint') }}</p>
         </div>
 
         <div v-else class="card">
@@ -176,25 +176,25 @@
             <table class="sa-table">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Product</th>
-                  <th>Type</th>
-                  <th>Change</th>
-                  <th>Qty After</th>
-                  <th>Notes</th>
+                  <th>{{ $t('inventory.date') }}</th>
+                  <th>{{ $t('inventory.product') }}</th>
+                  <th>{{ $t('inventory.type') }}</th>
+                  <th>{{ $t('inventory.change') }}</th>
+                  <th>{{ $t('inventory.qtyAfter') }}</th>
+                  <th>{{ $t('inventory.notes') }}</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="tx in paginatedTransactions" :key="tx.id">
                   <td>{{ formatDate(tx.created_at) }}</td>
                   <td>
-                    <strong>{{ tx.product_variant?.product?.name || tx.product?.name || 'Unknown' }}</strong>
+                    <strong>{{ tx.product_variant?.product?.name || tx.product?.name || $t('inventory.unknown') }}</strong>
                     <span class="muted" v-if="tx.product_variant">
                       {{ [tx.product_variant.color, tx.product_variant.storage].filter(Boolean).join(' / ') }}
                     </span>
                   </td>
                   <td>
-                    <span :class="['type-badge', tx.type]">{{ tx.type }}</span>
+                    <span :class="['type-badge', tx.type]">{{ getTxTypeText(tx.type) }}</span>
                   </td>
                   <td :class="tx.quantity_change >= 0 ? 'change-positive' : 'change-negative'">
                     {{ tx.quantity_change >= 0 ? '+' : '' }}{{ tx.quantity_change }}
@@ -220,39 +220,39 @@
     <!-- Stock Adjustment Modal -->
     <div class="modal-overlay" v-if="adjustModal.show" @click.self="closeAdjustModal">
       <div class="modal-card">
-        <h2><i class="fas fa-sliders-h"></i> Adjust Stock</h2>
+        <h2><i class="fas fa-sliders-h"></i> {{ $t('inventory.adjustStock') }}</h2>
         <div class="form-group">
-          <label>Product Variant</label>
+          <label>{{ $t('inventory.productVariant') }}</label>
           <input type="text" :value="adjustModal.label" disabled class="readonly-input" />
         </div>
         <div class="form-row">
           <div class="form-group">
-            <label>Current Stock</label>
+            <label>{{ $t('inventory.currentStock') }}</label>
             <input type="text" :value="adjustModal.currentStock" disabled class="readonly-input" />
           </div>
           <div class="form-group">
-            <label>Adjustment Type</label>
+            <label>{{ $t('inventory.adjustmentType') }}</label>
             <select v-model="adjustModal.type">
-              <option value="adjustment">Adjustment</option>
-              <option value="damage">Damage</option>
-              <option value="opening">Opening Balance</option>
+              <option value="adjustment">{{ $t('inventory.adjustment') }}</option>
+              <option value="damage">{{ $t('inventory.damage') }}</option>
+              <option value="opening">{{ $t('inventory.openingBalance') }}</option>
             </select>
           </div>
         </div>
         <div class="form-group">
-          <label>Quantity Change</label>
-          <input v-model.number="adjustModal.quantity" type="number" placeholder="Use negative to reduce stock" />
-          <span class="field-hint">Use a negative number to reduce stock, positive to increase.</span>
+          <label>{{ $t('inventory.quantityChange') }}</label>
+          <input v-model.number="adjustModal.quantity" type="number" :placeholder="$t('inventory.quantityPlaceholder')" />
+          <span class="field-hint">{{ $t('inventory.quantityHint') }}</span>
         </div>
         <div class="form-group">
-          <label>Notes</label>
-          <textarea v-model="adjustModal.notes" rows="3" placeholder="Reason for adjustment..."></textarea>
+          <label>{{ $t('inventory.notes') }}</label>
+          <textarea v-model="adjustModal.notes" rows="3" :placeholder="$t('inventory.notesPlaceholder')"></textarea>
         </div>
         <div v-if="adjustModal.error" class="field-error"><i class="fas fa-exclamation-circle"></i> {{ adjustModal.error }}</div>
         <div class="modal-actions">
-          <button class="btn btn-outline" @click="closeAdjustModal">Cancel</button>
+          <button class="btn btn-outline" @click="closeAdjustModal">{{ $t('inventory.cancel') }}</button>
           <button class="btn btn-primary" @click="submitAdjust" :disabled="adjustModal.saving">
-            <i class="fas fa-check"></i> {{ adjustModal.saving ? 'Saving...' : 'Submit Adjustment' }}
+            <i class="fas fa-check"></i> {{ adjustModal.saving ? $t('inventory.saving') : $t('inventory.submitAdjustment') }}
           </button>
         </div>
       </div>
@@ -266,10 +266,12 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { inventoryApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import TablePagination from '@/components/TablePagination.vue'
 
+const { t } = useI18n()
 const loading = ref(true)
 const loadingTransactions = ref(true)
 const activeTab = ref('inventory')
@@ -304,13 +306,19 @@ function getStatusClass(item) {
 }
 
 function getStatusText(item) {
-  if (item.quantity_on_hand <= 0) return 'Out of Stock'
-  if (item.quantity_on_hand <= (item.reorder_level || 0)) return 'Low Stock'
-  return 'OK'
+  if (item.quantity_on_hand <= 0) return t('inventory.statusOut')
+  if (item.quantity_on_hand <= (item.reorder_level || 0)) return t('inventory.statusLow')
+  return t('inventory.statusOk')
+}
+
+function getTxTypeText(type) {
+  if (type === 'damage') return t('inventory.damage')
+  if (type === 'opening') return t('inventory.openingBalance')
+  return t('inventory.adjustment')
 }
 
 function buildItemLabel(item) {
-  const name = item.product?.name || 'Unknown'
+  const name = item.product?.name || t('inventory.unknown')
   const parts = [item.color, item.storage].filter(Boolean)
   return parts.length ? `${name} (${parts.join(' / ')})` : name
 }
@@ -427,7 +435,7 @@ function closeAdjustModal() {
 async function submitAdjust() {
   adjustModal.error = ''
   if (!adjustModal.quantity || adjustModal.quantity === 0) {
-    adjustModal.error = 'Quantity change is required and cannot be zero.'
+    adjustModal.error = t('inventory.quantityRequired')
     return
   }
   adjustModal.saving = true
@@ -439,11 +447,11 @@ async function submitAdjust() {
       notes: adjustModal.notes,
     })
     closeAdjustModal()
-    toastMsg.value = 'Stock adjusted successfully'
+    toastMsg.value = t('inventory.adjustSuccess')
     setTimeout(() => toastMsg.value = '', 3000)
     await loadAll()
   } catch (e) {
-    adjustModal.error = e.response?.data?.message || 'Failed to adjust stock'
+    adjustModal.error = e.response?.data?.message || t('inventory.adjustFailed')
   } finally {
     adjustModal.saving = false
   }

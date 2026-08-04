@@ -73,7 +73,7 @@ export const useBusinessStore = defineStore('business', () => {
   function restoreFromStorage() {
     const id = localStorage.getItem('active_business_id')
     if (!id) return null
-    const found = [...directory.value, ...mine.value].find(
+    const found = mine.value.find(
       (b) => String(b.id) === String(id)
     )
     if (found) {

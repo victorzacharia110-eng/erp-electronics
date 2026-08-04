@@ -2,12 +2,12 @@
   <div class="dashboard-page container">
     <div class="dash-header">
       <div>
-        <h1><i class="fas fa-file-invoice" style="color: #e74c3c; margin-right: 12px;"></i>Purchase Orders</h1>
-        <p>Manage supplier purchase orders and inventory restocking</p>
+        <h1><i class="fas fa-file-invoice" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('purchaseOrder.title') }}</h1>
+        <p>{{ $t('purchaseOrder.subtitle') }}</p>
       </div>
       <div class="header-actions">
-        <button class="btn btn-primary" @click="openCreateModal"><i class="fas fa-plus"></i> New Purchase Order</button>
-        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> Back</router-link>
+        <button class="btn btn-primary" @click="openCreateModal"><i class="fas fa-plus"></i> {{ $t('purchaseOrder.new') }}</button>
+        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('purchaseOrder.back') }}</router-link>
       </div>
     </div>
 
@@ -27,9 +27,9 @@
 
     <div v-else-if="purchaseOrders.length === 0" class="empty-state card">
       <i class="fas fa-file-invoice"></i>
-      <h3>No purchase orders yet</h3>
-      <p>Create your first purchase order to start tracking supplier orders and inventory.</p>
-      <button class="btn btn-primary" style="margin-top: 16px;" @click="openCreateModal"><i class="fas fa-plus"></i> Create Purchase Order</button>
+      <h3>{{ $t('purchaseOrder.noOrders') }}</h3>
+      <p>{{ $t('purchaseOrder.noOrdersDesc') }}</p>
+      <button class="btn btn-primary" style="margin-top: 16px;" @click="openCreateModal"><i class="fas fa-plus"></i> {{ $t('purchaseOrder.createFirst') }}</button>
     </div>
 
     <template v-else>
@@ -37,12 +37,12 @@
         <table class="sa-table">
           <thead>
             <tr>
-              <th>PO Number</th>
-              <th>Supplier</th>
-              <th>Date</th>
-              <th>Total Cost</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{{ $t('purchaseOrder.poNumber') }}</th>
+              <th>{{ $t('purchaseOrder.supplier') }}</th>
+              <th>{{ $t('purchaseOrder.date') }}</th>
+              <th>{{ $t('purchaseOrder.totalCost') }}</th>
+              <th>{{ $t('purchaseOrder.status') }}</th>
+              <th>{{ $t('purchaseOrder.actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -52,16 +52,16 @@
               <td>{{ formatDate(po.created_at) }}</td>
               <td class="amount-cell">TSh {{ Number(po.total_cost || 0).toLocaleString('en-TZ') }}</td>
               <td>
-                <span :class="['status-badge', `status-${po.status}`]">{{ po.status }}</span>
+                <span :class="['status-badge', `status-${po.status}`]">{{ statusLabel(po.status) }}</span>
               </td>
               <td class="actions-cell">
-                <button class="btn-icon" title="View" @click="viewPO(po)">
+                <button class="btn-icon" :title="$t('purchaseOrder.view')" @click="viewPO(po)">
                   <i class="fas fa-eye"></i>
                 </button>
                 <button
                   v-if="po.status === 'ordered'"
                   class="btn-icon btn-success-icon"
-                  title="Receive"
+                  :title="$t('purchaseOrder.receive')"
                   @click="confirmReceive(po)"
                 >
                   <i class="fas fa-truck-loading"></i>
@@ -69,7 +69,7 @@
                 <button
                   v-if="po.status === 'draft'"
                   class="btn-icon btn-danger-icon"
-                  title="Delete"
+                  :title="$t('purchaseOrder.delete')"
                   @click="confirmDelete(po)"
                 >
                   <i class="fas fa-trash"></i>
@@ -77,7 +77,7 @@
               </td>
             </tr>
             <tr v-if="purchaseOrders.length === 0">
-              <td colspan="6" class="empty-row">No purchase orders found</td>
+              <td colspan="6" class="empty-row">{{ $t('purchaseOrder.noOrdersFound') }}</td>
             </tr>
           </tbody>
         </table>
@@ -98,44 +98,44 @@
     <div class="modal-overlay" v-if="showCreateModal" @click.self="showCreateModal = false">
       <div class="modal-card modal-lg">
         <div class="modal-header">
-          <h3><i class="fas fa-file-invoice"></i> New Purchase Order</h3>
+          <h3><i class="fas fa-file-invoice"></i> {{ $t('purchaseOrder.newTitle') }}</h3>
           <button class="modal-close" @click="showCreateModal = false"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group">
-              <label>Supplier Name <span class="required">*</span></label>
-              <input v-model="form.supplier_name" type="text" placeholder="e.g. Tech Suppliers Ltd" />
+              <label>{{ $t('purchaseOrder.supplierName') }} <span class="required">*</span></label>
+              <input v-model="form.supplier_name" type="text" :placeholder="$t('purchaseOrder.supplierName')" />
             </div>
             <div class="form-group">
-              <label>Supplier Contact</label>
-              <input v-model="form.supplier_contact" type="text" placeholder="Phone or email" />
+              <label>{{ $t('purchaseOrder.supplierContact') }}</label>
+              <input v-model="form.supplier_contact" type="text" :placeholder="$t('purchaseOrder.supplierContact')" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Expected Date</label>
+              <label>{{ $t('purchaseOrder.expectedDate') }}</label>
               <input v-model="form.expected_date" type="date" />
             </div>
             <div class="form-group">
-              <label>Notes</label>
-              <input v-model="form.notes" type="text" placeholder="Optional notes" />
+              <label>{{ $t('purchaseOrder.notes') }}</label>
+              <input v-model="form.notes" type="text" :placeholder="$t('purchaseOrder.notesPlaceholder')" />
             </div>
           </div>
 
           <div class="line-items-section">
             <div class="section-header">
-              <h4>Line Items</h4>
-              <button class="btn btn-sm btn-outline" @click="addLineItem"><i class="fas fa-plus"></i> Add Item</button>
+              <h4>{{ $t('purchaseOrder.lineItems') }}</h4>
+              <button class="btn btn-sm btn-outline" @click="addLineItem"><i class="fas fa-plus"></i> {{ $t('purchaseOrder.addItem') }}</button>
             </div>
             <div class="table-wrap">
               <table class="sa-table line-table">
                 <thead>
                   <tr>
-                    <th>Product Variant</th>
-                    <th style="width: 110px;">Quantity</th>
-                    <th style="width: 140px;">Unit Cost</th>
-                    <th style="width: 140px;">Total</th>
+                    <th>{{ $t('purchaseOrder.productVariant') }}</th>
+                    <th style="width: 110px;">{{ $t('purchaseOrder.quantity') }}</th>
+                    <th style="width: 140px;">{{ $t('purchaseOrder.unitCost') }}</th>
+                    <th style="width: 140px;">{{ $t('purchaseOrder.total') }}</th>
                     <th style="width: 50px;"></th>
                   </tr>
                 </thead>
@@ -143,9 +143,9 @@
                   <tr v-for="(item, index) in form.line_items" :key="index">
                     <td>
                       <select v-model="item.product_variant_id" class="variant-select">
-                        <option value="">Select variant...</option>
+                        <option value="">{{ $t('purchaseOrder.selectVariant') }}</option>
                         <option v-for="v in allVariants" :key="v.id" :value="v.id">
-                          {{ v.product?.name || 'Product' }} - {{ v.name || v.sku }} ({{ v.sku }})
+                          {{ v.product?.name || $t('purchaseOrder.product') }} - {{ v.name || v.sku }} ({{ v.sku }})
                         </option>
                       </select>
                     </td>
@@ -157,7 +157,7 @@
                     </td>
                     <td class="amount-cell">TSh {{ Number((item.quantity || 0) * (item.unit_cost || 0)).toLocaleString('en-TZ') }}</td>
                     <td>
-                      <button v-if="form.line_items.length > 1" class="btn-icon btn-danger-icon" title="Remove" @click="removeLineItem(index)">
+                      <button v-if="form.line_items.length > 1" class="btn-icon btn-danger-icon" :title="$t('purchaseOrder.remove')" @click="removeLineItem(index)">
                         <i class="fas fa-times"></i>
                       </button>
                     </td>
@@ -168,15 +168,15 @@
           </div>
 
           <div class="total-row">
-            <span class="total-label">Total Cost:</span>
+            <span class="total-label">{{ $t('purchaseOrder.totalCost') }}:</span>
             <span class="total-value">TSh {{ Number(formTotalCost).toLocaleString('en-TZ') }}</span>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="showCreateModal = false">Cancel</button>
+          <button class="btn btn-outline" @click="showCreateModal = false">{{ $t('purchaseOrder.cancel') }}</button>
           <button class="btn btn-primary" :disabled="submitting || !form.supplier_name.trim()" @click="submitPO">
             <i v-if="submitting" class="fas fa-spinner fa-spin"></i>
-            {{ submitting ? 'Creating...' : 'Create Purchase Order' }}
+            {{ submitting ? $t('purchaseOrder.creating') : $t('purchaseOrder.create') }}
           </button>
         </div>
       </div>
@@ -192,42 +192,42 @@
         <div class="modal-body" v-if="viewingPO">
           <div class="po-detail-grid">
             <div class="po-detail">
-              <span class="detail-label">Supplier</span>
+              <span class="detail-label">{{ $t('purchaseOrder.supplier') }}</span>
               <span class="detail-value">{{ viewingPO.supplier_name }}</span>
             </div>
             <div class="po-detail">
-              <span class="detail-label">Contact</span>
+              <span class="detail-label">{{ $t('purchaseOrder.contact') }}</span>
               <span class="detail-value">{{ viewingPO.supplier_contact || '—' }}</span>
             </div>
             <div class="po-detail">
-              <span class="detail-label">Status</span>
-              <span :class="['status-badge', `status-${viewingPO.status}`]">{{ viewingPO.status }}</span>
+              <span class="detail-label">{{ $t('purchaseOrder.status') }}</span>
+              <span :class="['status-badge', `status-${viewingPO.status}`]">{{ statusLabel(viewingPO.status) }}</span>
             </div>
             <div class="po-detail">
-              <span class="detail-label">Date</span>
+              <span class="detail-label">{{ $t('purchaseOrder.date') }}</span>
               <span class="detail-value">{{ formatDate(viewingPO.created_at) }}</span>
             </div>
             <div class="po-detail">
-              <span class="detail-label">Expected</span>
+              <span class="detail-label">{{ $t('purchaseOrder.expected') }}</span>
               <span class="detail-value">{{ viewingPO.expected_date ? formatDate(viewingPO.expected_date) : '—' }}</span>
             </div>
             <div class="po-detail">
-              <span class="detail-label">Notes</span>
+              <span class="detail-label">{{ $t('purchaseOrder.notes') }}</span>
               <span class="detail-value">{{ viewingPO.notes || '—' }}</span>
             </div>
           </div>
 
           <div class="line-items-section" style="margin-top: 20px;">
-            <h4>Line Items</h4>
+            <h4>{{ $t('purchaseOrder.lineItems') }}</h4>
             <div class="table-wrap">
               <table class="sa-table line-table">
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Variant</th>
-                    <th>Qty</th>
-                    <th>Unit Cost</th>
-                    <th>Total</th>
+                    <th>{{ $t('purchaseOrder.product') }}</th>
+                    <th>{{ $t('purchaseOrder.variant') }}</th>
+                    <th>{{ $t('purchaseOrder.qty') }}</th>
+                    <th>{{ $t('purchaseOrder.unitCost') }}</th>
+                    <th>{{ $t('purchaseOrder.total') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -239,7 +239,7 @@
                     <td class="amount-cell">TSh {{ Number((item.quantity || 0) * (item.unit_cost || 0)).toLocaleString('en-TZ') }}</td>
                   </tr>
                   <tr v-if="!viewingPO.line_items?.length">
-                    <td colspan="5" class="empty-row">No line items</td>
+                    <td colspan="5" class="empty-row">{{ $t('purchaseOrder.noLineItems') }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -247,18 +247,18 @@
           </div>
 
           <div class="total-row">
-            <span class="total-label">Total Cost:</span>
+            <span class="total-label">{{ $t('purchaseOrder.totalCost') }}:</span>
             <span class="total-value">TSh {{ Number(viewingPO.total_cost || 0).toLocaleString('en-TZ') }}</span>
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="showViewModal = false">Close</button>
+          <button class="btn btn-outline" @click="showViewModal = false">{{ $t('purchaseOrder.close') }}</button>
           <button
             v-if="viewingPO?.status === 'ordered'"
             class="btn btn-success"
             @click="showViewModal = false; confirmReceive(viewingPO)"
           >
-            <i class="fas fa-truck-loading"></i> Receive
+            <i class="fas fa-truck-loading"></i> {{ $t('purchaseOrder.receive') }}
           </button>
         </div>
       </div>
@@ -268,18 +268,18 @@
     <div class="modal-overlay" v-if="showReceiveModal" @click.self="showReceiveModal = false">
       <div class="modal-card">
         <div class="modal-header">
-          <h3><i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i> Confirm Receive</h3>
+          <h3><i class="fas fa-exclamation-triangle" style="color: #f39c12;"></i> {{ $t('purchaseOrder.confirmReceiveTitle') }}</h3>
           <button class="modal-close" @click="showReceiveModal = false"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to receive this PO? This will update inventory.</p>
+          <p>{{ $t('purchaseOrder.confirmReceiveDesc') }}</p>
           <p class="po-ref" v-if="receivingPO">{{ receivingPO.po_number }} &mdash; {{ receivingPO.supplier_name }}</p>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="showReceiveModal = false">Cancel</button>
+          <button class="btn btn-outline" @click="showReceiveModal = false">{{ $t('purchaseOrder.cancel') }}</button>
           <button class="btn btn-success" :disabled="submitting" @click="doReceive">
             <i v-if="submitting" class="fas fa-spinner fa-spin"></i>
-            {{ submitting ? 'Receiving...' : 'Yes, Receive PO' }}
+            {{ submitting ? $t('purchaseOrder.receiving') : $t('purchaseOrder.yesReceive') }}
           </button>
         </div>
       </div>
@@ -289,18 +289,18 @@
     <div class="modal-overlay" v-if="showDeleteModal" @click.self="showDeleteModal = false">
       <div class="modal-card">
         <div class="modal-header">
-          <h3><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> Delete Purchase Order</h3>
+          <h3><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> {{ $t('purchaseOrder.deleteTitle') }}</h3>
           <button class="modal-close" @click="showDeleteModal = false"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this draft purchase order? This action cannot be undone.</p>
+          <p>{{ $t('purchaseOrder.deleteDesc') }}</p>
           <p class="po-ref" v-if="deletingPO">{{ deletingPO.po_number }} &mdash; {{ deletingPO.supplier_name }}</p>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="showDeleteModal = false">Cancel</button>
+          <button class="btn btn-outline" @click="showDeleteModal = false">{{ $t('purchaseOrder.cancel') }}</button>
           <button class="btn btn-danger" :disabled="submitting" @click="doDelete">
             <i v-if="submitting" class="fas fa-spinner fa-spin"></i>
-            {{ submitting ? 'Deleting...' : 'Delete PO' }}
+            {{ submitting ? $t('purchaseOrder.deleting') : $t('purchaseOrder.deletePO') }}
           </button>
         </div>
       </div>
@@ -314,9 +314,12 @@
 
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { purchaseOrderApi, productManageApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import TablePagination from '@/components/TablePagination.vue'
+
+const { t } = useI18n()
 
 const loading = ref(true)
 const submitting = ref(false)
@@ -354,12 +357,18 @@ const statusTabs = computed(() => {
   const ordered = purchaseOrders.value.filter(p => p.status === 'ordered').length
   const received = purchaseOrders.value.filter(p => p.status === 'received').length
   return [
-    { label: 'All', value: '', count: all },
-    { label: 'Draft', value: 'draft', count: draft },
-    { label: 'Ordered', value: 'ordered', count: ordered },
-    { label: 'Received', value: 'received', count: received }
+    { label: t('purchaseOrder.all'), value: '', count: all },
+    { label: t('purchaseOrder.draft'), value: 'draft', count: draft },
+    { label: t('purchaseOrder.ordered'), value: 'ordered', count: ordered },
+    { label: t('purchaseOrder.received'), value: 'received', count: received }
   ]
 })
+
+function statusLabel(status) {
+  return t(`purchaseOrder.${status}`) !== `purchaseOrder.${status}`
+    ? t(`purchaseOrder.${status}`)
+    : status
+}
 
 const formTotalCost = computed(() => {
   return form.line_items.reduce((sum, item) => sum + (item.quantity || 0) * (item.unit_cost || 0), 0)
@@ -462,7 +471,7 @@ async function submitPO() {
       }))
     })
     showCreateModal.value = false
-    showToast('Purchase order created')
+    showToast(t('purchaseOrder.createdSuccess'))
     await loadPOs()
   } catch (e) {
     console.error(e)
@@ -491,7 +500,7 @@ async function doReceive() {
   try {
     await purchaseOrderApi.receive(receivingPO.value.id)
     showReceiveModal.value = false
-    showToast('Purchase order received — inventory updated')
+    showToast(t('purchaseOrder.receivedSuccess'))
     await loadPOs()
   } catch (e) {
     console.error(e)
@@ -505,7 +514,7 @@ async function doDelete() {
   try {
     await purchaseOrderApi.delete(deletingPO.value.id)
     showDeleteModal.value = false
-    showToast('Purchase order deleted')
+    showToast(t('purchaseOrder.deletedSuccess'))
     await loadPOs()
   } catch (e) {
     console.error(e)

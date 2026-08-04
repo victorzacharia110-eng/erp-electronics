@@ -58,6 +58,22 @@
 
       <div class="card sa-section">
         <div class="section-header">
+          <h3><i class="fas fa-tags"></i> Subscription Plans</h3>
+          <button class="btn btn-primary btn-sm" @click="openPlansEditor">
+            <i class="fas fa-pen"></i> Edit Plans
+          </button>
+        </div>
+        <div class="plans-list">
+          <div v-for="(plan, key) in plans" :key="key" class="plan-item">
+            <span class="plan-item-name">{{ cap(key) }}</span>
+            <span class="plan-item-price">TSh {{ formatPrice(plan.price_monthly) }}/mo</span>
+            <span class="plan-item-limits">{{ plan.max_products }} products · {{ plan.max_employees }} employees</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card sa-section">
+        <div class="section-header">
           <h3><i class="fas fa-store"></i> All Owners</h3>
           <button class="btn btn-primary btn-sm" @click="showCreateModal = true">
             <i class="fas fa-plus"></i> Add Owner
@@ -161,6 +177,40 @@
       </div>
     </div>
 
+    <div class="modal-overlay" v-if="showPlansModal" @click.self="showPlansModal = false">
+      <div class="modal-card">
+        <h3><i class="fas fa-tags"></i> Edit Subscription Plans</h3>
+        <p class="modal-desc">Prices are in Tanzanian Shillings per month. These values are used when owners pay for their subscription.</p>
+        <form @submit.prevent="savePlans">
+          <div v-for="key in ['starter', 'pro', 'enterprise']" :key="key" class="plan-editor-block">
+            <h4>{{ cap(key) }}</h4>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Price (TSh/month)</label>
+                <input v-model.number="plansForm[key].price_monthly" type="number" min="0" />
+              </div>
+              <div class="form-group">
+                <label>Max Products</label>
+                <input v-model.number="plansForm[key].max_products" type="number" min="0" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Max Employees</label>
+                <input v-model.number="plansForm[key].max_employees" type="number" min="0" />
+              </div>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" @click="showPlansModal = false">Cancel</button>
+            <button type="submit" class="btn btn-primary" :disabled="savingPlans">
+              {{ savingPlans ? 'Saving...' : 'Save Plans' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
     <div class="toast" v-if="toastMsg" @click="toastMsg = ''">
       <i class="fas fa-check-circle"></i> {{ toastMsg }}
     </div>
@@ -178,6 +228,10 @@ const owners = ref([])
 const showCreateModal = ref(false)
 const creating = ref(false)
 const toastMsg = ref('')
+const plans = ref({})
+const showPlansModal = ref(false)
+const savingPlans = ref(false)
+const plansForm = ref({ starter: {}, pro: {}, enterprise: {} })
 
 const newOwner = ref({
   name: '',
@@ -188,22 +242,51 @@ const newOwner = ref({
   subscription_plan: 'starter',
 })
 
+function cap(s) {
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
+}
+
 function formatPrice(v) {
   return Number(v || 0).toLocaleString('en-TZ')
 }
 
 async function loadData() {
   try {
-    const [statsRes, ownersRes] = await Promise.all([
+    const [statsRes, ownersRes, plansRes] = await Promise.all([
       superadminApi.getStats(),
       superadminApi.getOwners(),
+      superadminApi.getSubscriptionPlans(),
     ])
     stats.value = statsRes.data
     owners.value = ownersRes.data
+    plans.value = plansRes.data
   } catch (e) {
     console.error(e)
   }
   loading.value = false
+}
+
+function openPlansEditor() {
+  plansForm.value = {
+    starter: { ...plans.value.starter },
+    pro: { ...plans.value.pro },
+    enterprise: { ...plans.value.enterprise },
+  }
+  showPlansModal.value = true
+}
+
+async function savePlans() {
+  savingPlans.value = true
+  try {
+    const res = await superadminApi.updateSubscriptionPlans(plansForm.value)
+    plans.value = res.data.plans
+    showPlansModal.value = false
+    toastMsg.value = res.data.message || 'Plans updated'
+  } catch (e) {
+    toastMsg.value = e.response?.data?.message || 'Failed to update plans'
+  }
+  savingPlans.value = false
+  setTimeout(() => toastMsg.value = '', 3000)
 }
 
 async function createOwner() {
@@ -517,6 +600,15 @@ onMounted(loadData)
 
 .default-pw-note { padding: 12px; background: #fef9e7; border: 1px solid #fdebd0; border-radius: 6px; font-size: 13px; color: #7d6608; margin-bottom: 16px; }
 .default-pw-note i { margin-right: 4px; }
+
+.plans-list { display: flex; flex-direction: column; gap: 12px; }
+.plan-item { display: flex; align-items: center; gap: 16px; padding: 12px 14px; background: #f8f9fa; border: 1px solid #eee; border-radius: 8px; flex-wrap: wrap; }
+.plan-item-name { font-weight: 700; font-size: 14px; min-width: 90px; }
+.plan-item-price { font-weight: 800; color: #e74c3c; font-size: 14px; }
+.plan-item-limits { color: #888; font-size: 13px; margin-left: auto; }
+
+.plan-editor-block { border: 1px solid #eee; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #fafafa; }
+.plan-editor-block h4 { margin: 0 0 12px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.3px; color: #555; }
 
 .modal-actions {
   display: flex;

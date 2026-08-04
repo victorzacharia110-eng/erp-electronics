@@ -112,8 +112,8 @@ async function loadContent() {
   try {
     const res = await superadminApi.getHomeContent()
     form.value = {
-      en: { ...(res.data.en || {}) },
-      sw: { ...(res.data.sw || {}) },
+      en: { ...res.data.en },
+      sw: { ...res.data.sw },
     }
   } catch (e) {
     console.error(e)

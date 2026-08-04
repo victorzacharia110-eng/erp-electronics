@@ -107,6 +107,8 @@
             $t('dashboards.owner.shippingSettings') }}</span></router-link>
           <router-link to="/owner/accounting" class="action-tile"><i class="fas fa-calculator"></i><span>{{
             $t('dashboards.owner.accountingAction') }}</span></router-link>
+          <router-link to="/owner/billing" class="action-tile"><i class="fas fa-credit-card"></i><span>{{
+            $t('dashboards.owner.billingAction') }}</span></router-link>
           <router-link to="/account" class="action-tile"><i class="fas fa-user-pen"></i><span>{{ $t('account.profile') }}</span></router-link>
         </div>
       </div>
@@ -142,7 +144,7 @@
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useBusinessStore } from '@/stores/business'
-import { productApi, orderApi, employeeApi, stockAlertApi } from '@/api'
+import { productManageApi, orderApi, employeeApi, stockAlertApi } from '@/api'
 import SalesCharts from './analytics/SalesCharts.vue'
 import AiSuggestions from './analytics/AiSuggestions.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
@@ -171,7 +173,7 @@ function selectBusiness(business) {
 async function loadDashboard() {
   try {
     const [prodRes, orderRes, empRes, alertRes] = await Promise.all([
-      productApi.getAll({ per_page: 5 }),
+      productManageApi.getAll({ per_page: 5 }),
       orderApi.getAll({ per_page: 5 }),
       employeeApi.getAll().catch(() => ({ data: [] })),
       stockAlertApi.getCount().catch(() => ({ data: { count: 0 } })),

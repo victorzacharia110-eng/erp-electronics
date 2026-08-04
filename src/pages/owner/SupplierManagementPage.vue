@@ -2,19 +2,19 @@
   <div class="dashboard-page container">
     <div class="dash-header">
       <div>
-        <h1><i class="fas fa-truck" style="color: #e74c3c; margin-right: 12px;"></i>Suppliers</h1>
-        <p>Manage your supplier directory and contact information</p>
+        <h1><i class="fas fa-truck" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('suppliers.title') }}</h1>
+        <p>{{ $t('suppliers.subtitle') }}</p>
       </div>
       <div class="header-actions">
-        <button class="btn btn-primary" @click="openCreateModal"><i class="fas fa-plus"></i> Add Supplier</button>
-        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> Back</router-link>
+        <button class="btn btn-primary" @click="openCreateModal"><i class="fas fa-plus"></i> {{ $t('suppliers.addSupplier') }}</button>
+        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.back') }}</router-link>
       </div>
     </div>
 
     <div class="filters-bar" v-if="suppliers.length > 0 || search">
       <div class="search-box">
         <i class="fas fa-search"></i>
-        <input v-model="search" type="text" placeholder="Search suppliers by name, contact, email..." />
+        <input v-model="search" type="text" :placeholder="$t('suppliers.searchPlaceholder')" />
       </div>
     </div>
 
@@ -22,15 +22,15 @@
 
     <div v-else-if="filteredSuppliers.length === 0 && !search" class="empty-state card">
       <i class="fas fa-truck"></i>
-      <h3>No suppliers yet</h3>
-      <p>Add your first supplier to start managing purchase orders and vendor information.</p>
-      <button class="btn btn-primary" style="margin-top: 16px;" @click="openCreateModal"><i class="fas fa-plus"></i> Add Supplier</button>
+      <h3>{{ $t('suppliers.noSuppliersTitle') }}</h3>
+      <p>{{ $t('suppliers.noSuppliersDesc') }}</p>
+      <button class="btn btn-primary" style="margin-top: 16px;" @click="openCreateModal"><i class="fas fa-plus"></i> {{ $t('suppliers.addSupplier') }}</button>
     </div>
 
     <div v-else-if="filteredSuppliers.length === 0 && search" class="empty-state card">
       <i class="fas fa-search"></i>
-      <h3>No suppliers found</h3>
-      <p>No suppliers match your search for "{{ search }}".</p>
+      <h3>{{ $t('suppliers.noResultsTitle') }}</h3>
+      <p>{{ $t('suppliers.noResultsDesc', { query: search }) }}</p>
     </div>
 
     <template v-else>
@@ -38,14 +38,14 @@
         <table class="sa-table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Contact Person</th>
-              <th>Phone</th>
-              <th>Email</th>
-              <th>City</th>
-              <th>POs</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th>{{ $t('suppliers.name') }}</th>
+              <th>{{ $t('suppliers.contactPerson') }}</th>
+              <th>{{ $t('suppliers.phone') }}</th>
+              <th>{{ $t('suppliers.email') }}</th>
+              <th>{{ $t('suppliers.city') }}</th>
+              <th>{{ $t('suppliers.pos') }}</th>
+              <th>{{ $t('suppliers.status') }}</th>
+              <th>{{ $t('suppliers.actions') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -58,14 +58,14 @@
               <td class="count-cell">{{ supplier.purchase_orders_count ?? 0 }}</td>
               <td>
                 <span :class="['status-badge', supplier.is_active !== false ? 'status-active' : 'status-inactive']">
-                  {{ supplier.is_active !== false ? 'Active' : 'Inactive' }}
+                  {{ supplier.is_active !== false ? $t('suppliers.active') : $t('suppliers.inactive') }}
                 </span>
               </td>
               <td class="actions-cell">
-                <button class="btn-icon" title="Edit" @click="openEditModal(supplier)">
+                <button class="btn-icon" :title="$t('common.edit')" @click="openEditModal(supplier)">
                   <i class="fas fa-edit"></i>
                 </button>
-                <button class="btn-icon btn-danger-icon" title="Delete" @click="confirmDelete(supplier)">
+                <button class="btn-icon btn-danger-icon" :title="$t('common.delete')" @click="confirmDelete(supplier)">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -89,97 +89,97 @@
     <div class="modal-overlay" v-if="showModal" @click.self="closeModal">
       <div class="modal-card modal-lg">
         <div class="modal-header">
-          <h3><i class="fas fa-truck"></i> {{ editingSupplier ? 'Edit Supplier' : 'Add Supplier' }}</h3>
+          <h3><i class="fas fa-truck"></i> {{ editingSupplier ? $t('suppliers.editSupplier') : $t('suppliers.addSupplier') }}</h3>
           <button class="modal-close" @click="closeModal"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
           <div class="form-row">
             <div class="form-group" :class="{ 'has-error': formErrors.name }">
-              <label>Name <span class="required">*</span></label>
-              <input v-model="form.name" type="text" placeholder="e.g. Tech Supplies Ltd" @blur="validateField('name')" @input="validateField('name')" />
+              <label>{{ $t('suppliers.name') }} <span class="required">*</span></label>
+              <input v-model="form.name" type="text" :placeholder="$t('suppliers.namePlaceholder')" @blur="validateField('name')" @input="validateField('name')" />
               <span class="field-error" v-if="formErrors.name"><i class="fas fa-exclamation-triangle"></i> {{ formErrors.name }}</span>
             </div>
             <div class="form-group">
-              <label>Contact Person</label>
-              <input v-model="form.contact_person" type="text" placeholder="e.g. John Doe" />
+              <label>{{ $t('suppliers.contactPerson') }}</label>
+              <input v-model="form.contact_person" type="text" :placeholder="$t('suppliers.contactPersonPlaceholder')" />
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Phone</label>
-              <input v-model="form.phone" type="tel" placeholder="e.g. +255 712 345 678" />
+              <label>{{ $t('suppliers.phone') }}</label>
+              <input v-model="form.phone" type="tel" :placeholder="$t('suppliers.phonePlaceholder')" />
             </div>
             <div class="form-group">
-              <label>Email</label>
-              <input v-model="form.email" type="email" placeholder="e.g. supplier@example.com" />
+              <label>{{ $t('suppliers.email') }}</label>
+              <input v-model="form.email" type="email" :placeholder="$t('suppliers.emailPlaceholder')" />
             </div>
           </div>
           <div class="form-group">
-            <label>Address</label>
-            <input v-model="form.address" type="text" placeholder="Street address" />
+            <label>{{ $t('suppliers.address') }}</label>
+            <input v-model="form.address" type="text" :placeholder="$t('suppliers.addressPlaceholder')" />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>City</label>
-              <input v-model="form.city" type="text" placeholder="e.g. Dar es Salaam" />
+              <label>{{ $t('suppliers.city') }}</label>
+              <input v-model="form.city" type="text" :placeholder="$t('suppliers.cityPlaceholder')" />
             </div>
             <div class="form-group">
-              <label>Country</label>
-              <input v-model="form.country" type="text" placeholder="Country" />
+              <label>{{ $t('suppliers.country') }}</label>
+              <input v-model="form.country" type="text" :placeholder="$t('suppliers.countryPlaceholder')" />
             </div>
           </div>
 
           <div class="legal-section">
-            <h4><i class="fas fa-file-contract"></i> Tanzanian Business Details</h4>
+            <h4><i class="fas fa-file-contract"></i> {{ $t('suppliers.tanzanianBusinessDetails') }}</h4>
             <div class="form-row">
               <div class="form-group">
-                <label>Business Type</label>
+                <label>{{ $t('suppliers.businessType') }}</label>
                 <select v-model="form.business_type">
-                  <option value="">Select business type</option>
-                  <option value="sole_proprietorship">Sole Proprietorship</option>
-                  <option value="partnership">Partnership</option>
-                  <option value="limited_company">Limited Company</option>
-                  <option value="other">Other</option>
+                  <option value="">{{ $t('suppliers.selectBusinessType') }}</option>
+                  <option value="sole_proprietorship">{{ $t('suppliers.businessTypeSoleProprietorship') }}</option>
+                  <option value="partnership">{{ $t('suppliers.businessTypePartnership') }}</option>
+                  <option value="limited_company">{{ $t('suppliers.businessTypeLimitedCompany') }}</option>
+                  <option value="other">{{ $t('suppliers.businessTypeOther') }}</option>
                 </select>
               </div>
               <div class="form-group">
-                <label>TIN Number (TRA)</label>
-                <input v-model="form.tin_number" type="text" placeholder="e.g. 123-456-789" />
+                <label>{{ $t('suppliers.tinNumber') }}</label>
+                <input v-model="form.tin_number" type="text" :placeholder="$t('suppliers.tinNumberPlaceholder')" />
               </div>
             </div>
             <div class="form-row">
               <div class="form-group">
-                <label>VAT Number</label>
-                <input v-model="form.vat_number" type="text" placeholder="VAT registration number if registered" />
+                <label>{{ $t('suppliers.vatNumber') }}</label>
+                <input v-model="form.vat_number" type="text" :placeholder="$t('suppliers.vatNumberPlaceholder')" />
               </div>
               <div class="form-group">
-                <label>Business Registration No. (BRELA)</label>
-                <input v-model="form.business_registration_number" type="text" placeholder="BRELA registration number" />
+                <label>{{ $t('suppliers.businessRegistrationNumber') }}</label>
+                <input v-model="form.business_registration_number" type="text" :placeholder="$t('suppliers.businessRegistrationNumberPlaceholder')" />
               </div>
             </div>
           </div>
 
           <div class="form-group">
-            <label>Products Description</label>
-            <textarea v-model="form.products_description" rows="3" placeholder="What products does this supplier provide?"></textarea>
+            <label>{{ $t('suppliers.productsDescription') }}</label>
+            <textarea v-model="form.products_description" rows="3" :placeholder="$t('suppliers.productsDescriptionPlaceholder')"></textarea>
           </div>
           <div class="form-group">
-            <label>Notes</label>
-            <textarea v-model="form.notes" rows="2" placeholder="Internal notes about this supplier"></textarea>
+            <label>{{ $t('suppliers.notes') }}</label>
+            <textarea v-model="form.notes" rows="2" :placeholder="$t('suppliers.notesPlaceholder')"></textarea>
           </div>
 
           <div class="legal-section">
-            <h4><i class="fas fa-folder-open"></i> Legal Documents (Tanzanian Format)</h4>
-            <p class="attachments-desc">Business registration (BRELA), TIN certificate, VAT certificate, business license, certificate of incorporation, identification and the signed supply contract.</p>
+            <h4><i class="fas fa-folder-open"></i> {{ $t('suppliers.legalDocsTitle') }}</h4>
+            <p class="attachments-desc">{{ $t('suppliers.legalDocsDesc') }}</p>
 
             <template v-if="editingSupplier">
-              <div v-if="documents.length === 0" class="no-files">No documents uploaded yet</div>
+              <div v-if="documents.length === 0" class="no-files">{{ $t('suppliers.noDocuments') }}</div>
               <div v-for="doc in documents" :key="doc.id" class="file-item">
                 <i class="fas fa-file-alt"></i>
                 <span class="file-name" :title="doc.original_name">{{ doc.original_name }}</span>
                 <span class="doc-category">{{ docCategoryLabel(doc.category) }}</span>
-                <button type="button" class="btn-icon" title="Download" @click="downloadDoc(doc)"><i class="fas fa-download"></i></button>
-                <button type="button" class="btn-icon danger" title="Delete" @click="deleteDoc(doc)"><i class="fas fa-trash"></i></button>
+                <button type="button" class="btn-icon" :title="$t('suppliers.download')" @click="downloadDoc(doc)"><i class="fas fa-download"></i></button>
+                <button type="button" class="btn-icon danger" :title="$t('suppliers.delete')" @click="deleteDoc(doc)"><i class="fas fa-trash"></i></button>
               </div>
               <div class="doc-upload-sep" v-if="documents.length > 0"></div>
             </template>
@@ -187,23 +187,23 @@
             <label class="file-drop">
               <input type="file" multiple accept=".pdf,.jpg,.jpeg,.png,.doc,.docx" @change="onFilesSelected" />
               <i class="fas fa-cloud-upload-alt"></i>
-              <span>{{ editingSupplier ? 'Upload more documents' : 'Choose documents' }}</span>
+              <span>{{ editingSupplier ? $t('suppliers.uploadMoreDocuments') : $t('suppliers.chooseDocuments') }}</span>
             </label>
-            <div v-if="newDocs.length === 0" class="no-files">No files chosen</div>
+            <div v-if="newDocs.length === 0" class="no-files">{{ $t('suppliers.noFilesChosen') }}</div>
             <div v-for="(f, i) in newDocs" :key="i" class="file-item">
               <i class="fas fa-file-alt"></i>
               <span class="file-name" :title="f.file.name">{{ f.file.name }}</span>
               <select v-model="f.type" class="form-select file-type-select">
-                <option value="contract">Supply Contract</option>
-                <option value="business_registration">Business Registration (BRELA)</option>
-                <option value="tin_certificate">TIN Certificate (TRA)</option>
-                <option value="vat_certificate">VAT Certificate</option>
-                <option value="business_license">Business License</option>
-                <option value="certificate_of_incorporation">Certificate of Incorporation</option>
-                <option value="identification">Identification (NIDA / Passport / License)</option>
-                <option value="other">Other</option>
+                <option value="contract">{{ $t('suppliers.docCategoryContract') }}</option>
+                <option value="business_registration">{{ $t('suppliers.docCategoryBusinessRegistration') }}</option>
+                <option value="tin_certificate">{{ $t('suppliers.docCategoryTinCertificate') }}</option>
+                <option value="vat_certificate">{{ $t('suppliers.docCategoryVatCertificate') }}</option>
+                <option value="business_license">{{ $t('suppliers.docCategoryBusinessLicense') }}</option>
+                <option value="certificate_of_incorporation">{{ $t('suppliers.docCategoryIncorporation') }}</option>
+                <option value="identification">{{ $t('suppliers.docCategoryIdentification') }}</option>
+                <option value="other">{{ $t('suppliers.docCategoryOther') }}</option>
               </select>
-              <button type="button" class="btn-icon danger" title="Remove" @click="removeFile(i)"><i class="fas fa-trash"></i></button>
+              <button type="button" class="btn-icon danger" :title="$t('suppliers.remove')" @click="removeFile(i)"><i class="fas fa-trash"></i></button>
             </div>
           </div>
 
@@ -212,10 +212,10 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="closeModal">Cancel</button>
+          <button class="btn btn-outline" @click="closeModal">{{ $t('suppliers.cancel') }}</button>
           <button class="btn btn-primary" :disabled="saving || !canSave" @click="saveSupplier">
             <i v-if="saving" class="fas fa-spinner fa-spin"></i>
-            {{ saving ? 'Saving...' : (editingSupplier ? 'Update Supplier' : 'Create Supplier') }}
+            {{ saving ? $t('suppliers.saving') : (editingSupplier ? $t('suppliers.updateSupplier') : $t('suppliers.createSupplier')) }}
           </button>
         </div>
       </div>
@@ -225,18 +225,18 @@
     <div class="modal-overlay" v-if="deletingSupplier" @click.self="deletingSupplier = null">
       <div class="modal-card">
         <div class="modal-header">
-          <h3><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> Delete Supplier</h3>
+          <h3><i class="fas fa-exclamation-triangle" style="color: #e74c3c;"></i> {{ $t('suppliers.deleteSupplier') }}</h3>
           <button class="modal-close" @click="deletingSupplier = null"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
-          <p>Are you sure you want to delete this supplier? This action cannot be undone.</p>
+          <p>{{ $t('suppliers.deleteConfirm') }}</p>
           <p class="supplier-ref" v-if="deletingSupplier">{{ deletingSupplier.name }}</p>
         </div>
         <div class="modal-footer">
-          <button class="btn btn-outline" @click="deletingSupplier = null">Cancel</button>
+          <button class="btn btn-outline" @click="deletingSupplier = null">{{ $t('suppliers.cancel') }}</button>
           <button class="btn btn-danger" :disabled="submittingDelete" @click="doDelete">
             <i v-if="submittingDelete" class="fas fa-spinner fa-spin"></i>
-            {{ submittingDelete ? 'Deleting...' : 'Delete Supplier' }}
+            {{ submittingDelete ? $t('suppliers.deleting') : $t('suppliers.deleteSupplier') }}
           </button>
         </div>
       </div>
@@ -250,10 +250,12 @@
 
 <script setup>
 import { ref, computed, reactive, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { supplierApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import TablePagination from '@/components/TablePagination.vue'
 
+const { t } = useI18n()
 const loading = ref(true)
 const saving = ref(false)
 const submittingDelete = ref(false)
@@ -322,8 +324,8 @@ const canSave = computed(() => form.name.trim().length >= 2)
 
 function validateField(field) {
   if (field === 'name') {
-    if (!form.name.trim()) formErrors.value.name = 'Supplier name is required'
-    else if (form.name.trim().length < 2) formErrors.value.name = 'Name must be at least 2 characters'
+    if (!form.name.trim()) formErrors.value.name = t('suppliers.nameRequired')
+    else if (form.name.trim().length < 2) formErrors.value.name = t('suppliers.nameMinLength')
     else delete formErrors.value.name
   }
 }
@@ -383,18 +385,18 @@ function closeModal() {
 }
 
 const docCategoryLabels = {
-  contract: 'Contract',
-  business_registration: 'Business Registration (BRELA)',
-  tin_certificate: 'TIN Certificate',
-  vat_certificate: 'VAT Certificate',
-  business_license: 'Business License',
-  certificate_of_incorporation: 'Certificate of Incorporation',
-  identification: 'Identification',
-  other: 'Other',
+  contract: t('suppliers.docCategoryContract'),
+  business_registration: t('suppliers.docCategoryBusinessRegistration'),
+  tin_certificate: t('suppliers.docCategoryTinCertificate'),
+  vat_certificate: t('suppliers.docCategoryVatCertificate'),
+  business_license: t('suppliers.docCategoryBusinessLicense'),
+  certificate_of_incorporation: t('suppliers.docCategoryIncorporation'),
+  identification: t('suppliers.docCategoryIdentification'),
+  other: t('suppliers.docCategoryOther'),
 }
 
 function docCategoryLabel(cat) {
-  return docCategoryLabels[cat] || cat || 'Other'
+  return docCategoryLabels[cat] || cat || t('suppliers.docCategoryOther')
 }
 
 function onFilesSelected(e) {
@@ -417,13 +419,13 @@ async function loadDocuments(id) {
 }
 
 async function deleteDoc(doc) {
-  if (!confirm('Delete this document?')) return
+  if (!confirm(t('suppliers.deleteConfirm'))) return
   try {
     await supplierApi.deleteDocument(editingSupplier.value.id, doc.id)
-    showToast('Document deleted')
+    showToast(t('suppliers.documentDeleted'))
     await loadDocuments(editingSupplier.value.id)
   } catch (e) {
-    serverErrors.value = [e.response?.data?.message || 'Failed to delete document']
+    serverErrors.value = [e.response?.data?.message || t('suppliers.deleteDocumentFailed')]
   }
 }
 
@@ -439,7 +441,7 @@ async function downloadDoc(doc) {
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
   } catch {
-    showToast('Download failed')
+    showToast(t('suppliers.downloadFailed'))
   }
 }
 
@@ -497,13 +499,13 @@ async function saveSupplier() {
       await supplierApi.create(fd)
     }
     closeModal()
-    showToast(editingSupplier.value ? 'Supplier updated' : 'Supplier created')
+    showToast(editingSupplier.value ? t('suppliers.updated') : t('suppliers.created'))
     await loadSuppliers()
   } catch (e) {
     if (e.response?.data?.errors) {
       serverErrors.value = Object.entries(e.response.data.errors).map(([, arr]) => arr[0])
     } else {
-      serverErrors.value = [e.response?.data?.message || 'Failed to save supplier']
+      serverErrors.value = [e.response?.data?.message || t('suppliers.saveFailed')]
     }
   }
   saving.value = false
@@ -518,10 +520,10 @@ async function doDelete() {
   try {
     await supplierApi.delete(deletingSupplier.value.id)
     deletingSupplier.value = null
-    showToast('Supplier deleted')
+    showToast(t('suppliers.deleted'))
     await loadSuppliers()
   } catch (e) {
-    serverErrors.value = [e.response?.data?.message || 'Failed to delete supplier']
+    serverErrors.value = [e.response?.data?.message || t('suppliers.deleteFailed')]
   }
   submittingDelete.value = false
 }

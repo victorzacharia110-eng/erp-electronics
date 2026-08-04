@@ -2,11 +2,11 @@
   <div class="dashboard-page container">
     <div class="dash-header">
       <div>
-        <h1><i class="fas fa-percentage" style="color: #e74c3c; margin-right: 12px;"></i>Commission Management</h1>
-        <p>Manage employee commissions and payments</p>
+        <h1><i class="fas fa-percentage" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('commissions.title') }}</h1>
+        <p>{{ $t('commissions.subtitle') }}</p>
       </div>
       <div class="header-actions">
-        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> Back</router-link>
+        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('commissions.back') }}</router-link>
       </div>
     </div>
 
@@ -19,20 +19,20 @@
             <div class="emp-avatar"><i class="fas fa-user"></i></div>
             <div class="emp-summary-info">
               <h3>{{ emp.name }}</h3>
-              <span class="commission-rate">{{ emp.commission_rate }}% commission</span>
+              <span class="commission-rate">{{ $t('commissions.commissionRate', { rate: emp.commission_rate }) }}</span>
             </div>
           </div>
           <div class="emp-summary-stats">
             <div class="emp-stat">
-              <span class="emp-stat-label">Total Profit</span>
+              <span class="emp-stat-label">{{ $t('commissions.totalProfit') }}</span>
               <span class="emp-stat-value">TSh {{ Number(emp.total_profit || 0).toLocaleString('en-TZ') }}</span>
             </div>
             <div class="emp-stat">
-              <span class="emp-stat-label">Pending</span>
+              <span class="emp-stat-label">{{ $t('commissions.pending') }}</span>
               <span class="emp-stat-value pending-text">{{ emp.pending_count }} · TSh {{ Number(emp.pending_amount || 0).toLocaleString('en-TZ') }}</span>
             </div>
             <div class="emp-stat">
-              <span class="emp-stat-label">Paid</span>
+              <span class="emp-stat-label">{{ $t('commissions.paid') }}</span>
               <span class="emp-stat-value paid-text">{{ emp.paid_count }} · TSh {{ Number(emp.paid_amount || 0).toLocaleString('en-TZ') }}</span>
             </div>
           </div>
@@ -41,25 +41,25 @@
 
       <div v-if="pendingCommissions.length > 0" class="section-actions">
         <button class="btn btn-primary" :disabled="payAllLoading" @click="payAllPending">
-          <i class="fas fa-check-double"></i> {{ payAllLoading ? 'Processing...' : 'Pay All Pending' }}
+          <i class="fas fa-check-double"></i> {{ payAllLoading ? $t('commissions.processing') : $t('commissions.payAllPending') }}
         </button>
       </div>
 
       <div class="card table-section">
         <div class="table-section-header">
-          <h2><i class="fas fa-clock" style="color: #e74c3c;"></i> Pending Commissions</h2>
+          <h2><i class="fas fa-clock" style="color: #e74c3c;"></i> {{ $t('commissions.pendingCommissions') }}</h2>
           <span class="count-badge">{{ pendingCommissions.length }}</span>
         </div>
         <div class="table-wrap">
           <table class="sa-table">
             <thead>
               <tr>
-                <th>Employee</th>
-                <th>Order #</th>
-                <th>Order Amount</th>
-                <th>Profit</th>
-                <th>Rate</th>
-                <th>Commission</th>
+                <th>{{ $t('commissions.employee') }}</th>
+                <th>{{ $t('commissions.orderNumber') }}</th>
+                <th>{{ $t('commissions.orderAmount') }}</th>
+                <th>{{ $t('commissions.profit') }}</th>
+                <th>{{ $t('commissions.rate') }}</th>
+                <th>{{ $t('commissions.commission') }}</th>
                 <th></th>
               </tr>
             </thead>
@@ -72,12 +72,12 @@
                 <td class="amount-cell">TSh {{ Number(c.commission_amount || 0).toLocaleString('en-TZ') }}</td>
                 <td class="actions-cell">
                   <button class="btn btn-success btn-sm" :disabled="c._paying" @click="payCommission(c)">
-                    <i class="fas fa-money-bill-wave"></i> {{ c._paying ? 'Paying...' : 'Pay' }}
+                    <i class="fas fa-money-bill-wave"></i> {{ c._paying ? $t('commissions.paying') : $t('commissions.pay') }}
                   </button>
                 </td>
               </tr>
               <tr v-if="pendingCommissions.length === 0">
-                <td colspan="6" class="empty-row">No pending commissions</td>
+                <td colspan="6" class="empty-row">{{ $t('commissions.noPendingCommissions') }}</td>
               </tr>
             </tbody>
           </table>
@@ -86,19 +86,19 @@
 
       <div class="card table-section">
         <div class="table-section-header">
-          <h2><i class="fas fa-check-circle" style="color: #27ae60;"></i> Paid Commissions</h2>
+          <h2><i class="fas fa-check-circle" style="color: #27ae60;"></i> {{ $t('commissions.paidCommissions') }}</h2>
           <span class="count-badge paid">{{ paidCommissions.length }}</span>
         </div>
         <div class="table-wrap">
           <table class="sa-table">
             <thead>
               <tr>
-                <th>Employee</th>
-                <th>Order #</th>
-                <th>Order Amount</th>
-                <th>Rate</th>
-                <th>Commission</th>
-                <th>Paid On</th>
+                <th>{{ $t('commissions.employee') }}</th>
+                <th>{{ $t('commissions.orderNumber') }}</th>
+                <th>{{ $t('commissions.orderAmount') }}</th>
+                <th>{{ $t('commissions.rate') }}</th>
+                <th>{{ $t('commissions.commission') }}</th>
+                <th>{{ $t('commissions.paidOn') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -111,7 +111,7 @@
                 <td>{{ c.paid_at ? new Date(c.paid_at).toLocaleDateString('en-TZ') : '-' }}</td>
               </tr>
               <tr v-if="paidCommissions.length === 0">
-                <td colspan="6" class="empty-row">No paid commissions</td>
+                <td colspan="6" class="empty-row">{{ $t('commissions.noPaidCommissions') }}</td>
               </tr>
             </tbody>
           </table>

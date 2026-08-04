@@ -2,11 +2,11 @@
   <div class="dashboard-page container">
     <div class="dash-header">
       <div>
-        <h1><i class="fas fa-exclamation-triangle" style="color: #e74c3c; margin-right: 12px;"></i>Stock Alerts</h1>
-        <p>Monitor low stock and out of stock alerts across your inventory</p>
+        <h1><i class="fas fa-exclamation-triangle" style="color: #e74c3c; margin-right: 12px;"></i>{{ $t('stockAlerts.title') }}</h1>
+        <p>{{ $t('stockAlerts.subtitle') }}</p>
       </div>
       <div class="header-actions">
-        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> Back</router-link>
+        <router-link to="/owner/accounting" class="back-btn"><i class="fas fa-arrow-left"></i> {{ $t('common.back') }}</router-link>
       </div>
     </div>
 
@@ -26,14 +26,14 @@
         </div>
         <div class="search-box">
           <i class="fas fa-search"></i>
-          <input v-model="search" placeholder="Search products, SKU..." @input="debouncedFilter" />
+          <input v-model="search" :placeholder="$t('stockAlerts.searchPlaceholder')" @input="debouncedFilter" />
         </div>
       </div>
 
       <div v-if="filteredAlerts.length === 0" class="empty-state card">
         <i class="fas fa-check-circle"></i>
-        <h3>No stock alerts</h3>
-        <p>All inventory levels are looking good.</p>
+        <h3>{{ $t('stockAlerts.noAlertsTitle') }}</h3>
+        <p>{{ $t('stockAlerts.noAlertsDesc') }}</p>
       </div>
 
       <div v-else class="card">
@@ -41,14 +41,14 @@
           <table class="sa-table">
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Product</th>
-                <th>SKU</th>
-                <th>Qty</th>
-                <th>Reorder Level</th>
-                <th>Message</th>
-                <th>Created</th>
-                <th>Actions</th>
+                <th>{{ $t('stockAlerts.type') }}</th>
+                <th>{{ $t('stockAlerts.product') }}</th>
+                <th>{{ $t('stockAlerts.sku') }}</th>
+                <th>{{ $t('stockAlerts.quantity') }}</th>
+                <th>{{ $t('stockAlerts.reorderLevel') }}</th>
+                <th>{{ $t('stockAlerts.message') }}</th>
+                <th>{{ $t('stockAlerts.created') }}</th>
+                <th>{{ $t('stockAlerts.actions') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -56,16 +56,16 @@
                 <td>
                   <span :class="['type-badge', alert.type === 'out_of_stock' ? 'out-of-stock' : 'low-stock']">
                     <i :class="alert.type === 'out_of_stock' ? 'fas fa-times-circle' : 'fas fa-exclamation-circle'"></i>
-                    {{ alert.type === 'out_of_stock' ? 'Out of Stock' : 'Low Stock' }}
+                    {{ alert.type === 'out_of_stock' ? $t('stockAlerts.outOfStock') : $t('stockAlerts.lowStock') }}
                   </span>
                 </td>
                 <td>
-                  <strong>{{ alert.product_variant?.product?.name || 'Unknown Product' }}</strong>
+                  <strong>{{ alert.product_variant?.product?.name || $t('stockAlerts.unknownProduct') }}</strong>
                   <span v-if="alert.product_variant?.color || alert.product_variant?.storage" class="muted">
                     {{ [alert.product_variant.color, alert.product_variant.storage].filter(Boolean).join(' / ') }}
                   </span>
                 </td>
-                <td class="sku-cell">{{ alert.product_variant?.product?.sku || 'N/A' }}</td>
+                <td class="sku-cell">{{ alert.product_variant?.product?.sku || $t('stockAlerts.nA') }}</td>
                 <td class="qty-cell" :class="{ 'qty-zero': (alert.current_quantity || 0) === 0 }">
                   {{ alert.current_quantity ?? 0 }}
                 </td>
@@ -78,21 +78,21 @@
                     class="btn-action acknowledge"
                     @click="handleAcknowledge(alert)"
                     :disabled="processingId === alert.id"
-                    title="Acknowledge"
+                    :title="$t('stockAlerts.acknowledge')"
                   >
-                    <i class="fas fa-check"></i> Acknowledge
+                    <i class="fas fa-check"></i> {{ $t('stockAlerts.acknowledge') }}
                   </button>
                   <button
                     v-if="alert.status !== 'resolved'"
                     class="btn-action resolve"
                     @click="handleResolve(alert)"
                     :disabled="processingId === alert.id"
-                    title="Resolve"
+                    :title="$t('stockAlerts.resolve')"
                   >
-                    <i class="fas fa-check-double"></i> Resolve
+                    <i class="fas fa-check-double"></i> {{ $t('stockAlerts.resolve') }}
                   </button>
                   <span v-if="alert.status === 'resolved'" class="status-badge resolved">
-                    <i class="fas fa-check-circle"></i> Resolved
+                    <i class="fas fa-check-circle"></i> {{ $t('stockAlerts.resolveStatus') }}
                   </span>
                 </td>
               </tr>
@@ -118,10 +118,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { stockAlertApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import TablePagination from '@/components/TablePagination.vue'
 
+const { t } = useI18n()
 const loading = ref(true)
 const alerts = ref([])
 const search = ref('')
@@ -140,10 +142,10 @@ function formatDate(d) {
 const filterTabs = computed(() => {
   const all = alerts.value
   return [
-    { label: 'All', value: 'all', count: all.length },
-    { label: 'Active', value: 'active', count: all.filter(a => a.status === 'active').length },
-    { label: 'Acknowledged', value: 'acknowledged', count: all.filter(a => a.status === 'acknowledged').length },
-    { label: 'Resolved', value: 'resolved', count: all.filter(a => a.status === 'resolved').length },
+    { label: t('stockAlerts.all'), value: 'all', count: all.length },
+    { label: t('stockAlerts.active'), value: 'active', count: all.filter(a => a.status === 'active').length },
+    { label: t('stockAlerts.acknowledged'), value: 'acknowledged', count: all.filter(a => a.status === 'acknowledged').length },
+    { label: t('stockAlerts.resolved'), value: 'resolved', count: all.filter(a => a.status === 'resolved').length },
   ]
 })
 
@@ -198,7 +200,7 @@ async function handleAcknowledge(alert) {
   try {
     await stockAlertApi.acknowledge(alert.id)
     alert.status = 'acknowledged'
-    toastMsg.value = 'Alert acknowledged'
+    toastMsg.value = t('stockAlerts.acknowledgedSuccess')
     setTimeout(() => toastMsg.value = '', 3000)
   } catch { /* empty */ }
   processingId.value = null
@@ -209,7 +211,7 @@ async function handleResolve(alert) {
   try {
     await stockAlertApi.resolve(alert.id)
     alert.status = 'resolved'
-    toastMsg.value = 'Alert resolved'
+    toastMsg.value = t('stockAlerts.resolvedSuccess')
     setTimeout(() => toastMsg.value = '', 3000)
   } catch { /* empty */ }
   processingId.value = null

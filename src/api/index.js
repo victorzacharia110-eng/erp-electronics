@@ -238,6 +238,18 @@ export const paymentApi = {
   },
 }
 
+export const subscriptionApi = {
+  getPlans() {
+    return api.get('/subscription/plans')
+  },
+  pay(data) {
+    return api.post('/subscription/pay', data)
+  },
+  getHistory() {
+    return api.get('/subscription/payments')
+  },
+}
+
 export const addressApi = {
   getAll() {
     return api.get('/addresses')
@@ -381,6 +393,21 @@ export const superadminApi = {
   },
   setOwnerPassword(id, data) {
     return api.post(`/superadmin/owners/${id}/set-password`, data)
+  },
+  getSubscriptionPlans() {
+    return api.get('/superadmin/subscription/plans')
+  },
+  updateSubscriptionPlans(data) {
+    return api.put('/superadmin/subscription/plans', data)
+  },
+  getSubscriptionPayments() {
+    return api.get('/superadmin/subscription-payments')
+  },
+  getOwnerSubscriptionPayments(id) {
+    return api.get(`/superadmin/owners/${id}/subscription-payments`)
+  },
+  confirmSubscriptionPayment(id) {
+    return api.post(`/superadmin/subscription-payments/${id}/confirm`)
   },
   forcePasswordChange(id) {
     return api.post(`/superadmin/owners/${id}/force-password-change`)
