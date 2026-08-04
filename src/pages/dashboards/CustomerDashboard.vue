@@ -62,6 +62,8 @@
       <div class="card dash-section">
         <h2><i class="fas fa-bolt"></i> {{ $t('dashboards.customer.quickActions') }}</h2>
         <div class="actions-grid">
+          <a v-if="whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="action-tile whatsapp"><i class="fab fa-whatsapp"></i><span>{{
+            $t('dashboards.customer.chatWhatsApp') }}</span></a>
           <router-link to="/products" class="action-tile"><i class="fas fa-shopping-bag"></i><span>{{
             $t('dashboards.customer.shopNow') }}</span></router-link>
           <router-link to="/cart" class="action-tile"><i class="fas fa-cart-plus"></i><span>{{
@@ -84,13 +86,22 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useBusinessStore } from '@/stores/business'
 import { orderApi, addressApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 
 const authStore = useAuthStore()
+const businessStore = useBusinessStore()
 const stats = ref({ totalOrders: 0, pendingOrders: 0, deliveredOrders: 0, addresses: 0 })
 const recentOrders = ref([])
 const loading = ref(true)
+
+const whatsappUrl = computed(() => {
+  const digits = (businessStore.current?.whatsapp_number || '').replace(/[^\d]/g, '')
+  if (!digits) return null
+  const msg = businessStore.current?.whatsapp_message || 'Hello!'
+  return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`
+})
 
 const hasActiveOrders = computed(() => recentOrders.value.some(o => ['pending', 'paid', 'processing', 'shipped'].includes(o.status)))
 
@@ -408,6 +419,21 @@ onMounted(async () => {
 .action-tile:hover {
   border-color: #e74c3c;
   background: #fef5f5;
+}
+
+.action-tile.whatsapp {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+
+.action-tile.whatsapp i {
+  color: #fff;
+}
+
+.action-tile.whatsapp:hover {
+  background: #1ebe5d;
+  border-color: #1ebe5d;
 }
 
 @media (max-width: 768px) {
