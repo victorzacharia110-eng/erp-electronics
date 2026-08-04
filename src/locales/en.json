@@ -82,6 +82,35 @@
     "contact": "Contact",
     "copyright": "© 2026 ElectroShop. All rights reserved."
   },
+  "whatsapp": {
+    "chat": "Chat on WhatsApp"
+  },
+  "storeSettings": {
+    "title": "Store Settings",
+    "subtitle": "WhatsApp, contact details and social media links shown on your storefront.",
+    "noBusiness": "No store found for your account yet.",
+    "selectBusiness": "Store:",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Customers will message this number with a ready-made message. Use your own number or an employee's who handles orders.",
+    "whatsappNumber": "WhatsApp Number",
+    "whatsappNumberPlaceholder": "e.g. +255 703 870 268",
+    "whatsappMessage": "Default Message",
+    "whatsappMessagePlaceholder": "e.g. Hello! I would like to know more about your products.",
+    "contact": "Contact Details",
+    "contactDesc": "Shown in the storefront header and footer.",
+    "contactPhone": "Contact Phone",
+    "contactPhonePlaceholder": "e.g. +255 703 870 268",
+    "contactEmail": "Contact Email",
+    "contactEmailPlaceholder": "e.g. sales@yourstore.com",
+    "address": "Address",
+    "addressPlaceholder": "e.g. Samora Avenue, Dar es Salaam",
+    "social": "Social Media Links",
+    "socialDesc": "Enter the full URLs (https://...) to display the icons on your storefront.",
+    "save": "Save Settings",
+    "saved": "Store settings saved",
+    "saveError": "Could not save settings. Please check the URLs.",
+    "defaultMessage": "Hello {store}! I would like to know more about your products."
+  },
   "search": {
     "placeholder": "Search products...",
     "noProducts": "No products found",
@@ -759,6 +788,7 @@
       "shippingSettings": "Shipping Settings",
       "accountingAction": "Accounting",
       "billingAction": "Billing & Subscription",
+      "storeSettingsAction": "Store Settings",
       "purchaseOrdersAction": "Purchase Orders",
       "commissionsAction": "Commissions",
       "wingasAction": "Wingas",

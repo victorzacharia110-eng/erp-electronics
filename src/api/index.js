@@ -667,4 +667,7 @@ export const businessApi = {
   mine() {
     return api.get('/businesses/mine')
   },
+  update(id, data) {
+    return api.put(`/businesses/${id}`, data)
+  },
 }

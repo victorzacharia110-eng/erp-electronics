@@ -82,6 +82,35 @@
     "contact": "Wasiliana",
     "copyright": "© 2026 ElectroShop. Haki zote zimehifadhiwa."
   },
+  "whatsapp": {
+    "chat": "Ongea kwa WhatsApp"
+  },
+  "storeSettings": {
+    "title": "Mipangilio ya Duka",
+    "subtitle": "WhatsApp, taarifa za mawasiliano na viungo vya mitandao ya kijamii vinavyoonekana kwenye duka lako.",
+    "noBusiness": "Duka halijapatikana kwa akaunti yako bado.",
+    "selectBusiness": "Duka:",
+    "whatsapp": "WhatsApp",
+    "whatsappDesc": "Wateja watampelekea ujumbe nambari hii na ujumbe ulioandaliwa. Tumia nambari yako au ya mfanyakazi anayesimamia maagizo.",
+    "whatsappNumber": "Nambari ya WhatsApp",
+    "whatsappNumberPlaceholder": "mf. +255 703 870 268",
+    "whatsappMessage": "Ujumbe wa kawaida",
+    "whatsappMessagePlaceholder": "mf. Habari! Ningependa kujua zaidi kuhusu bidhaa zenu.",
+    "contact": "Taarifa za Mawasiliano",
+    "contactDesc": "Zinaonekana kwenye kichwa na chini ya duka.",
+    "contactPhone": "Nambari ya Simu",
+    "contactPhonePlaceholder": "mf. +255 703 870 268",
+    "contactEmail": "Barua pepe",
+    "contactEmailPlaceholder": "mf. sales@duka.com",
+    "address": "Anwani",
+    "addressPlaceholder": "mf. Samora Avenue, Dar es Salaam",
+    "social": "Viungo vya Mitandao ya Kijamii",
+    "socialDesc": "Weka URL kamili (https://...) ili vionekane kwenye duka lako.",
+    "save": "Hifadhi Mipangilio",
+    "saved": "Mipangilio ya duka imehifadhiwa",
+    "saveError": "Imeshindikana kuhifadhi. Angalia URLs.",
+    "defaultMessage": "Habari {store}! Ningependa kujua zaidi kuhusu bidhaa zenu."
+  },
   "search": {
     "placeholder": "Tafuta bidhaa...",
     "noProducts": "Hakuna bidhaa zilizopatikana",
@@ -759,6 +788,7 @@
       "shippingSettings": "Mipangilio ya Usafirishaji",
       "accountingAction": "Uhasibu",
       "billingAction": "Bili na Uandikishaji",
+      "storeSettingsAction": "Mipangilio ya Duka",
       "purchaseOrdersAction": "Oda za Ununuzi",
       "commissionsAction": "Mishahara",
       "wingasAction": "Winga",

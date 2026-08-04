@@ -264,6 +264,12 @@ const routes = [
         meta: { requiresAuth: true, role: 'owner' },
       },
       {
+        path: 'owner/store-settings',
+        name: 'owner-store-settings',
+        component: () => import('@/pages/owner/StoreSettingsPage.vue'),
+        meta: { requiresAuth: true, role: 'owner' },
+      },
+      {
         path: 'supplier',
         name: 'supplier-dashboard',
         component: () => import('@/pages/supplier/SupplierPortalPage.vue'),

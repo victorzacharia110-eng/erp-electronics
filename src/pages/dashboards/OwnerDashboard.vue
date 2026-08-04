@@ -109,6 +109,8 @@
             $t('dashboards.owner.accountingAction') }}</span></router-link>
           <router-link to="/owner/billing" class="action-tile"><i class="fas fa-credit-card"></i><span>{{
             $t('dashboards.owner.billingAction') }}</span></router-link>
+          <router-link to="/owner/store-settings" class="action-tile"><i class="fas fa-store"></i><span>{{
+            $t('dashboards.owner.storeSettingsAction') }}</span></router-link>
           <router-link to="/account" class="action-tile"><i class="fas fa-user-pen"></i><span>{{ $t('account.profile') }}</span></router-link>
         </div>
       </div>

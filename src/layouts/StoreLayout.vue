@@ -3,15 +3,15 @@
     <header class="site-header">
       <div class="top-bar">
         <div class="container top-bar-inner">
-          <div class="top-bar-left">
-            <span><i class="fas fa-phone"></i> {{ $t('topBar.phone') }}</span>
-            <span><i class="fas fa-envelope"></i> {{ $t('topBar.email') }}</span>
-            <span><i class="fas fa-location-dot"></i> {{ $t('topBar.location') }}</span>
+          <div class="top-bar-left" v-if="!isDirectory && (contactPhone || contactEmail || contactAddress)">
+            <span v-if="contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</span>
+            <span v-if="contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</span>
+            <span v-if="contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</span>
           </div>
-          <div class="top-bar-right">
-            <a href="#"><i class="fab fa-facebook-f"></i></a>
-            <a href="#"><i class="fab fa-whatsapp"></i></a>
-            <a href="#"><i class="fab fa-instagram"></i></a>
+          <div class="top-bar-right" v-if="!isDirectory && socialLinks.length">
+            <a v-for="s in socialLinks" :key="s.platform" :href="s.url" target="_blank" rel="noopener" :aria-label="s.platform" :title="s.platform">
+              <i :class="s.icon"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -191,7 +191,12 @@
             <span class="logo-icon"><i class="fas fa-bolt"></i></span>
             <span class="logo-text">{{ logoTextFirst }}<span v-if="logoTextRest">{{ logoTextRest }}</span></span>
           </div>
-          <p class="footer-desc">{{ $t('footer.description') }}</p>
+          <p class="footer-desc">{{ businessStore.current?.tagline || $t('footer.description') }}</p>
+          <div class="footer-social" v-if="socialLinks.length">
+            <a v-for="s in socialLinks" :key="s.platform" :href="s.url" target="_blank" rel="noopener" :aria-label="s.platform" :title="s.platform">
+              <i :class="s.icon"></i>
+            </a>
+          </div>
         </div>
         <div>
           <h4>{{ $t('footer.quickLinks') }}</h4>
@@ -207,9 +212,15 @@
         </div>
         <div>
           <h4>{{ $t('footer.contact') }}</h4>
-          <p><i class="fas fa-phone"></i> {{ $t('topBar.phone') }}</p>
-          <p><i class="fas fa-envelope"></i> {{ $t('topBar.email') }}</p>
-          <p><i class="fas fa-location-dot"></i> {{ $t('topBar.location') }}</p>
+          <p v-if="contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</p>
+          <p v-else><i class="fas fa-phone"></i> {{ $t('topBar.phone') }}</p>
+          <p v-if="contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</p>
+          <p v-else><i class="fas fa-envelope"></i> {{ $t('topBar.email') }}</p>
+          <p v-if="contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</p>
+          <p v-else><i class="fas fa-location-dot"></i> {{ $t('topBar.location') }}</p>
+          <a v-if="whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="footer-whatsapp">
+            <i class="fab fa-whatsapp"></i> {{ $t('whatsapp.chat') }}
+          </a>
         </div>
       </div>
       <div class="footer-bottom">
@@ -218,6 +229,10 @@
         </div>
       </div>
     </footer>
+
+    <a v-if="whatsappUrl && !isDirectory" :href="whatsappUrl" target="_blank" rel="noopener" class="whatsapp-fab" :aria-label="$t('whatsapp.chat')" :title="$t('whatsapp.chat')">
+      <i class="fab fa-whatsapp"></i>
+    </a>
 
     <ChangePasswordModal v-if="authStore.mustChangePassword" @close="authStore.mustChangePassword = false" />
   </div>
@@ -260,6 +275,34 @@ const brandColorDark = computed(() => businessStore.current?.brand_color_seconda
 const storeName = computed(() => businessStore.current?.store_name || 'ElectroShop')
 const logoTextFirst = computed(() => storeName.value.split(' ')[0] || 'ElectroShop')
 const logoTextRest = computed(() => storeName.value.split(' ').slice(1).join(' '))
+
+const contactPhone = computed(() => businessStore.current?.contact_phone || '')
+const contactEmail = computed(() => businessStore.current?.contact_email || '')
+const contactAddress = computed(() => businessStore.current?.address || '')
+
+const whatsappUrl = computed(() => {
+  const digits = (businessStore.current?.whatsapp_number || '').replace(/[^\d]/g, '')
+  if (!digits) return null
+  const msg = businessStore.current?.whatsapp_message || 'Hello!'
+  return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`
+})
+
+const socialLinks = computed(() => {
+  const social = businessStore.current?.social || {}
+  const links = []
+  if (whatsappUrl.value) links.push({ platform: 'whatsapp', icon: 'fab fa-whatsapp', url: whatsappUrl.value })
+  const defs = [
+    ['facebook', 'fab fa-facebook-f'],
+    ['instagram', 'fab fa-instagram'],
+    ['twitter', 'fab fa-x-twitter'],
+    ['tiktok', 'fab fa-tiktok'],
+    ['youtube', 'fab fa-youtube'],
+  ]
+  for (const [key, icon] of defs) {
+    if (social[key]) links.push({ platform: key, icon, url: social[key] })
+  }
+  return links
+})
 
 function storeLink(path) {
   return businessStore.link(path)
@@ -822,6 +865,70 @@ footer p i {
   color: var(--brand);
   width: 18px;
   margin-right: 4px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  opacity: 1;
+  margin: 0;
+}
+
+.footer-social a:hover {
+  background: var(--brand);
+  color: #fff;
+}
+
+.footer-whatsapp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: #25d366;
+  color: #fff !important;
+  font-weight: 600;
+  opacity: 1;
+}
+
+.footer-whatsapp:hover {
+  background: #1da851;
+}
+
+.whatsapp-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+  z-index: 500;
+  transition: transform 0.2s;
+}
+
+.whatsapp-fab:hover {
+  transform: scale(1.08);
+  color: #fff;
 }
 
 .footer-bottom {
