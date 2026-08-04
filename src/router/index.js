@@ -367,6 +367,12 @@ const routes = [
         meta: { requiresAuth: true, role: 'customer' },
       },
       {
+        path: 'customer',
+        name: 'store-customer-dashboard',
+        component: () => import('@/pages/dashboards/CustomerDashboard.vue'),
+        meta: { requiresAuth: true, role: 'customer' },
+      },
+      {
         path: 'customer/inbox',
         name: 'store-customer-inbox',
         component: () => import('@/pages/customer/CustomerInboxPage.vue'),

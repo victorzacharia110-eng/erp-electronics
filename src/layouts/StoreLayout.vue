@@ -321,7 +321,7 @@ const homeLink = computed(() => {
 
 const inboxRoute = computed(() => {
   if (authStore.isOwner) return '/owner/inbox'
-  return '/customer/inbox'
+  return businessStore.link('/customer/inbox')
 })
 
 let msgPollTimer = null
@@ -346,7 +346,7 @@ const dashboardRoute = computed(() => {
   if (authStore.isSuperadmin) return '/superadmin'
   if (authStore.isOwner) return '/owner'
   if (authStore.isEmployee) return '/employee'
-  return '/customer'
+  return businessStore.link('/customer')
 })
 
 async function applyBusinessContext() {

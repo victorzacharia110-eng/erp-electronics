@@ -62,8 +62,14 @@
       <div class="card dash-section">
         <h2><i class="fas fa-bolt"></i> {{ $t('dashboards.customer.quickActions') }}</h2>
         <div class="actions-grid">
-          <a v-if="whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="action-tile whatsapp"><i class="fab fa-whatsapp"></i><span>{{
+          <a v-if="whatsappTargets.length === 1" :href="whatsappTargets[0].url" target="_blank" rel="noopener" class="action-tile whatsapp"><i class="fab fa-whatsapp"></i><span>{{
             $t('dashboards.customer.chatWhatsApp') }}</span></a>
+          <div v-else-if="whatsappTargets.length > 1" class="action-tile whatsapp wa-picker" @click="waOpen = !waOpen">
+            <i class="fab fa-whatsapp"></i><span>{{ $t('dashboards.customer.chatWhatsApp') }}</span><i class="fas fa-chevron-down"></i>
+            <div v-if="waOpen" class="wa-dropdown" @click.stop>
+              <a v-for="o in whatsappTargets" :key="o.id" :href="o.url" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i>{{ o.name }}</a>
+            </div>
+          </div>
           <router-link to="/products" class="action-tile"><i class="fas fa-shopping-bag"></i><span>{{
             $t('dashboards.customer.shopNow') }}</span></router-link>
           <router-link to="/cart" class="action-tile"><i class="fas fa-cart-plus"></i><span>{{
@@ -96,17 +102,26 @@ const stats = ref({ totalOrders: 0, pendingOrders: 0, deliveredOrders: 0, addres
 const recentOrders = ref([])
 const loading = ref(true)
 
-const whatsappUrl = computed(() => {
-  const digits = (businessStore.current?.whatsapp_number || '').replace(/[^\d]/g, '')
-  if (!digits) return null
-  const msg = businessStore.current?.whatsapp_message || 'Hello!'
-  return `https://wa.me/${digits}?text=${encodeURIComponent(msg)}`
+const whatsappTargets = computed(() => {
+  const build = (b) => {
+    const digits = (b?.whatsapp_number || '').replace(/[^\d]/g, '')
+    if (!digits) return null
+    const msg = b?.whatsapp_message || 'Hello!'
+    return { id: b.id, name: b.store_name || b.name, url: `https://wa.me/${digits}?text=${encodeURIComponent(msg)}` }
+  }
+  const current = build(businessStore.current)
+  if (current) return [current]
+  return businessStore.directory.map(build).filter(Boolean)
 })
+const waOpen = ref(false)
 
 const hasActiveOrders = computed(() => recentOrders.value.some(o => ['pending', 'paid', 'processing', 'shipped'].includes(o.status)))
 
 onMounted(async () => {
   await authStore.fetchProfile()
+  if (!businessStore.directory.length) {
+    await businessStore.fetchDirectory()
+  }
   try {
     const [orderRes, addrRes] = await Promise.all([
       orderApi.getAll({ per_page: 5 }),
@@ -425,6 +440,7 @@ onMounted(async () => {
   background: #25d366;
   border-color: #25d366;
   color: #fff;
+  position: relative;
 }
 
 .action-tile.whatsapp i {
@@ -434,6 +450,48 @@ onMounted(async () => {
 .action-tile.whatsapp:hover {
   background: #1ebe5d;
   border-color: #1ebe5d;
+}
+
+.action-tile.whatsapp.wa-picker {
+  cursor: pointer;
+}
+
+.wa-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.wa-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  text-decoration: none;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.wa-dropdown a:last-child {
+  border-bottom: none;
+}
+
+.wa-dropdown a:hover {
+  background: #f0fbf5;
+  color: #1ebe5d;
+}
+
+.wa-dropdown a i {
+  color: #25d366;
 }
 
 @media (max-width: 768px) {
