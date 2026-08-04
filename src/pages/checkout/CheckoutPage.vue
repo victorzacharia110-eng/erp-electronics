@@ -177,12 +177,13 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { useCartStore } from '@/stores/cart'
 import { useBusinessStore } from '@/stores/business'
-import { addressApi, orderApi, paymentApi, settingsApi, cartApi, orderManageApi, shippingRuleApi } from '@/api'
+import { addressApi, orderApi, paymentApi, settingsApi, cartApi, orderManageApi, shippingRuleApi, paymentProviderApi } from '@/api'
 
+const route = useRoute()
 const router = useRouter()
 const cartStore = useCartStore()
 const businessStore = useBusinessStore()
@@ -215,10 +216,6 @@ watch(() => newAddress.value.city, () => {
 
 const defaultProviders = [
   { slug: 'cash', name: 'Cash', icon: 'fas fa-money-bill-wave', number: null },
-  { slug: 'mpesa', name: 'M-Pesa', icon: 'fas fa-mobile-screen', number: '0794770268' },
-  { slug: 'airtel', name: 'Airtel Money', icon: 'fas fa-signal', number: '0683870268' },
-  { slug: 'mixx_by_yas', name: 'Mixx by Yas', icon: 'fas fa-water', number: '0703870268' },
-  { slug: 'halopesa', name: 'Halopesa', icon: 'fas fa-bolt', number: '0632870268' },
 ]
 
 const extraProviders = ref([])
@@ -330,6 +327,25 @@ async function calculateShipping() {
   }
 }
 
+async function loadPaymentConfig() {
+  const [paymentRes, providersRes] = await Promise.all([
+    settingsApi.getPayment(businessStore.activeSlug ? { business: businessStore.activeSlug } : undefined),
+    paymentProviderApi.getEnabled(businessStore.activeSlug ? { business: businessStore.activeSlug } : undefined),
+  ])
+  extraProviders.value = providersRes.data || []
+  clickpesaEnabled.value = paymentRes.data.clickpesa_enabled
+  const hasMobileMoney = mobileMoneyProviders.value.some(p => p.slug !== 'cash')
+  if (clickpesaEnabled.value) selectedPayment.value = 'clickpesa'
+  else if (hasMobileMoney) selectedPayment.value = mobileMoneyProviders.value.find(p => p.slug !== 'cash').slug
+  else selectedPayment.value = 'cash'
+}
+
+watch(() => businessStore.activeSlug, async (slug) => {
+  if (slug) {
+    try { await loadPaymentConfig() } catch { selectedPayment.value = 'cash' }
+  }
+})
+
 async function initCheckout() {
   try {
     await cartStore.fetchCart()
@@ -338,14 +354,11 @@ async function initCheckout() {
       return
     }
     try { await loadAddresses() } catch { /* user may have no addresses yet */ }
-    try {
-      const res = await settingsApi.getPayment()
-      clickpesaEnabled.value = res.data.clickpesa_enabled
-      if (clickpesaEnabled.value) selectedPayment.value = 'clickpesa'
-      else selectedPayment.value = 'cash'
-    } catch {
-      selectedPayment.value = 'cash'
+    const slug = route.params.slug
+    if (slug && businessStore.activeSlug !== slug) {
+      await businessStore.loadBySlug(slug)
     }
+    try { await loadPaymentConfig() } catch { selectedPayment.value = 'cash' }
   } finally {
     loading.value = false
   }

@@ -266,8 +266,8 @@ export const addressApi = {
 }
 
 export const settingsApi = {
-  getPayment() {
-    return api.get('/settings/payment')
+  getPayment(params) {
+    return api.get('/settings/payment', { params })
   },
   updatePayment(data) {
     return api.put('/settings/payment', data)
@@ -302,11 +302,11 @@ export const supportApi = {
 }
 
 export const paymentProviderApi = {
-  getAll() {
-    return api.get('/payment-providers')
+  getAll(params) {
+    return api.get('/payment-providers', { params })
   },
-  getEnabled() {
-    return api.get('/payment-providers')
+  getEnabled(params) {
+    return api.get('/payment-providers', { params })
   },
   manage() {
     return api.get('/payment-providers-manage')
