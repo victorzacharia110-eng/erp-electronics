@@ -191,8 +191,8 @@
             <span class="logo-icon"><i class="fas fa-bolt"></i></span>
             <span class="logo-text">{{ logoTextFirst }}<span v-if="logoTextRest">{{ logoTextRest }}</span></span>
           </div>
-          <p class="footer-desc">{{ businessStore.current?.tagline || $t('footer.description') }}</p>
-          <div class="footer-social" v-if="socialLinks.length">
+          <p class="footer-desc">{{ isDirectory ? $t('footer.description') : (businessStore.current?.tagline || $t('footer.description')) }}</p>
+          <div class="footer-social" v-if="!isDirectory && socialLinks.length">
             <a v-for="s in socialLinks" :key="s.platform" :href="s.url" target="_blank" rel="noopener" :aria-label="s.platform" :title="s.platform">
               <i :class="s.icon"></i>
             </a>
@@ -212,13 +212,13 @@
         </div>
         <div>
           <h4>{{ $t('footer.contact') }}</h4>
-          <p v-if="contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</p>
+          <p v-if="!isDirectory && contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</p>
           <p v-else><i class="fas fa-phone"></i> {{ $t('topBar.phone') }}</p>
-          <p v-if="contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</p>
+          <p v-if="!isDirectory && contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</p>
           <p v-else><i class="fas fa-envelope"></i> {{ $t('topBar.email') }}</p>
-          <p v-if="contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</p>
+          <p v-if="!isDirectory && contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</p>
           <p v-else><i class="fas fa-location-dot"></i> {{ $t('topBar.location') }}</p>
-          <a v-if="whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="footer-whatsapp">
+          <a v-if="!isDirectory && whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="footer-whatsapp">
             <i class="fab fa-whatsapp"></i> {{ $t('whatsapp.chat') }}
           </a>
         </div>
@@ -270,9 +270,15 @@ const unreadMsgCount = ref(0)
 const businessSlug = computed(() => route.params.businessSlug || null)
 const isDirectory = computed(() => route.name === 'home' && !businessSlug.value)
 
-const brandColor = computed(() => businessStore.current?.brand_color || 'var(--brand)')
-const brandColorDark = computed(() => businessStore.current?.brand_color_secondary || 'var(--brand-dark)')
-const storeName = computed(() => businessStore.current?.store_name || 'ElectroShop')
+const brandColor = computed(() =>
+  businessSlug.value ? businessStore.current?.brand_color || 'var(--brand)' : 'var(--brand)'
+)
+const brandColorDark = computed(() =>
+  businessSlug.value ? businessStore.current?.brand_color_secondary || 'var(--brand-dark)' : 'var(--brand-dark)'
+)
+const storeName = computed(() =>
+  businessSlug.value ? businessStore.current?.store_name || 'ElectroShop' : 'ElectroShop'
+)
 const logoTextFirst = computed(() => storeName.value.split(' ')[0] || 'ElectroShop')
 const logoTextRest = computed(() => storeName.value.split(' ').slice(1).join(' '))
 

@@ -57,7 +57,6 @@ export const useBusinessStore = defineStore('business', () => {
     if (cached) {
       current.value = cached
       persist()
-      return cached
     }
     try {
       const res = await businessApi.bySlug(slug)
@@ -65,6 +64,7 @@ export const useBusinessStore = defineStore('business', () => {
       persist()
       return res.data
     } catch {
+      if (cached) return cached
       current.value = null
       return null
     }
