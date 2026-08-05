@@ -180,6 +180,7 @@ onMounted(async () => {
   color: inherit;
   transition: all 0.3s;
   position: relative;
+  min-width: 0;
 }
 
 .store-card:hover {
