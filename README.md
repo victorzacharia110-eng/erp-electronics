@@ -7,14 +7,18 @@ Vue 3 single-page application for the ERP Electronics Store — an e-commerce st
 Generated PDF documentation lives in [`docs/`](docs/):
 
 - `User_Manual_EN.pdf` / `User_Manual_SW.pdf` — end-user manuals (English & Swahili)
+- `Supplier_Manual_EN.pdf` / `Supplier_Manual_SW.pdf` — supplier portal manuals (English & Swahili)
 - `Developer_Documentation.pdf` — developer & technical documentation (architecture, brand identity, API, superadmin module, security, deployment)
+- `*_Documentation.pdf` — PDF companions for the diagrams below
 - `*.drawio` — ERD, class, use case, and sequence diagrams (open in [diagrams.net](https://app.diagrams.net))
 
 Regenerate the PDFs from the repo root:
 
 ```sh
-python3 generate_manual.py     # user manuals
-python3 generate_dev_doc.py    # developer documentation
+python3 generate_manual.py           # user manuals
+python3 generate_supplier_manual.py  # supplier manuals
+python3 generate_dev_doc.py          # developer documentation
+python3 generate_diagrams.py         # drawio diagrams + their PDF companions
 ```
 
 Full developer notes: [`MyDocumentationNotes/PROJECT.md`](MyDocumentationNotes/PROJECT.md).

@@ -568,6 +568,7 @@ def gen_class():
         '- subscription_plan: string',
         '- max_products / max_employees: int',
         '- brand_store_name / tagline: string',
+        '- whatsapp_number / whatsapp_default_message: string',
     ], [
         '+ user(): BelongsTo',
     ], fill='#d5e8d4')
@@ -755,6 +756,7 @@ def gen_uc():
     uc23 = d.oval(2150, 1010, 'Contact Support')
     uc24 = d.oval(2150, 1100, 'Manage Addresses')
     uc25 = d.oval(2150, 1190, 'Message Owner (Inbox)')
+    uc26 = d.oval(2150, 1280, 'Chat on WhatsApp')
 
     for uc in [uc1,uc2,uc3,uc4,uc5]:
         d.edge(sa, uc, 'manages', color='#2980b9', labelBg='#d6eaf8')
@@ -762,7 +764,7 @@ def gen_uc():
         d.edge(ow, uc, 'manages', color='#27ae60', labelBg='#d5f5e3')
     for uc in [uc14,uc15,uc16,uc17,uc18]:
         d.edge(em, uc, 'handles', color='#c0392b', labelBg='#fdedec')
-    for uc in [uc19,uc20,uc21,uc22,uc23,uc24,uc25]:
+    for uc in [uc19,uc20,uc21,uc22,uc23,uc24,uc25,uc26]:
         d.edge(cu, uc, 'uses', color='#d79b00', labelBg='#fef5e7')
     d.edge(ai, uc12, 'powers', ex=0, ey=0.5, ix=1, iy=0.5, color='#8e44ad', labelBg='#f4ecf7')
 

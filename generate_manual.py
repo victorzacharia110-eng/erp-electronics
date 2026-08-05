@@ -168,8 +168,8 @@ def build_en():
     el += cover_page(
         'ERP Electronics Store',
         'User Manual',
-        'Version 3.0',
-        'July 2026'
+        'Version 3.1',
+        'August 2026'
     )
 
     # ── Table of Contents ──
@@ -181,7 +181,7 @@ def build_en():
         ('3.', 'Employee Management'),
         ('4.', 'Branch Management'),
         ('5.', 'Product Management'),
-        ('6.', 'Payment Settings'),
+        ('6.', 'Payment & Store Settings'),
         ('7.', 'Shipping Settings'),
         ('8.', 'Reports & Analytics'),
         ('9.', 'Employee Dashboard'),
@@ -241,7 +241,7 @@ def build_en():
         '<b>Sales Analytics Charts</b> — Interactive bar and line charts showing Revenue vs Profit, Orders Trend, Items Sold, and Revenue by Category. Use the period selector to toggle between 6 and 12 months.',
         '<b>AI Business Insights</b> — AI-powered suggestions from Google Gemini analyzing your business data. Suggestions are categorized by priority (High/Medium/Low) and type (Inventory, Pricing, Marketing, Growth, Operations). Click "Refresh" to regenerate insights.',
         '<b>Recent Orders</b> — Quick view of the latest orders with status badges. Click "View All" to go to full Order Management.',
-        '<b>Quick Actions</b> — Tiles to jump to Employees, Products, Orders, Reports, Inventory, Payment Settings, and Shipping Settings.',
+        '<b>Quick Actions</b> — Tiles to jump to Employees, Products, Orders, Reports, Inventory, Payment Settings, Shipping Settings, and Store Settings.',
         '<b>Products Overview</b> — Top products listed by name, brand, and price. Click "View All" for full product management.',
     ]))
     el.append(PageBreak())
@@ -339,8 +339,8 @@ def build_en():
     el.append(body('Click the delete icon on any product row. Confirm the deletion when prompted. Note: Products with existing orders cannot be deleted.'))
     el.append(PageBreak())
 
-    # ── Chapter 6: Payment Settings ──
-    el.append(chapter('6. Payment Settings (Owner)'))
+    # ── Chapter 6: Payment & Store Settings ──
+    el.append(chapter('6. Payment & Store Settings (Owner)'))
     el.append(hr())
     el.append(body('Configure payment methods from <b>Owner → Payment Settings</b>.'))
     el.append(spacer())
@@ -355,6 +355,18 @@ def build_en():
         '<b>Toggle</b> providers enabled/disabled.',
         '<b>Delete</b> a provider you no longer accept.',
     ]))
+    el.append(spacer())
+    el.append(section('WhatsApp & Store Contact (Store Settings)'))
+    el.append(body('From <b>Owner → Store Settings</b> you control the contact details customers see on your storefront:'))
+    el.extend(bullet_list([
+        '<b>WhatsApp Number</b> — the number customers message through the WhatsApp chat buttons.',
+        '<b>Default WhatsApp Message</b> — the ready-made message pre-filled when a customer taps "Chat on WhatsApp".',
+        '<b>Contact Phone & Email</b> — shown in the storefront header and footer.',
+        '<b>Address</b> — your physical location.',
+        '<b>Social Links</b> — optional Facebook, Instagram, Twitter, TikTok and YouTube URLs.',
+    ]))
+    el.append(spacer())
+    el.append(note('If the WhatsApp number is left empty, the system uses an employee\'s phone number, then the WhatsApp number on your account profile, and finally your own phone number. The message shown is your store\'s default message, otherwise the profile default, otherwise a standard greeting such as "Hello {Store}! I would like to know more about your products."'))
     el.append(PageBreak())
 
     # ── Chapter 7: Shipping Settings ──
@@ -775,6 +787,14 @@ def build_en():
         'Click <b>"Add to Cart"</b>.',
         'The cart icon in the header updates with the item count.',
     ]))
+    el.append(spacer())
+    el.append(section('Contacting the Store on WhatsApp'))
+    el.append(body('Every storefront shows a <b>floating WhatsApp button</b> in the bottom corner and a <b>"Chat on WhatsApp"</b> link in the footer.'))
+    el.extend(bullet_list([
+        'Tapping the WhatsApp button opens a chat with the store\'s WhatsApp number, with a ready-made message already written for you.',
+        'The store\'s contact phone number and email are displayed in the header and footer of the storefront.',
+        'The WhatsApp number and default message are configured by the owner under <b>Store Settings</b> (see Chapter 6).',
+    ]))
     el.append(PageBreak())
 
     # ── Chapter 20: Checkout & Payment ──
@@ -786,7 +806,7 @@ def build_en():
         'Select or add a <b>delivery address</b>.',
         'Choose <b>delivery option</b>: Pickup (free) or Home Delivery (shipping fee calculated automatically based on your city).',
         'Select a <b>payment method</b>: Cash, M-Pesa, Airtel Money, Mixx by Yas, or Halopesa.',
-        'If paying via mobile money, enter your phone number.',
+        'If paying via mobile money, enter your phone number. Use the <b>country code dropdown</b> next to the field to select your country (e.g., +255 Tanzania), and the number is formatted automatically as you type.',
         'Click <b>"Place Order"</b>.',
         'For <b>Cash</b>: Your order is confirmed immediately. Collect at the shop.',
         'For <b>Mobile Money</b>: Send payment to the displayed number. Your order will be confirmed by staff.',
@@ -800,6 +820,7 @@ def build_en():
     el.append(spacer())
     el.extend(bullet_list([
         '<b>Dashboard</b> — See order stats: Total Orders, In Progress, Delivered.',
+        '<b>WhatsApp</b> — Quick link to chat with the store on WhatsApp (same ready-made message as the storefront button).',
         '<b>Order History</b> — View all past orders with status and details.',
         '<b>Support</b> — Send messages about payment issues, order status, delivery, or refund requests. View replies from staff.',
         '<b>Inbox</b> — Chat with the store owner about your orders. You can delete one of your own sent messages (trash icon on the message) or the entire conversation (trash icon at the top of the chat).',
@@ -868,7 +889,7 @@ def build_en():
     el.append(spacer())
     el.append(spacer())
     el.append(hr())
-    el.append(Paragraph('<b>ERP Electronics Store</b> — User Manual v3.0 — July 2026', sFooter))
+    el.append(Paragraph('<b>ERP Electronics Store</b> — User Manual v3.1 — August 2026', sFooter))
     el.append(Paragraph('For technical support, contact your system administrator.', sFooter))
 
     return el
@@ -885,8 +906,8 @@ def build_sw():
     el += cover_page(
         'Duka la Elektroniki ERP',
         'Manual ya Mtumiaji',
-        'Toleo 3.0',
-        'Julai 2026'
+        'Toleo 3.1',
+        'Agosti 2026'
     )
 
     # ── Yaliyomo ──
@@ -898,7 +919,7 @@ def build_sw():
         ('3.', 'Usimamizi wa Wafanyakazi'),
         ('4.', 'Usimamizi wa Matawi'),
         ('5.', 'Usimamizi wa Bidhaa'),
-        ('6.', 'Mipangilio ya Malipo'),
+        ('6.', 'Mipangilio ya Malipo na Duka'),
         ('7.', 'Mipangilio ya Usafirishaji'),
         ('8.', 'Ripoti na Uchambuzi'),
         ('9.', 'Dashibodi ya Mfanyakazi'),
@@ -958,7 +979,7 @@ def build_sw():
         '<b>Chati za Uchambuzi wa Mauzo</b> — Chati za bar na mstari zinaonyesha Mapato dhidi ya Faida, Mwenendo wa Oda, Bidhaa Zilizouzwa, na Mapato kwa Kategoria. Tumia kichaguzi cha kipindi kubadilisha kati ya miezi 6 na 12.',
         '<b>Maarifa ya Biashara ya AI</b> — Mapendekezo ya AI kutoka Google Gemini yanayochambua data ya biashara yako. Mapendekezo yamegawanywa kwa kipaumbele (Juu/Wastani/Chini) na aina (Hifadhi, Bei, Matangazo, Ukuaji, Uendeshaji). Bofya "Sahihisha" ili kujenga upya.',
         '<b>Oda za Hivi Karibuni</b> — Mtazamo wa haraka wa oda za mwisho kwa vigezo vya hali. Bofya "Angalia Zote" kwenda kwenye Usimamizi kamili wa Oda.',
-        '<b>Hatua za Haraka</b> — Tiles za kufikia Wafanyakazi, Bidhaa, Oda, Ripoti, Hifadhi, Mipangilio ya Malipo, na Mipangilio ya Usafirishaji.',
+        '<b>Hatua za Haraka</b> — Tiles za kufikia Wafanyakazi, Bidhaa, Oda, Ripoti, Hifadhi, Mipangilio ya Malipo, Mipangilio ya Usafirishaji, na Mipangilio ya Duka.',
         '<b>Muhtasari wa Bidhaa</b> — Bidhaa bora kwa jina, chapa, na bei. Bofya "Angalia Zote" kwa usimamizi kamili.',
     ]))
     el.append(PageBreak())
@@ -1053,8 +1074,8 @@ def build_sw():
     el.append(body('Bofya ikoni ya kufuta kwenye safu yoyote ya bidhaa. Thibitisha ufungaji uliokizwa. Tahadhari: Bidhaa zenye oda zilizopo hazifutwi.'))
     el.append(PageBreak())
 
-    # ── Sura ya 6: Mipangilio ya Malipo ──
-    el.append(chapter('6. Mipangilio ya Malipo (Mmiliki)'))
+    # ── Sura ya 6: Mipangilio ya Malipo na Duka ──
+    el.append(chapter('6. Mipangilio ya Malipo na Duka (Mmiliki)'))
     el.append(hr())
     el.append(body('Sanidi njia za malipo kutoka <b>Mmiliki → Mipangilio ya Malipo</b>.'))
     el.append(spacer())
@@ -1069,6 +1090,18 @@ def build_sw():
         '<b>Washa/Zima</b> watoa huduma.',
         '<b>Futa</b> mtoa huduma ambaye huna tena.',
     ]))
+    el.append(spacer())
+    el.append(section('WhatsApp na Mawasiliano ya Duka (Mipangilio ya Duka)'))
+    el.append(body('Kutoka <b>Mmiliki → Mipangilio ya Duka</b> unadhibiti maelezo ya mawasiliano ambayo wateja wanaona kwenye duka lako la mtandaoni:'))
+    el.extend(bullet_list([
+        '<b>Nambari ya WhatsApp</b> — nambari ambayo wateja hutumia kupitia vifungo vya mazungumzo ya WhatsApp.',
+        '<b>Ujumbe Chaguo-Msingi wa WhatsApp</b> — ujumbe uliotayarishwa mapema unaojazwa kiotomatiki mteja anapobofya "Zungumza kwenye WhatsApp".',
+        '<b>Simu na Barua Pepe za Mawasiliano</b> — zinazoonyeshwa kwenye kichwa na chini ya duka.',
+        '<b>Anwani</b> — eneo lako halisi.',
+        '<b>Viungo vya Mitandao ya Kijamii</b> — viungo vya hiari vya Facebook, Instagram, Twitter, TikTok na YouTube.',
+    ]))
+    el.append(spacer())
+    el.append(note('Ikiwa nambari ya WhatsApp imeachwa wazi, mfumo unatumia nambari ya mfanyakazi, kisha nambari ya WhatsApp kwenye wasifu wako, na hatimaye nambari yako ya simu. Ujumbe unaoonyeshwa ni ujumbe chaguo-msingi wa duka, kisha ule wa wasifu, kisha salamu ya kawaida kama "Hello {Duka}! Ningependa kujua zaidi kuhusu bidhaa zako."'))
     el.append(PageBreak())
 
     # ── Sura ya 7: Mipangilio ya Usafirishaji ──
@@ -1490,6 +1523,14 @@ def build_sw():
         'Bofya <b>"Ongeza kwenye Kikapu"</b>.',
         'Ikoni ya kikapu kwenye upau wa juu inasahihishwa na idadi ya bidhaa.',
     ]))
+    el.append(spacer())
+    el.append(section('Kuwasiliana na Duka kupitia WhatsApp'))
+    el.append(body('Kila duka la mtandaoni linaonyesha <b>kitufe cha WhatsApp kinachoelea</b> kwenye kona ya chini na kiungo cha <b>"Zungumza kwenye WhatsApp"</b> kwenye chini ya duka.'))
+    el.extend(bullet_list([
+        'Kubofya kitufe cha WhatsApp kunafungua mazungumzo na nambari ya WhatsApp ya duka, na ujumbe uliotayarishwa mapema umeandikwa tayari kwako.',
+        'Nambari ya simu na barua pepe za mawasiliano za duka zinaonyeshwa kwenye kichwa na chini ya duka la mtandaoni.',
+        'Nambari ya WhatsApp na ujumbe chaguo-msingi husanifiwa na mmiliki chini ya <b>Mipangilio ya Duka</b> (tazama Sura ya 6).',
+    ]))
     el.append(PageBreak())
 
     # ── Sura ya 20: Malipo na Uthibitishaji ──
@@ -1501,7 +1542,7 @@ def build_sw():
         'Chagua au ongeza <b>anwani ya usafirishaji</b>.',
         'Chagua <b>chaguo la usafirishaji</b>: Chukua Dukani (bure) au Usafirishaji wa Nyumbani (ada inakokolewa kiotomatiki kulingana na jiji lako).',
         'Chagua <b>njia ya malipo</b>: Pesa Taslimu, M-Pesa, Airtel Money, Mixx by Yas, au Halopesa.',
-        'Ikiwa unalipia kupitia pesa za simu, weka nambari yako ya simu.',
+        'Ikiwa unalipia kupitia pesa za simu, weka nambari yako ya simu. Tumia <b>orodha ya msimbo wa nchi</b> karibu na sehemu ya nambari kuchagua nchi yako (mfano, +255 Tanzania), na nambari inasahihishwa kiotomatiki unapoandika.',
         'Bofya <b>"Weka Oda"</b>.',
         'Kwa <b>Pesa Taslimu</b>: Oda yako inathibitishwa mara moja. Chukua dukani.',
         'Kwa <b>Pesa za Simu</b>: Tuma malipo kwa nambari iliyoonyeshwa. Oda yako itathibishwa na wafanyakazi.',
@@ -1515,6 +1556,7 @@ def build_sw():
     el.append(spacer())
     el.extend(bullet_list([
         '<b>Dashibodi</b> — Ona takwimu za oda: Oda Jumla, Inachakatwa, Imefikishwa.',
+        '<b>WhatsApp</b> — Kiungo cha haraka cha kuzungumza na duka kwenye WhatsApp (ujumbe ule ule uliotayarishwa mapema kama kitufe cha duka).',
         '<b>Historia ya Oda</b> — Angalia oda zote za zamani kwa hali na maelezo.',
         '<b>Msaada</b> — Tuma ujumbe kuhusu masuala ya malipo, hali ya oda, usafirishaji, au maombi ya kurejeshewa pesa. Angalia majibu kutoka kwa wafanyakazi.',
         '<b>Kikasha</b> — Mazungumzo na mmiliki wa duka kuhusu oda zako. Unaweza kufuta ujumbe wako uliotumwa (aikoni ya takataka kwenye ujumbe) au mazungumzo yote (aikoni ya takataka juu ya mazungumzo).',
@@ -1583,7 +1625,7 @@ def build_sw():
     el.append(spacer())
     el.append(spacer())
     el.append(hr())
-    el.append(Paragraph('<b>ERP Duka la Elektroniki</b> — Manual ya Mtumiaji Toleo 3.0 — Julai 2026', sFooter))
+    el.append(Paragraph('<b>ERP Duka la Elektroniki</b> — Manual ya Mtumiaji Toleo 3.1 — Agosti 2026', sFooter))
     el.append(Paragraph('Kwa msaada wa kiufundi, wasiliana na msimamizi wako wa mfumo.', sFooter))
 
     return el

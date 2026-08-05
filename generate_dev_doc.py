@@ -187,7 +187,7 @@ def cover_page():
         [Spacer(1, 30)],
         [HRFlowable(width="55%", thickness=2, color=RED, spaceBefore=4, spaceAfter=4)],
         [Spacer(1, 14)],
-        [Paragraph('Version 2.3 &nbsp;|&nbsp; August 2026', sCoverMeta)],
+        [Paragraph('Version 2.4 &nbsp;|&nbsp; August 2026', sCoverMeta)],
         [Paragraph('Software Developers &middot; System Administrators &middot; Superadmins', sCoverMeta)],
     ], colWidths=[480])
     txt.setStyle(TableStyle([
@@ -205,7 +205,7 @@ def add_page_number(canvas, doc):
     canvas.saveState()
     canvas.setFont('DejaVu', 8)
     canvas.setFillColor(GRAY)
-    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.3  ·  Page {doc.page}')
+    canvas.drawCentredString(A4[0] / 2, 20 * mm, f'ERP Electronics Store — Developer Documentation v2.4  ·  Page {doc.page}')
     canvas.restoreState()
 
 
@@ -232,7 +232,7 @@ def ch_document_control():
     el.append(chapter('1. Document Control'))
     el.append(hr())
     el.append(info_table([
-        ('Version', '2.3'),
+        ('Version', '2.4'),
         ('Date', 'August 2026'),
         ('Status', 'Released'),
         ('Audience', 'Software developers, system administrators, superadmins, and technical stakeholders'),
@@ -363,7 +363,7 @@ def ch_repo_layout():
         '    ├── composables/             # useTablePagination.js',
         '    ├── layouts/                 # StoreLayout, SuperadminLayout, StoreFooter',
         '    ├── locales/                 # i18n.js, sw.json, en.json',
-        '    ├── pages/                   # 53 pages across 13 areas',
+        '    ├── pages/                   # 57 pages across 13 areas',
         '    ├── router/                  # routes + navigation guard',
         '    ├── stores/                  # auth, business, cart, products, session',
         '    ├── utils/                   # image.js',
@@ -377,9 +377,9 @@ def ch_repo_layout():
         '├── app/',
         '│   ├── Console/Commands/        # 5 artisan commands',
         '│   ├── Exceptions/              # AccountingException',
-        '│   ├── Http/Controllers/Api/    # 31 controllers',
+        '│   ├── Http/Controllers/Api/    # 32 controllers',
         '│   ├── Http/Middleware/         # Owner, Superadmin, Supplier',
-        '│   ├── Models/                  # 38 Eloquent models',
+        '│   ├── Models/                  # 39 Eloquent models',
         '│   ├── Providers/               # AppServiceProvider (macros + limiters)',
         '│   ├── Services/                # AccountingEntryService, AccountingReportService, AiSuggestionService',
         '│   └── Support/                 # Tenant.php (multi-tenancy resolver)',
@@ -387,9 +387,9 @@ def ch_repo_layout():
         '├── config/                      # app, auth, database, filesystems, sanctum, services…',
         '├── database/',
         '│   ├── factories/UserFactory.php',
-        '│   ├── migrations/              # 56 migrations',
+        '│   ├── migrations/              # 64 migrations',
         '│   └── seeders/                 # DatabaseSeeder, SuperadminSeeder, AccountingSeeder',
-        '├── routes/                      # api.php (175 routes), web.php, console.php',
+        '├── routes/                      # api.php (190 routes), web.php, console.php',
         '└── tests/                       # Feature + Unit tests',
     ]))
     el.append(PageBreak())
@@ -408,7 +408,7 @@ def ch_frontend():
         (mono('src/main.js'), 'Application entry point. Creates the Vue app, registers Pinia (with the persistedstate plugin), the router, and i18n. Installs a global helper <font face="Mono">$storeLink</font> that routes links through the business store (slug-aware). Mounts #app.'),
         (mono('src/App.vue'), 'Root component: renders <font face="Mono">&lt;router-view/&gt;</font> plus the session warning modal. Watches the auth token to start/stop the idle-session timer. Hosts global CSS (Inter font, .btn, .card, .container, form styles, selection color).'),
         (mono('src/api/axios.js'), 'Single Axios instance. Base URL from <font face="Mono">VITE_API_URL</font> (default localhost:8000/api). Request interceptor injects the Bearer token and the X-Business-Id header. Response interceptor clears the token and redirects to /login on any 401.'),
-        (mono('src/api/index.js'), 'The API barrel — 38 typed modules (authApi, employeeApi, branchApi, …) that map one-to-one to backend routes. Every page imports its endpoints from here; see §9 for the route mapping.'),
+        (mono('src/api/index.js'), 'The API barrel — 36 typed modules (authApi, employeeApi, branchApi, …) that map one-to-one to backend routes. Every page imports its endpoints from here; see §9 for the route mapping.'),
         (mono('src/locales/i18n.js'), 'Creates the vue-i18n instance (legacy: false). Locale is read from localStorage (key <font face="Mono">locale</font>), defaulting to <b>sw</b> with <b>en</b> as fallback.'),
         (mono('src/locales/sw.json'), 'Swahili message catalog (hundreds of keys across nav, pages, forms, validation).'),
         (mono('src/locales/en.json'), 'English message catalog; mirror of sw.json keys.'),
@@ -433,7 +433,7 @@ def ch_frontend():
 
     el.append(section('5.4 Layouts'))
     el.append(info_table(header=['File', 'Purpose'], col_widths=[200, 280], rows=[
-        (mono('src/layouts/StoreLayout.vue'), 'The storefront shell: top bar, search, header actions (cart badge, inbox badge with 15 s unread polling, dashboard link, logout), primary nav with top 5 categories, mobile dropdown, and footer. Applies the business brand colors as CSS variables (<font face="Mono">--brand</font>, <font face="Mono">--brand-dark</font>) and the store name in the logo. Mounts the forced-password ChangePasswordModal. Resolves the business context (slug mode vs directory) on mount and when the slug changes.'),
+        (mono('src/layouts/StoreLayout.vue'), 'The storefront shell: top bar, search, header actions (cart badge, inbox badge with 15 s unread polling, dashboard link, logout), primary nav with top 5 categories, mobile dropdown, and footer. Applies the business brand colors as CSS variables (<font face="Mono">--brand</font>, <font face="Mono">--brand-dark</font>) and the store name in the logo. Mounts the forced-password ChangePasswordModal. Resolves the business context (slug mode vs directory) on mount and when the slug changes. Also renders the floating WhatsApp button and the footer "Chat on WhatsApp" link, built as <font face="Mono">https://wa.me/{digits}?text={encodeURIComponent(message)}</font> from the business\'s resolved WhatsApp config (see §7 Business Contact Resolution).'),
         (mono('src/layouts/SuperadminLayout.vue'), 'Shell for the /superadmin panel: sidebar navigation (dashboard, owners, inbox), top bar with the platform name.'),
         (mono('src/layouts/StoreFooter.vue'), 'Standalone footer component. Not imported by any current page (the footer is inlined in StoreLayout.vue); retained as a reusable footer for storefront pages.'),
     ]))
@@ -447,6 +447,7 @@ def ch_frontend():
         (mono('src/components/SkeletonLoader.vue'), 'Loading placeholder block used by pages while fetching data.'),
         (mono('src/components/TablePagination.vue'), 'Shared pagination bar (per-page count, page links, show-all toggle) bound to the useTablePagination composable.'),
         (mono('src/components/product/ProductCard.vue'), 'Storefront product card: image (via imageUrl), name, price, add-to-cart button; used by the product list, home, and search results.'),
+        (mono('src/components/PhoneInput.vue'), 'Phone number field with a country-code dropdown (19 countries, default +255 Tanzania) and live per-country masking as the user types. Used by checkout, register, and every profile/branch/employee/supplier/winga/owner form.'),
     ]))
     el.append(spacer(8))
 
@@ -467,10 +468,10 @@ def ch_frontend():
         (mono('pages/cart/CartPage.vue'), 'Cart review: line items, quantities, subtotal, shipping estimate, proceed to checkout.'),
         (mono('pages/checkout/CheckoutPage.vue'), 'Checkout: delivery-required toggle, address selection, shipping-cost calculation (/shipping/calculate), payment provider choice (M-Pesa/Airtel/Mixx/Halopesa/ClickPesa/cash), optional winga reference; places the order and shows the payment outcome.'),
         (mono('pages/account/OrdersPage.vue'), 'Order history for the logged-in user with status, items, and payments.'),
-        (mono('pages/account/AccountPage.vue'), 'Profile + address book (CRUD via addressApi) and account settings.'),
+        (mono('pages/account/AccountPage.vue'), 'Profile + address book (CRUD via addressApi), account settings, and the owner\'s WhatsApp fields (whatsapp_number + whatsapp_default_message, used as the fallback storefront chat config).'),
         (mono('pages/account/SupportPage.vue'), 'Customer support tickets: create a ticket against an order, view replies and status.'),
         (mono('pages/customer/CustomerInboxPage.vue'), 'Customer chat with the store owner (conversationApi); live unread badges; WhatsApp-style ticks on sent messages (faded single check = delivered, solid double check = read).'),
-        (mono('pages/dashboards/CustomerDashboard.vue'), 'Customer landing after login: quick stats, recent orders, quick links.'),
+        (mono('pages/dashboards/CustomerDashboard.vue'), 'Customer landing after login: quick stats, recent orders, quick links, and a WhatsApp action tile that opens the store chat with the pre-filled message.'),
     ]))
     el.append(spacer(8))
 
@@ -497,6 +498,7 @@ def ch_frontend():
         (mono('pages/owner/EmployeeManagementPage.vue'), 'Employee CRUD: NIDA/voting IDs, branch assignment, commission rate, guarantors (Wadhamini), document uploads, reset password.'),
         (mono('pages/owner/BranchManagementPage.vue'), 'Branches CRUD with default branch, order/employee counts.'),
         (mono('pages/owner/PaymentSettingsPage.vue'), 'Payment providers management and the ClickPesa enable flag.'),
+        (mono('pages/owner/StoreSettingsPage.vue'), 'Store contact & social settings (route owner/store-settings): WhatsApp number + default message, contact phone/email, address, and the social URLs (Facebook/Instagram/Twitter/TikTok/YouTube). Saves via PUT /businesses/{business}; refreshes the business store so the storefront reflects the changes.'),
         (mono('pages/owner/ShippingSettingsPage.vue'), 'Shipping rules CRUD (from/to city, base cost, value-based tiers).'),
         (mono('pages/owner/ReportsPage.vue'), 'Daily and summary sales reports.'),
         (mono('pages/owner/InventoryManagementPage.vue'), 'Inventory dashboard: stock levels, adjust (opening/adjustment/damage), transactions log, low-stock list.'),
@@ -621,12 +623,12 @@ def ch_backend():
     ]))
     el.append(spacer(8))
 
-    el.append(section('6.4 Controllers (app/Http/Controllers/Api/) — 31'))
+    el.append(section('6.4 Controllers (app/Http/Controllers/Api/) — 32'))
     el.append(info_table(header=['Controller', 'Area', 'Responsibilities'], col_widths=[150, 110, 220], rows=[
         ('AuthController', 'Auth', 'register (public, creates customer), login (lockout + attempts + flags), logout, profile, updateProfile, changePassword.'),
         ('ProductController', 'Catalog', 'Public index/show/featured (business-scoped) + owner store/update/destroy/manage with variant + inventory creation and image handling.'),
         ('CategoryController', 'Catalog', 'Public category tree + detail with active products; translated names.'),
-        ('BusinessController', 'Multi-store', 'Public index/by-slug; owner mine; presentation of store_name/colors.'),
+        ('BusinessController', 'Multi-store', 'Public index/by-slug; owner mine + update (whatsapp/contact/social fields); presentation of store_name/colors and the WhatsApp number/message resolution chain.'),
         ('CartController', 'Commerce', 'Cart-as-pending_payment-order: index/add/update/remove/clear with stock checks and recalculation.'),
         ('OrderController', 'Commerce', 'Checkout store, index/show, manage, updateStatus (lifecycle + auto-journaling), updateDelivery, returnItems (partial returns).'),
         ('PaymentController', 'Commerce', 'initiate (auto-confirms ClickPesa/cash), webhook (no auth), status.'),
@@ -652,8 +654,8 @@ def ch_backend():
         ('PurchaseOrderController', 'Procurement', 'PO index/store/show/receive/destroy + supplier-portal supplierOrders/supplierShow/supplierUpdateStatus.'),
         ('SupplierController', 'Procurement', 'Supplier CRUD + documents + portal profile.'),
         ('StockAlertController', 'Inventory', 'index/count/acknowledge/resolve + static checkLowStock used by other flows.'),
-        ('SettingsController', 'Platform', 'Public payment flag + branding + home content (defaults merged over stored JSON); owner updatePayment; superadmin updateHomeContent (whitelisted keys).'),
-        ('SuperadminController', 'Platform', 'Stats, owner CRUD, subscription/limits/branding/logo, password status/reset/set/force/unlock, all-password status.'),
+        ('SettingsController', 'Platform', 'Public payment flag + branding + home content (defaults merged over stored JSON) + platform-info (superadmin name/phone/email); owner updatePayment; superadmin updateHomeContent (whitelisted keys).'),
+        ('SuperadminController', 'Platform', 'Stats, owner CRUD, subscription/limits/branding/logo, extend-trial (trial auto-deactivation on expiry), password status/reset/set/force/unlock, all-password status.'),
     ]))
     el.append(spacer(8))
 
@@ -713,12 +715,12 @@ def ch_schema():
     el = []
     el.append(chapter('7. Database Schema & Models'))
     el.append(hr())
-    el.append(body('The database contains <b>46 business tables</b> plus Laravel framework tables, built by <b>56 migrations</b>. A full entity-relationship diagram is available as <b>ERD.drawio</b> (crow\'s foot notation). This section lists the tables by domain and the notable columns added by later migrations.'))
+    el.append(body('The database contains <b>38 business tables</b> plus 9 Laravel framework tables, built by <b>64 migrations</b>. A full entity-relationship diagram is available as <b>ERD.drawio</b> (crow\'s foot notation). This section lists the tables by domain and the notable columns added by later migrations.'))
     el.append(spacer(8))
     el.append(section('Tables by Domain'))
     el.append(info_table(header=['Domain', 'Tables'], col_widths=[120, 360], rows=[
         ('Identity', 'users, customer_profiles, employee_profiles, owner_profiles, personal_access_tokens'),
-        ('Multi-store', 'businesses, business_user'),
+        ('Multi-store', 'businesses, business_user, subscription_payments'),
         ('Catalog', 'categories, products, product_variants, inventory'),
         ('Commerce', 'addresses, branches, orders, order_items, payments, payment_providers, shipping_rules'),
         ('Support', 'support_messages, conversations, conversation_messages, notifications'),
@@ -747,8 +749,16 @@ def ch_schema():
         '<b>JournalEntry</b> → owner, prepared/posted/voided by users; has many journal_lines → accounts.',
         '<b>Commission / WingaCommission</b> → owner, order, journal entry; commissions reference the employee.',
         '<b>PurchaseOrder</b> → owner, supplier (nullable), items → variants; received POs post inventory journals.',
-        '<b>Business</b> → owner; products and members relate back to the business (products by owner_id; members via pivot).',
+        '<b>Business</b> → owner; products and members relate back to the business (products by owner_id; members via pivot). Holds the storefront contact fields: whatsapp_number, whatsapp_default_message, contact_phone, contact_email, address, and the social URLs (facebook_url, instagram_url, twitter_url, tiktok_url, youtube_url).',
     ]))
+    el.append(spacer(8))
+    el.append(section('Business Contact Resolution (WhatsApp)'))
+    el.append(body('When a storefront renders the WhatsApp chat button/link, <font face="Mono">BusinessController@present()</font> resolves the target number and pre-filled message with the following fallback chain:'))
+    el.extend(bullet_list([
+        '<b>Number</b>: businesses.whatsapp_number → first employee phone (branch-scoped to the owner) → owner_profiles.whatsapp_number → owner phone.',
+        '<b>Message</b>: businesses.whatsapp_default_message → owner_profiles.whatsapp_default_message → "Hello {storeName}! I would like to know more about your products."',
+    ]))
+    el.append(note('The frontend builds <font face="Mono">https://wa.me/{digits}?text={encodeURIComponent(message)}</font> in StoreLayout.vue. Digits are the raw phone with non-numeric characters stripped.'))
     el.append(spacer(8))
     el.append(section('System Account Codes'))
     el.append(info_table(header=['Code', 'Name', 'Type'], col_widths=[60, 300, 120], rows=[
@@ -817,9 +827,9 @@ def ch_auth():
 
 def ch_api():
     el = []
-    el.append(chapter('9. API Reference — All 179 Routes'))
+    el.append(chapter('9. API Reference — All 190 Routes'))
     el.append(hr())
-    el.append(body('All endpoints are JSON and mounted under the <font face="Mono">/api</font> prefix. Development base: ' + mono(DEV_API) + '. Production base: ' + mono(PROD_API) + '. Of the 175 routes, <b>14 are public</b> and <b>161 require a Bearer token</b>; 35 are gated by the owner middleware, 16 by superadmin, and 4 by supplier. The only named routes are the 5 auto-generated addresses.* routes.'))
+    el.append(body('All endpoints are JSON and mounted under the <font face="Mono">/api</font> prefix. Development base: ' + mono(DEV_API) + '. Production base: ' + mono(PROD_API) + '. Of the 190 routes, <b>16 are public</b> and <b>174 require a Bearer token</b>; 38 are gated by the owner middleware, 23 by superadmin, and 4 by supplier. The only named routes are the 5 auto-generated addresses.* routes.'))
     el.append(spacer(8))
     el.append(section('9.1 Public Endpoints (no auth)'))
     el.append(info_table(header=['Method', 'URI', 'Controller@method', 'Ext. middleware'], col_widths=[48, 170, 180, 82], rows=[
@@ -838,6 +848,7 @@ def ch_api():
         ('GET', '/settings/payment', 'SettingsController@payment', '—'),
         ('GET', '/settings/branding', 'SettingsController@branding', '—'),
         ('GET', '/settings/home-content', 'SettingsController@homeContent', '—'),
+        ('GET', '/settings/platform-info', 'SettingsController@platformInfo', '—'),
     ]))
     el.append(spacer(8))
     el.append(section('9.2 Authenticated — Auth, Businesses, Branches, Employees'))
@@ -847,6 +858,7 @@ def ch_api():
         ('PUT', '/auth/profile', 'AuthController@updateProfile', '—'),
         ('POST', '/auth/change-password', 'AuthController@changePassword', '—'),
         ('GET', '/businesses/mine', 'BusinessController@mine', '—'),
+        ('PUT', '/businesses/{business}', 'BusinessController@update', '—'),
         ('GET', '/branches', 'BranchController@index', '—'),
         ('POST', '/branches', 'BranchController@store', '—'),
         ('GET', '/branches/{branch}', 'BranchController@show', '—'),
@@ -1024,6 +1036,7 @@ def ch_api():
         ('GET', '/superadmin/owners/{id}', 'SuperadminController@show'),
         ('PATCH', '/superadmin/owners/{id}/toggle-active', 'SuperadminController@toggleActive'),
         ('PUT', '/superadmin/owners/{id}/subscription', 'SuperadminController@updateSubscription'),
+        ('POST', '/superadmin/owners/{id}/extend-trial', 'SuperadminController@extendTrial'),
         ('PUT', '/superadmin/owners/{id}/limits', 'SuperadminController@updateLimits'),
         ('PUT', '/superadmin/owners/{id}/branding', 'SuperadminController@updateBranding'),
         ('POST', '/superadmin/owners/{id}/branding-logo', 'SuperadminController@updateBrandingLogo'),
@@ -1064,6 +1077,7 @@ def ch_superadmin():
     el.extend(bullet_list([
         '<b>Create Owner</b> — registers an owner with name, email, phone, and company name. Default password is the full name in capitals plus a random 3-digit suffix; the response exposes <font face="Mono">default_password</font> to share securely.',
         '<b>Toggle Active/Inactive</b> — enable or disable an owner\'s account instantly.',
+        '<b>Extend Trial</b> — POST /superadmin/owners/{id}/extend-trial adds trial days to a trial owner. Trial owners whose subscription expires are auto-deactivated.',
         '<b>Delete Owner</b> — removes the owner and all associated data.',
     ]))
     el.append(spacer(6))
@@ -1299,7 +1313,7 @@ def ch_docs():
         ('User_Manual_EN.pdf', 'End users', 'English user manual, 24 chapters'),
         ('User_Manual_SW.pdf', 'End users', 'Swahili user manual, 24 chapters'),
         ('Supplier_Manual.pdf', 'Suppliers', 'Supplier portal manual'),
-        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.3)'),
+        ('Developer_Documentation.pdf', 'Developers & admins', 'This document (v2.4)'),
     ]))
     el.append(spacer(8))
     el.append(section('System Diagrams (docs/)'))
@@ -1451,6 +1465,13 @@ def ch_gotchas():
         ('11', 'Sanctum tokens have no expiration by default; sessions are protected by the frontend idle timeout and server-side token revocation on logout.'),
     ]))
     el.append(spacer(12))
+    el.append(section('Changelog — 2026-08-04 / 2026-08-05'))
+    el.append(body('<b>Store contact & WhatsApp</b>: businesses gained whatsapp_number, whatsapp_default_message, contact_phone, contact_email, address and the social URLs (facebook/instagram/twitter/tiktok/youtube) via migration 2026_08_04_000004. The owner edits them on the new StoreSettingsPage (PUT /businesses/{business}); the storefront (StoreLayout.vue) renders a floating WhatsApp button and a footer "Chat on WhatsApp" link as wa.me URLs. BusinessController@present() resolves the number/message with a fallback chain (business → employee phone → owner profile → owner phone). The account profile holds owner-level WhatsApp defaults. New PhoneInput component (19 countries, default +255) standardises phone entry across checkout, register, and owner/employee/supplier/winga forms.'))
+    el.append(spacer(10))
+    el.append(body('<b>Platform info & trial lifecycle</b>: public GET /settings/platform-info exposes the superadmin name/phone/email for the directory top bar/footer. Superadmins can now POST /superadmin/owners/{id}/extend-trial to extend a trial; owner accounts whose subscription is a trial auto-deactivate when the trial expires. API route count revised from 179 to 190 (16 public, 174 auth; 38 owner, 23 superadmin, 4 supplier).'))
+    el.append(spacer(10))
+    el.append(body('<b>Misc data fixes</b>: migration 2026_08_04_000002 backfills missing businesses from owners, and 2026_08_04_000003 attributes branch_id to employees with none set.'))
+    el.append(spacer(12))
     el.append(section('Changelog — 2026-08-03'))
     el.append(body('<b>Product form translations fixed</b>: the owner product create/edit routes referenced <font face="Mono">productForm.updateProduct</font>, <font face="Mono">createProduct</font>, <font face="Mono">updatedSuccessfully</font> and <font face="Mono">createdSuccessfully</font> keys that were missing from both <font face="Mono">en.json</font> and <font face="Mono">sw.json</font>, so vue-i18n rendered the raw key. All four keys were added to both locale files; the Swahili submit label now reads <b>"Sahihisha Bidhaa"</b> and the success toast <b>"Bidhaa imesahihishwa!"</b>.'))
     el.append(spacer(10))
@@ -1459,7 +1480,7 @@ def ch_gotchas():
     el.append(body('<b>Conversation & message deletion</b>: chat threads can now be deleted (<font face="Mono">DELETE /conversations/{conversation}</font>) and individual messages removed (<font face="Mono">DELETE /conversations/{conversation}/messages/{messageId}</font>), scoped to the participants. The API reference (§9.5) and controller listing were updated; route count revised from 175 to 179.'))
     el.append(spacer(12))
     el.append(hr())
-    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.3 — August 2026', sFooter))
+    el.append(Paragraph('<b>ERP Electronics Store</b> — Developer &amp; Technical Documentation v2.4 — August 2026', sFooter))
     el.append(Paragraph('For internal development and administration use only.', sFooter))
     return el
 
@@ -1480,7 +1501,7 @@ def build():
         ('6.', 'Backend Deep Dive — Every File'),
         ('7.', 'Database Schema & Models'),
         ('8.', 'Authentication & Authorization'),
-        ('9.', 'API Reference — All 179 Routes'),
+        ('9.', 'API Reference — All 190 Routes'),
         ('10.', 'Superadmin Module'),
         ('11.', 'Security Measures'),
         ('12.', 'Analytics & AI Insights'),
