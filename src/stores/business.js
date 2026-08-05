@@ -46,6 +46,17 @@ export const useBusinessStore = defineStore('business', () => {
     persist()
   }
 
+  function syncBusiness(business) {
+    if (!business?.id) return
+    const replace = (list) => list.map((b) => (String(b.id) === String(business.id) ? business : b))
+    directory.value = replace(directory.value)
+    mine.value = replace(mine.value)
+    if (current.value && String(current.value.id) === String(business.id)) {
+      current.value = business
+      persist()
+    }
+  }
+
   async function loadBySlug(slug) {
     if (!slug) {
       current.value = null
@@ -112,6 +123,7 @@ export const useBusinessStore = defineStore('business', () => {
     fetchDirectory,
     fetchMine,
     setCurrent,
+    syncBusiness,
     loadBySlug,
     restoreFromStorage,
     pickFallback,

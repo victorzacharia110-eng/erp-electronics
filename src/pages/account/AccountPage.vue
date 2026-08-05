@@ -51,11 +51,13 @@
 import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { useBusinessStore } from '@/stores/business'
 const { t } = useI18n()
 import { addressApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import PhoneInput from '@/components/PhoneInput.vue'
 const authStore = useAuthStore()
+const businessStore = useBusinessStore()
 const loading = ref(true)
 const form = ref({ name: '', email: '', phone: '', brand_store_name: '', brand_tagline: '', brand_color: '', brand_color_secondary: '', whatsapp_number: '', whatsapp_default_message: '' })
 const addresses = ref([])
@@ -64,7 +66,7 @@ const showAddForm = ref(false)
 const saving = ref(false)
 const message = ref('')
 onMounted(async () => { try { await authStore.fetchProfile(); form.value.name = authStore.user?.name || ''; form.value.email = authStore.user?.email || ''; form.value.phone = authStore.user?.phone || ''; if (authStore.isOwner) { const p = authStore.user?.owner_profile; form.value.brand_store_name = p?.brand_store_name || ''; form.value.brand_tagline = p?.brand_tagline || ''; form.value.brand_color = p?.brand_color || ''; form.value.brand_color_secondary = p?.brand_color_secondary || ''; form.value.whatsapp_number = p?.whatsapp_number || ''; form.value.whatsapp_default_message = p?.whatsapp_default_message || '' }; const r = await addressApi.getAll(); addresses.value = r.data } finally { loading.value = false } })
-async function updateProfile() { saving.value = true; message.value = ''; try { await authStore.updateProfile(form.value); message.value = t('account.profileUpdated') } finally { saving.value = false } }
+async function updateProfile() { saving.value = true; message.value = ''; try { await authStore.updateProfile(form.value); message.value = t('account.profileUpdated'); if (authStore.isOwner && businessStore.current?.slug) { await businessStore.loadBySlug(businessStore.current.slug) } } finally { saving.value = false } }
 async function addAddress() { const r = await addressApi.create(newAddress.value); addresses.value.push(r.data); newAddress.value = { label: '', street: '', city: '', country: 'Tanzania' }; showAddForm.value = false }
 async function deleteAddress(id) { await addressApi.delete(id); addresses.value = addresses.value.filter(a => a.id !== id) }
 </script>

@@ -90,8 +90,10 @@ import { useI18n } from 'vue-i18n'
 import { businessApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import PhoneInput from '@/components/PhoneInput.vue'
+import { useBusinessStore } from '@/stores/business'
 
 const { t } = useI18n()
+const businessStore = useBusinessStore()
 const loading = ref(true)
 const saving = ref(false)
 const toastMsg = ref('')
@@ -154,6 +156,7 @@ async function save() {
     const res = await businessApi.update(b.id, payload)
     const updated = businesses.value.map((x) => String(x.id) === String(b.id) ? res.data : x)
     businesses.value = updated
+    businessStore.syncBusiness(res.data)
     showToast(t('storeSettings.saved'))
   } catch (err) {
     showToast(err.response?.data?.message || t('storeSettings.saveError'))
