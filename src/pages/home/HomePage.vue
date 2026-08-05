@@ -165,15 +165,19 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 import { useProductStore } from '@/stores/products'
+import { useBusinessStore } from '@/stores/business'
 import ProductCard from '@/components/product/ProductCard.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import { settingsApi } from '@/api'
 
 const { t, locale } = useI18n()
+const route = useRoute()
 const productStore = useProductStore()
+const businessStore = useBusinessStore()
 const loading = ref(true)
 const allProducts = ref([])
 const content = ref({ en: {}, sw: {} })
@@ -205,7 +209,9 @@ function getCategoryIcon(name) {
   return icons[name] || 'fas fa-box'
 }
 
-onMounted(async () => {
+async function loadStoreData() {
+  if (route.params.businessSlug && !businessStore.activeSlug) return
+  loading.value = true
   try {
     const [res] = await Promise.all([
       settingsApi.getHomeContent(),
@@ -215,7 +221,7 @@ onMounted(async () => {
     ])
     content.value = res.data || { en: {}, sw: {} }
     allProducts.value = productStore.products
-  } catch (e) {
+  } catch {
     try {
       await Promise.all([
         productStore.fetchCategories(),
@@ -223,11 +229,14 @@ onMounted(async () => {
         productStore.fetchProducts({ per_page: 8 }),
       ])
       allProducts.value = productStore.products
-    } catch (err) { /* empty */ }
+    } catch { /* empty */ }
   } finally {
     loading.value = false
   }
-})
+}
+
+onMounted(loadStoreData)
+watch(() => businessStore.activeSlug, loadStoreData)
 </script>
 
 <style scoped>
