@@ -3,10 +3,10 @@
     <header class="site-header">
       <div class="top-bar">
         <div class="container top-bar-inner">
-          <div class="top-bar-left" v-if="!isDirectory && (contactPhone || contactEmail || contactAddress)">
-            <span v-if="contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</span>
-            <span v-if="contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</span>
-            <span v-if="contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</span>
+          <div class="top-bar-left" v-if="topPhone || topEmail || topAddress">
+            <span v-if="topPhone"><i class="fas fa-phone"></i> {{ topPhone }}</span>
+            <span v-if="topEmail"><i class="fas fa-envelope"></i> {{ topEmail }}</span>
+            <span v-if="topAddress"><i class="fas fa-location-dot"></i> {{ topAddress }}</span>
           </div>
           <div class="top-bar-right" v-if="!isDirectory && socialLinks.length">
             <a v-for="s in socialLinks" :key="s.platform" :href="s.url" target="_blank" rel="noopener" :aria-label="s.platform" :title="s.platform">
@@ -212,12 +212,9 @@
         </div>
         <div>
           <h4>{{ $t('footer.contact') }}</h4>
-          <p v-if="!isDirectory && contactPhone"><i class="fas fa-phone"></i> {{ contactPhone }}</p>
-          <p v-else><i class="fas fa-phone"></i> {{ $t('topBar.phone') }}</p>
-          <p v-if="!isDirectory && contactEmail"><i class="fas fa-envelope"></i> {{ contactEmail }}</p>
-          <p v-else><i class="fas fa-envelope"></i> {{ $t('topBar.email') }}</p>
-          <p v-if="!isDirectory && contactAddress"><i class="fas fa-location-dot"></i> {{ contactAddress }}</p>
-          <p v-else><i class="fas fa-location-dot"></i> {{ $t('topBar.location') }}</p>
+          <p v-if="topPhone"><i class="fas fa-phone"></i> {{ topPhone }}</p>
+          <p v-if="topEmail"><i class="fas fa-envelope"></i> {{ topEmail }}</p>
+          <p v-if="topAddress"><i class="fas fa-location-dot"></i> {{ topAddress }}</p>
           <a v-if="!isDirectory && whatsappUrl" :href="whatsappUrl" target="_blank" rel="noopener" class="footer-whatsapp">
             <i class="fab fa-whatsapp"></i> {{ $t('whatsapp.chat') }}
           </a>
@@ -246,12 +243,12 @@ import { useAuthStore } from '@/stores/auth'
 import { useCartStore } from '@/stores/cart'
 import { useProductStore } from '@/stores/products'
 import { useBusinessStore } from '@/stores/business'
-import { conversationApi } from '@/api'
+import { conversationApi, settingsApi } from '@/api'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
 
 const route = useRoute()
 const router = useRouter()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
 const authStore = useAuthStore()
 const cartStore = useCartStore()
 const productStore = useProductStore()
@@ -266,6 +263,7 @@ const searchQuery = ref('')
 const navOpen = ref(false)
 const cartBump = ref(false)
 const unreadMsgCount = ref(0)
+const platformInfo = ref(null)
 
 const businessSlug = computed(() => route.params.businessSlug || null)
 const isDirectory = computed(() => route.name === 'home' && !businessSlug.value)
@@ -282,9 +280,13 @@ const storeName = computed(() =>
 const logoTextFirst = computed(() => storeName.value.split(' ')[0] || 'ElectroShop')
 const logoTextRest = computed(() => storeName.value.split(' ').slice(1).join(' '))
 
-const contactPhone = computed(() => businessStore.current?.contact_phone || '')
+const contactPhone = computed(() => businessStore.current?.whatsapp_number || businessStore.current?.contact_phone || '')
 const contactEmail = computed(() => businessStore.current?.contact_email || '')
 const contactAddress = computed(() => businessStore.current?.address || '')
+
+const topPhone = computed(() => (isDirectory.value ? platformInfo.value?.phone : contactPhone.value) || '')
+const topEmail = computed(() => (isDirectory.value ? platformInfo.value?.email : contactEmail.value) || '')
+const topAddress = computed(() => (isDirectory.value ? platformInfo.value?.address || t('topBar.location') : contactAddress.value) || '')
 
 const whatsappUrl = computed(() => {
   const digits = (businessStore.current?.whatsapp_number || '').replace(/[^\d]/g, '')
@@ -373,6 +375,10 @@ onMounted(async () => {
   }
   await applyBusinessContext()
   await productStore.fetchCategories()
+  try {
+    const res = await settingsApi.getPlatformInfo()
+    platformInfo.value = res.data
+  } catch { /* empty */ }
   if (authStore.isAuthenticated) {
     await cartStore.fetchCart()
     pollUnreadMessages()

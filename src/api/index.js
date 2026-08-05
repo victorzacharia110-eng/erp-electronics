@@ -278,6 +278,9 @@ export const settingsApi = {
   getHomeContent() {
     return api.get('/settings/home-content')
   },
+  getPlatformInfo() {
+    return api.get('/settings/platform-info')
+  },
 }
 
 export const supportApi = {
