@@ -21,7 +21,7 @@
 
         <div class="form-group" :class="{ 'has-error': errors.phone }">
           <label>{{ $t('auth.phone') }}</label>
-          <input v-model="form.phone" type="tel" :placeholder="$t('auth.phonePlaceholder')" @blur="touch('phone')" @input="validateField('phone')" />
+          <PhoneInput v-model="form.phone" name="phone" placeholder="7XX XXX XXX" :invalid="!!errors.phone" @blur="touch('phone')" @update:modelValue="validateField('phone')" />
           <span class="field-error" v-if="errors.phone"><i class="fas fa-exclamation-triangle"></i> {{ errors.phone }}</span>
         </div>
 
@@ -69,6 +69,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 const router = useRouter()

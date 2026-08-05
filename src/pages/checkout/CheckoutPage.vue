@@ -118,7 +118,7 @@
               <div class="form-group"
                 v-if="selectedPayment && selectedPayment !== 'cash' && selectedPayment !== 'clickpesa'">
                 <label>{{ $t('checkout.yourPhone') }}</label>
-                <input v-model="phoneNumber" type="tel" :placeholder="$t('checkout.phonePlaceholder')" />
+                <PhoneInput v-model="phoneNumber" name="phone_number" placeholder="7XX XXX XXX" />
               </div>
             </div>
           </div>
@@ -179,6 +179,7 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 import { useCartStore } from '@/stores/cart'
 import { useBusinessStore } from '@/stores/business'
 import { addressApi, orderApi, paymentApi, settingsApi, cartApi, orderManageApi, shippingRuleApi, paymentProviderApi } from '@/api'

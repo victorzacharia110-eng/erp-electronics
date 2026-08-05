@@ -146,7 +146,7 @@
           </div>
           <div class="form-group">
             <label>Phone *</label>
-            <input v-model="newOwner.phone" type="tel" placeholder="+255700000000" />
+            <PhoneInput v-model="newOwner.phone" name="phone" placeholder="7XX XXX XXX" />
           </div>
           <div class="default-pw-note" v-if="newOwner.name.trim()">
             <i class="fas fa-info-circle"></i>
@@ -219,6 +219,7 @@ import { useTablePagination } from '@/composables/useTablePagination'
 import TablePagination from '@/components/TablePagination.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
 import ResetOwnerPasswordModal from '@/components/ResetOwnerPasswordModal.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const loading = ref(true)
 const owners = ref([])

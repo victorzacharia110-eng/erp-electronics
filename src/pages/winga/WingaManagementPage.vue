@@ -78,7 +78,7 @@
           </div>
           <div class="form-group">
             <label>{{ $t('wingas.phone') }}</label>
-            <input v-model="formData.phone" type="tel" :placeholder="$t('wingas.phonePlaceholder')" />
+            <PhoneInput v-model="formData.phone" name="phone" placeholder="7XX XXX XXX" />
           </div>
           <div class="form-group">
             <label>{{ $t('wingas.tinNumber') }}</label>
@@ -134,6 +134,7 @@ import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import { wingaApi, branchApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 const authStore = useAuthStore()

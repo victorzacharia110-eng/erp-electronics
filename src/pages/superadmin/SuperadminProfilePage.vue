@@ -21,7 +21,7 @@
           </div>
           <div class="form-group">
             <label>{{ $t('account.phone') }}</label>
-            <input v-model="form.phone" type="tel" />
+            <PhoneInput v-model="form.phone" name="phone" placeholder="7XX XXX XXX" />
           </div>
           <div class="meta-row">
             <span class="meta-item"><i class="fas fa-shield-halved"></i> {{ $t('superadminProfile.role') }}: <strong>Superadmin</strong></span>
@@ -52,6 +52,7 @@ import { ref, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
 import ChangePasswordModal from '@/components/ChangePasswordModal.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const authStore = useAuthStore()
 const { t } = useI18n()

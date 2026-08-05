@@ -82,7 +82,7 @@
         <div v-if="needsPhone" class="form-row">
           <div class="form-group">
             <label>{{ $t('billing.phoneNumber') }}</label>
-            <input v-model="phoneNumber" type="tel" :placeholder="$t('billing.phonePlaceholder')" />
+            <PhoneInput v-model="phoneNumber" name="phone_number" placeholder="7XX XXX XXX" />
           </div>
         </div>
         <div class="total-row">
@@ -141,6 +141,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { subscriptionApi, paymentProviderApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 

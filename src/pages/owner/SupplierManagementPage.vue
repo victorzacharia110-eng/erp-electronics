@@ -107,7 +107,7 @@
           <div class="form-row">
             <div class="form-group">
               <label>{{ $t('suppliers.phone') }}</label>
-              <input v-model="form.phone" type="tel" :placeholder="$t('suppliers.phonePlaceholder')" />
+              <PhoneInput v-model="form.phone" name="phone" placeholder="7XX XXX XXX" />
             </div>
             <div class="form-group">
               <label>{{ $t('suppliers.email') }}</label>
@@ -253,6 +253,7 @@ import { ref, computed, reactive, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { supplierApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 import TablePagination from '@/components/TablePagination.vue'
 
 const { t } = useI18n()

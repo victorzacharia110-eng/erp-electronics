@@ -83,7 +83,7 @@
           </div>
           <div class="form-group">
             <label>{{ $t('branches.phone') }}</label>
-            <input v-model="formData.phone" type="tel" :placeholder="$t('branches.phonePlaceholder')" />
+            <PhoneInput v-model="formData.phone" name="phone" placeholder="7XX XXX XXX" />
           </div>
           <div class="server-errors" v-if="serverErrors.length > 0">
             <div v-for="(msg, i) in serverErrors" :key="i" class="server-error"><i class="fas fa-exclamation-circle"></i> {{ msg }}</div>
@@ -117,6 +117,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { branchApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 

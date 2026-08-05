@@ -158,7 +158,7 @@
           </div>
           <div class="form-group">
             <label>Phone</label>
-            <input v-model="newOwner.phone" type="text" placeholder="+255700000000" required />
+            <PhoneInput v-model="newOwner.phone" name="phone" placeholder="7XX XXX XXX" required />
           </div>
           <div class="default-pw-note" v-if="newOwner.name.trim()">
             <i class="fas fa-info-circle"></i>
@@ -237,6 +237,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { superadminApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const loading = ref(true)
 const stats = ref({})

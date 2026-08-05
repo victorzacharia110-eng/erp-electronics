@@ -94,8 +94,7 @@
           </div>
           <div class="form-group" :class="{ 'has-error': addErrors.phone }">
             <label>{{ $t('employees.addModal.phone') }} *</label>
-            <input v-model="newEmp.phone" type="tel" :placeholder="$t('employees.addModal.phonePlaceholder')" @blur="validateAddField('phone')" @input="validateAddField('phone')" />
-            <span class="field-error" v-if="addErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ addErrors.phone }}</span>
+            <PhoneInput v-model="newEmp.phone" name="phone" placeholder="7XX XXX XXX" :invalid="!!addErrors.phone" @blur="validateAddField('phone')" @update:modelValue="validateAddField('phone')" />            <span class="field-error" v-if="addErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ addErrors.phone }}</span>
           </div>
           <div class="form-row">
             <div class="form-group" :class="{ 'has-error': addErrors.nida_number }">
@@ -193,7 +192,7 @@
           </div>
           <div class="form-group" :class="{ 'has-error': editErrors.phone }">
             <label>{{ $t('employees.addModal.phone') }} *</label>
-            <input v-model="editEmp.phone" type="tel" :placeholder="$t('employees.addModal.phonePlaceholder')" @blur="validateEditField('phone')" @input="validateEditField('phone')" />
+            <PhoneInput v-model="editEmp.phone" name="phone" placeholder="7XX XXX XXX" :invalid="!!editErrors.phone" @blur="validateEditField('phone')" @update:modelValue="validateEditField('phone')" />
             <span class="field-error" v-if="editErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ editErrors.phone }}</span>
           </div>
           <div class="form-row">
@@ -278,7 +277,7 @@
           </div>
           <div class="form-group" :class="{ 'has-error': guarantorErrors.phone }">
             <label>{{ $t('employees.addModal.guarantorPhone') }} *</label>
-            <input v-model="guarantorForm.phone" type="tel" :placeholder="$t('employees.addModal.guarantorPhonePlaceholder')" />
+            <PhoneInput v-model="guarantorForm.phone" name="phone" placeholder="7XX XXX XXX" :invalid="!!guarantorErrors.phone" />
             <span class="field-error" v-if="guarantorErrors.phone"><i class="fas fa-exclamation-triangle"></i> {{ guarantorErrors.phone }}</span>
           </div>
           <div class="form-group" :class="{ 'has-error': guarantorErrors.relationship }">
@@ -319,6 +318,7 @@ import { employeeApi, branchApi } from '@/api'
 import { useTablePagination } from '@/composables/useTablePagination'
 import TablePagination from '@/components/TablePagination.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 

@@ -27,7 +27,7 @@
             <p class="section-desc">{{ $t('storeSettings.whatsappDesc') }}</p>
             <div class="form-group">
               <label>{{ $t('storeSettings.whatsappNumber') }}</label>
-              <input v-model="form.whatsapp_number" type="tel" :placeholder="$t('storeSettings.whatsappNumberPlaceholder')" />
+              <PhoneInput v-model="form.whatsapp_number" name="whatsapp_number" placeholder="7XX XXX XXX" />
             </div>
             <div class="form-group">
               <label>{{ $t('storeSettings.whatsappMessage') }}</label>
@@ -40,7 +40,7 @@
             <h3 class="section-title"><i class="fas fa-address-book"></i> {{ $t('storeSettings.contact') }}</h3>
             <p class="section-desc">{{ $t('storeSettings.contactDesc') }}</p>
             <div class="form-row">
-              <div class="form-group"><label>{{ $t('storeSettings.contactPhone') }}</label><input v-model="form.contact_phone" type="tel" :placeholder="$t('storeSettings.contactPhonePlaceholder')" /></div>
+              <div class="form-group"><label>{{ $t('storeSettings.contactPhone') }}</label><PhoneInput v-model="form.contact_phone" name="contact_phone" placeholder="7XX XXX XXX" /></div>
               <div class="form-group"><label>{{ $t('storeSettings.contactEmail') }}</label><input v-model="form.contact_email" type="email" :placeholder="$t('storeSettings.contactEmailPlaceholder')" /></div>
             </div>
             <div class="form-group"><label>{{ $t('storeSettings.address') }}</label><input v-model="form.address" type="text" :placeholder="$t('storeSettings.addressPlaceholder')" /></div>
@@ -89,6 +89,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { businessApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 const loading = ref(true)

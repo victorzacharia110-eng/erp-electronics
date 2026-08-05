@@ -56,7 +56,7 @@
             <div class="form-group"><label>{{ $t('paymentSettings.slug') }}</label><input v-model="newProvider.slug" type="text" :placeholder="$t('paymentSettings.slugPlaceholder')" /></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>{{ $t('paymentSettings.phoneNumber') }}</label><input v-model="newProvider.number" type="tel" :placeholder="$t('paymentSettings.phoneNumberPlaceholder')" /></div>
+            <div class="form-group"><label>{{ $t('paymentSettings.phoneNumber') }}</label><PhoneInput v-model="newProvider.number" name="number" placeholder="7XX XXX XXX" /></div>
             <div class="form-group"><label>{{ $t('paymentSettings.iconClass') }}</label><input v-model="newProvider.icon" type="text" :placeholder="$t('paymentSettings.iconClassPlaceholder')" /></div>
           </div>
           <button class="btn btn-primary btn-sm" @click="addProvider" :disabled="saving">
@@ -74,7 +74,7 @@
               </div>
               <div v-else class="provider-info edit-fields">
                 <input v-model="editForm.name" type="text" class="edit-input" :placeholder="$t('paymentSettings.name')" />
-                <input v-model="editForm.number" type="tel" class="edit-input" :placeholder="$t('paymentSettings.phoneNumber')" />
+                <PhoneInput v-model="editForm.number" name="number" placeholder="7XX XXX XXX" />
               </div>
             </div>
             <div class="provider-right">
@@ -118,6 +118,7 @@ import { useI18n } from 'vue-i18n'
 import { settingsApi, paymentProviderApi } from '@/api'
 import TablePagination from '@/components/TablePagination.vue'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 
 const { t } = useI18n()
 const clickpesaEnabled = ref(false)

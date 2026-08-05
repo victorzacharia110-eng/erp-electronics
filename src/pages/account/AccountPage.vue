@@ -9,7 +9,7 @@
         <form @submit.prevent="updateProfile">
           <div class="form-group"><label>{{ $t('account.name') }}</label><input v-model="form.name" type="text" /></div>
           <div class="form-group"><label>{{ $t('account.email') }}</label><input v-model="form.email" type="email" /></div>
-          <div class="form-group"><label>{{ $t('account.phone') }}</label><input v-model="form.phone" type="tel" /></div>
+          <div class="form-group"><label>{{ $t('account.phone') }}</label><PhoneInput v-model="form.phone" name="phone" placeholder="7XX XXX XXX" /></div>
           <template v-if="authStore.isOwner">
             <div class="form-group"><label>Store Name</label><input v-model="form.brand_store_name" type="text" disabled /></div>
             <div class="form-group"><label>Tagline</label><input v-model="form.brand_tagline" type="text" disabled /></div>
@@ -20,7 +20,7 @@
               {{ form.brand_color }}
             </p>
             <div class="divider"></div>
-            <div class="form-group"><label><i class="fab fa-whatsapp"></i> {{ $t('account.whatsappNumber') }}</label><input v-model="form.whatsapp_number" type="tel" :placeholder="'+255 700 000 000'" /></div>
+            <div class="form-group"><label><i class="fab fa-whatsapp"></i> {{ $t('account.whatsappNumber') }}</label><PhoneInput v-model="form.whatsapp_number" name="whatsapp_number" placeholder="700 000 000" /></div>
             <div class="form-group"><label>{{ $t('account.whatsappMessage') }}</label><textarea v-model="form.whatsapp_default_message" rows="2" maxlength="500"></textarea></div>
             <p class="help-text"><i class="fas fa-info-circle"></i> {{ $t('account.whatsappHelp') }}</p>
           </template>
@@ -54,6 +54,7 @@ import { useAuthStore } from '@/stores/auth'
 const { t } = useI18n()
 import { addressApi } from '@/api'
 import SkeletonLoader from '@/components/SkeletonLoader.vue'
+import PhoneInput from '@/components/PhoneInput.vue'
 const authStore = useAuthStore()
 const loading = ref(true)
 const form = ref({ name: '', email: '', phone: '', brand_store_name: '', brand_tagline: '', brand_color: '', brand_color_secondary: '', whatsapp_number: '', whatsapp_default_message: '' })
