@@ -49,6 +49,10 @@
       <p class="auth-link home-link"><router-link to="/"><i class="fas fa-arrow-left"></i> {{ $t('common.backToHome')
           }}</router-link></p>
     </div>
+
+    <div class="toast" v-if="toastMsg" @click="toastMsg = ''">
+      <i class="fas fa-info-circle"></i> {{ toastMsg }}
+    </div>
   </div>
 </template>
 
@@ -72,17 +76,31 @@ const touched = ref({})
 const loading = ref(false)
 const showPw = ref(false)
 const ssoEnabled = ref(false)
+const ssoReady = ref(false)
+const toastMsg = ref('')
 
 onMounted(async () => {
   try {
     const { data } = await authApi.ssoStatus()
     ssoEnabled.value = !!data?.enabled
+    ssoReady.value = !!data?.ready
   } catch {
     ssoEnabled.value = false
+    ssoReady.value = false
   }
 })
 
+function showToast(msg) {
+  toastMsg.value = msg
+  setTimeout(() => (toastMsg.value = ''), 3000)
+}
+
 function startSso() {
+  if (!ssoReady.value) {
+    showToast(t('sso.notReady'))
+    return
+  }
+
   window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/auth/sso/redirect`
 }
 
@@ -331,5 +349,29 @@ async function handleLogin() {
 .server-error i {
   font-size: 12px;
   flex-shrink: 0;
+}
+
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #333;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  z-index: 1000;
+  max-width: 90%;
+}
+
+.toast i {
+  color: #f1c40f;
 }
 </style>

@@ -205,6 +205,7 @@
   "sso": {
     "signInWithSso": "Continue with SSO",
     "orContinueWith": "or",
+    "notReady": "SSO sign-in is not ready yet. Please use email and password.",
     "signingIn": "Signing you in...",
     "signingInSubtitle": "Please wait, we're completing your login.",
     "errors": {

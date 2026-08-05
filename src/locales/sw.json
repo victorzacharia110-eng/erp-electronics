@@ -205,6 +205,7 @@
   "sso": {
     "signInWithSso": "Endelea na SSO",
     "orContinueWith": "au",
+    "notReady": "Kuingia kwa SSO hakujawa tayari. Tafadhali tumia barua pepe na nenosiri.",
     "signingIn": "Inakuingiza...",
     "signingInSubtitle": "Tafadhali subiri, tunakamilisha kuingia kwako.",
     "errors": {
