@@ -1,6 +1,6 @@
 <template>
   <div class="auth-page">
-    <div class="auth-card card">
+    <div class="auth-card">
       <div class="auth-header">
         <span class="logo-icon"><i class="fas fa-bolt"></i></span>
         <h1>{{ $t('auth.loginTitle') }}</h1>
@@ -129,12 +129,11 @@ async function handleLogin() {
 .auth-card {
   width: 100%;
   max-width: 420px;
-  padding: 40px;
 }
 
 .auth-header {
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .auth-header .logo-icon {

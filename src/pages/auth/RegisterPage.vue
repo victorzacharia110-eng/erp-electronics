@@ -1,6 +1,6 @@
 <template>
   <div class="auth-page">
-    <div class="auth-card card">
+    <div class="auth-card">
       <div class="auth-header">
         <span class="logo-icon"><i class="fas fa-bolt"></i></span>
         <h1>{{ $t('auth.registerTitle') }}</h1>
@@ -165,8 +165,8 @@ async function handleRegister() {
 
 <style scoped>
 .auth-page { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f8f9fa; padding: 24px; }
-.auth-card { width: 100%; max-width: 480px; padding: 40px; }
-.auth-header { text-align: center; margin-bottom: 32px; }
+.auth-card { width: 100%; max-width: 480px; }
+.auth-header { text-align: center; margin-bottom: 28px; }
 .auth-header .logo-icon { display: inline-flex; color: #fff; background: #e74c3c; border-radius: 10px; justify-content: center; align-items: center; width: 48px; height: 48px; font-size: 20px; margin-bottom: 16px; }
 .auth-header h1 { font-size: 24px; margin-bottom: 8px; }
 .auth-header p { color: #888; font-size: 14px; }
