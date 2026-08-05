@@ -387,6 +387,12 @@ const routes = [
     meta: { guest: true },
   },
   {
+    path: '/sso/callback',
+    name: 'sso-callback',
+    component: () => import('@/pages/auth/SsoCallbackPage.vue'),
+    meta: { guest: true },
+  },
+  {
     path: '/register',
     name: 'register',
     component: () => import('@/pages/auth/RegisterPage.vue'),

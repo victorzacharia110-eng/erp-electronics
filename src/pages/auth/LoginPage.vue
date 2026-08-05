@@ -36,6 +36,14 @@
         <button type="submit" class="btn btn-primary full-width" :disabled="loading"><i
             class="fas fa-right-to-bracket"></i> {{ loading ? t('auth.signInLoading') : t('auth.signIn') }}</button>
       </form>
+
+      <div v-if="ssoEnabled" class="sso-divider">
+        <span>{{ $t('sso.orContinueWith') }}</span>
+      </div>
+      <button v-if="ssoEnabled" type="button" class="btn btn-sso full-width" @click="startSso">
+        <i class="fa-brands fa-microsoft"></i> {{ $t('sso.signInWithSso') }}
+      </button>
+
       <p class="auth-link">{{ $t('auth.noAccount') }} <router-link to="/register">{{ $t('auth.registerHere')
           }}</router-link></p>
       <p class="auth-link home-link"><router-link to="/"><i class="fas fa-arrow-left"></i> {{ $t('common.backToHome')
@@ -46,9 +54,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores/auth'
+import { authApi } from '@/api'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -61,6 +71,20 @@ const serverErrors = ref([])
 const touched = ref({})
 const loading = ref(false)
 const showPw = ref(false)
+const ssoEnabled = ref(false)
+
+onMounted(async () => {
+  try {
+    const { data } = await authApi.ssoStatus()
+    ssoEnabled.value = !!data?.enabled
+  } catch {
+    ssoEnabled.value = false
+  }
+})
+
+function startSso() {
+  window.location.href = `${import.meta.env.VITE_API_URL || 'http://localhost:8000/api'}/auth/sso/redirect`
+}
 
 function touch(field) { touched.value[field] = true }
 
@@ -164,6 +188,37 @@ async function handleLogin() {
   justify-content: center;
   padding: 14px;
   margin-top: 8px;
+}
+
+.sso-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0 4px;
+  color: #999;
+  font-size: 12px;
+}
+
+.sso-divider::before,
+.sso-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.btn-sso {
+  width: 100%;
+  justify-content: center;
+  padding: 14px;
+  margin-top: 12px;
+  background: #fff;
+  border: 1px solid #ddd;
+  color: #333;
+}
+
+.btn-sso:hover {
+  background: #f5f5f5;
 }
 
 .auth-link {

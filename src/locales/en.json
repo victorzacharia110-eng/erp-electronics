@@ -202,6 +202,25 @@
       "registrationFailed": "Registration failed. Please try again."
     }
   },
+  "sso": {
+    "signInWithSso": "Continue with SSO",
+    "orContinueWith": "or",
+    "signingIn": "Signing you in...",
+    "signingInSubtitle": "Please wait, we're completing your login.",
+    "errors": {
+      "disabled": "SSO is currently disabled. Please use email and password to sign in.",
+      "denied": "Sign-in was cancelled or declined. Please try again.",
+      "invalid_request": "The sign-in request was invalid. Please try again.",
+      "invalid_state": "The sign-in request expired. Please try again.",
+      "authentication_failed": "We could not verify your identity with the provider.",
+      "no_account": "No account is linked to this email. Please contact your administrator.",
+      "role_not_allowed": "Your account does not have permission to sign in via SSO.",
+      "deactivated": "Your account has been deactivated. Please contact support.",
+      "locked": "Your account is temporarily locked. Please try again later.",
+      "missingToken": "No session was received from the provider.",
+      "connectionFailed": "Unable to connect. Please check your internet and try again."
+    }
+  },
   "cart": {
     "title": "Shopping Cart",
     "empty": "Your cart is empty",

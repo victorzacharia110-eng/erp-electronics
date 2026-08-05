@@ -202,6 +202,25 @@
       "registrationFailed": "Usajili umeshindikana. Tafadhali jaribu tena."
     }
   },
+  "sso": {
+    "signInWithSso": "Endelea na SSO",
+    "orContinueWith": "au",
+    "signingIn": "Inakuingiza...",
+    "signingInSubtitle": "Tafadhali subiri, tunakamilisha kuingia kwako.",
+    "errors": {
+      "disabled": "SSO imezimwa kwa sasa. Tafadhali tumia barua pepe na nenosiri kuingia.",
+      "denied": "Kuingia kulighairiwa au kukataliwa. Tafadhali jaribu tena.",
+      "invalid_request": "Ombi la kuingia si sahihi. Tafadhali jaribu tena.",
+      "invalid_state": "Ombi la kuingia limeisha muda wake. Tafadhali jaribu tena.",
+      "authentication_failed": "Hatukuweza kuthibitisha utambulisho wako na mtoa huduma.",
+      "no_account": "Hakuna akaunti inayohusishwa na barua pepe hii. Tafadhali wasiliana na msimamizi wako.",
+      "role_not_allowed": "Akaunti yako haina ruhusa ya kuingia kupitia SSO.",
+      "deactivated": "Akaunti yako imewashwa. Tafadhali wasiliana na msaada.",
+      "locked": "Akaunti yako imefungwa kwa muda. Tafadhali jaribu tena baadaye.",
+      "missingToken": "Hakuna kipindi kilichopokelewa kutoka kwa mtoa huduma.",
+      "connectionFailed": "Haiwezi kuunganika. Tafadhali angalia mtandao wako na jaribu tena."
+    }
+  },
   "cart": {
     "title": "Kikapu cha Ununuzi",
     "empty": "Kikapu chako ni tupu",

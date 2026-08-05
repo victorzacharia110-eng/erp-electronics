@@ -19,6 +19,9 @@ export const authApi = {
   changePassword(data) {
     return api.post('/auth/change-password', data)
   },
+  ssoStatus() {
+    return api.get('/auth/sso/status')
+  },
 }
 
 export const employeeApi = {

@@ -52,6 +52,13 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  async function ssoLogin(token) {
+    token.value = token
+    localStorage.setItem('auth_token', token)
+    await fetchProfile()
+    return user.value
+  }
+
   async function fetchProfile() {
     if (!token.value) return
     loading.value = true
@@ -93,6 +100,7 @@ export const useAuthStore = defineStore('auth', () => {
     isSuperadmin,
     register,
     login,
+    ssoLogin,
     logout,
     fetchProfile,
     updateProfile,
